@@ -68,6 +68,13 @@ grok plugin install grok-build-livepatch --trust
 
 Validates both plugins, asserts **heuer-planning** is absent, checks README install form, and that nested `publish.sh` scripts refuse under this repo.
 
+CI (GitHub Actions, root only):
+
+- `.github/workflows/marketplace-gates.yml` — structural gates on every push to `main`
+- `.github/workflows/livepatch-watch.yml` — 6h apply/test of the bundled ban patch against `xai-org/grok-build`
+
+Nested `plugins/**/.github/workflows` are **not** run by GitHub; keep root workflows in sync.
+
 ## Out of scope
 
 - **heuer-planning** → install from ds4cc if you want full SAT skill load for critic

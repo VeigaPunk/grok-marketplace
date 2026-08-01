@@ -1,0 +1,85 @@
+name: livepatch-watch
+
+# Nested plugin workflows under plugins/**/.github are NOT executed by GitHub.
+# This root workflow watches the bundled patch in xbgst-stack.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/xbgst-stack/livepatch/patches/**"
+      - "plugins/grok-build-livepatch/patches/**"
+      - ".github/workflows/livepatch-watch.yml"
+
+jobs:
+  check-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Fetch upstream grok-build
+        run: |
+          git clone --depth 1 https://github.com/xai-org/grok-build.git /tmp/grok-build
+          echo "UPSTREAM_REV=$(git -C /tmp/grok-build rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Apply livepatch (bundled xbgst-stack)
+        id: apply
+        run: |
+          set -euo pipefail
+          PATCH="$GITHUB_WORKSPACE/plugins/xbgst-stack/livepatch/patches/0001-ban-generic-subagents.patch"
+          # keep dual trees in sync for CI signal
+          PATCH2="$GITHUB_WORKSPACE/plugins/grok-build-livepatch/patches/0001-ban-generic-subagents.patch"
+          cmp -s "$PATCH" "$PATCH2"
+          cd /tmp/grok-build
+          if git apply --check "$PATCH"; then
+            git apply "$PATCH"
+            echo "result=ok" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=needs-rebase" >> "$GITHUB_OUTPUT"
+            git apply --reject "$PATCH" || true
+            find . -name '*.rej' | head
+            exit 2
+          fi
+
+      - name: Unit smoke
+        if: steps.apply.outputs.result == 'ok'
+        run: |
+          cd /tmp/grok-build
+          cargo test -p xai-tool-types banned_subagent -- --nocapture
+
+      - name: Open issue on patch break
+        if: failure() && steps.apply.outputs.result == 'needs-rebase'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `livepatch needs rebase against grok-build@${process.env.UPSTREAM_REV}`;
+            const body = [
+              'Root workflow `livepatch-watch` failed to apply',
+              '`plugins/xbgst-stack/livepatch/patches/0001-ban-generic-subagents.patch`.',
+              '',
+              `Upstream tip: \`${process.env.UPSTREAM_REV}\``,
+              '',
+              'Refresh the patch against current `xai-org/grok-build` main and keep',
+              '`plugins/grok-build-livepatch/patches/` byte-identical.',
+            ].join('\n');
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'livepatch-break',
+            });
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['livepatch-break'],
+              });
+            }

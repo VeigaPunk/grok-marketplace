@@ -1,0 +1,65 @@
+name: marketplace-gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Structural gates (no Grok CLI required)
+        run: |
+          set -euo pipefail
+          fail=0
+          ok() { echo "OK  $*"; }
+          bad() { echo "FAIL $*"; fail=1; }
+
+          test ! -d plugins/xbgst-stack/skills/heuer-planning && ok "heuer-planning absent" || bad "heuer present"
+          python3 -c 'import json; json.load(open(".grok-plugin/marketplace.json"))' && ok "marketplace.json" || bad "marketplace.json"
+          python3 -c 'import json; json.load(open("plugins/xbgst-stack/plugin.json")); json.load(open("plugins/grok-build-livepatch/plugin.json"))' && ok "plugin.json" || bad "plugin.json"
+
+          if grep -nE 'marketplace add VeigaPunk/grok-marketplace@' README.md >/dev/null 2>&1; then
+            bad "README broken @ref marketplace add"
+          else
+            ok "README no @ref add"
+          fi
+
+          if grep -nE 'Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/scripts/install-host.sh \
+            | grep -vE 'sed -i|GROK_LIVEPATCH_REPLACE_BIN:-|tip:|opt-in|echo ' >/dev/null 2>&1; then
+            bad "install-host hardcodes REPLACE_BIN"
+          else
+            ok "install-host REPLACE_BIN opt-in"
+          fi
+
+          if bash plugins/xbgst-stack/livepatch/scripts/publish.sh >/dev/null 2>&1; then
+            bad "nested publish should refuse"
+          else
+            c=$?
+            [[ "$c" -eq 2 ]] && ok "nested publish refuse" || bad "nested publish exit $c"
+          fi
+
+          if bash plugins/grok-build-livepatch/scripts/publish.sh >/dev/null 2>&1; then
+            bad "marketplace-path publish should refuse"
+          else
+            c=$?
+            [[ "$c" -eq 2 ]] && ok "standalone-path publish refuse" || bad "standalone publish exit $c"
+          fi
+
+          # versions lockstep
+          python3 - <<'PY'
+          import json,sys
+          m=json.load(open(".grok-plugin/marketplace.json"))
+          xs=json.load(open("plugins/xbgst-stack/plugin.json"))["version"]
+          lp=json.load(open("plugins/grok-build-livepatch/plugin.json"))["version"]
+          cats={p["name"]:p["version"] for p in m["plugins"]}
+          assert cats.get("xbgst-stack")==xs, (cats, xs)
+          assert cats.get("grok-build-livepatch")==lp, (cats, lp)
+          print("OK  version lockstep", xs)
+          PY
+
+          test "$fail" -eq 0
