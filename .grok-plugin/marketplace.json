@@ -1,6 +1,6 @@
 {
   "name": "veigapunk-grok-stable",
-  "description": "VeigaPunk Grok-stable marketplace — xbgst orchestration agents/skills/commands + Grok Build CLI livepatch. Install: grok plugin marketplace add VeigaPunk/grok-marketplace@grok-stable",
+  "description": "VeigaPunk Grok-stable marketplace — xbgst orchestration agents/skills/commands + Grok Build CLI livepatch. Install: grok plugin marketplace add VeigaPunk/grok-marketplace (channel tag: grok-stable)",
   "owner": {
     "name": "VeigaPunk",
     "email": "vgpnk@users.noreply.github.com"
