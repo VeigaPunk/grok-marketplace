@@ -1,23 +1,40 @@
 {
   "name": "veigapunk-grok-stable",
   "description": "VeigaPunk Grok-stable. Primary: xbgst-stack (agents + commands + livepatch bundled). Tag: grok-stable.",
-  "owner": { "name": "VeigaPunk", "email": "vgpnk@users.noreply.github.com" },
+  "owner": {
+    "name": "VeigaPunk",
+    "email": "vgpnk@users.noreply.github.com"
+  },
   "plugins": [
     {
       "name": "xbgst-stack",
-      "version": "1.1.6",
+      "version": "1.1.7",
       "description": "Full Grok xbgst + livepatch; REPLACE_BIN opt-in timer; smoke-gates. No heuer-planning (ds4cc).",
       "category": "orchestration",
-      "source": { "type": "local", "path": "./plugins/xbgst-stack" },
-      "keywords": ["xbgst", "godspeed", "grok-stable", "livepatch"]
+      "source": {
+        "type": "local",
+        "path": "./plugins/xbgst-stack"
+      },
+      "keywords": [
+        "xbgst",
+        "godspeed",
+        "grok-stable",
+        "livepatch"
+      ]
     },
     {
       "name": "grok-build-livepatch",
-      "version": "1.1.6",
+      "version": "1.1.7",
       "description": "Livepatch only (also inside xbgst-stack).",
       "category": "development",
-      "source": { "type": "local", "path": "./plugins/grok-build-livepatch" },
-      "keywords": ["livepatch", "grok-stable"]
+      "source": {
+        "type": "local",
+        "path": "./plugins/grok-build-livepatch"
+      },
+      "keywords": [
+        "livepatch",
+        "grok-stable"
+      ]
     }
   ]
 }

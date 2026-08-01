@@ -84,6 +84,26 @@ else
   ok "install-host uses install-timer.sh"
 fi
 
+# Primary README install block must not require REPLACE_BIN on the default path
+# (opt-in may appear only in comments / dedicated opt-in lines)
+if awk '/^```bash$/,/^```$/' README.md | head -20 | rg -n 'GROK_LIVEPATCH_REPLACE_BIN=1' | rg -v '^\s*#' >/dev/null 2>&1; then
+  # crude: fail if first code fence still has uncommented REPLACE_BIN as primary
+  if sed -n '/^```bash$/,/^```$/p' README.md | head -25 | rg -n '^GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1' >/dev/null 2>&1; then
+    bad "README primary install still defaults REPLACE_BIN=1"
+  else
+    ok "README primary install REPLACE_BIN not required"
+  fi
+else
+  ok "README primary install REPLACE_BIN not required"
+fi
+
+if sed -n '/After installing \*\*xbgst-stack\*\*/,/^## /p' plugins/xbgst-stack/skills/xbgst/SKILL.md \
+  | rg -n '^GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1' >/dev/null 2>&1; then
+  bad "xbgst skill still defaults REPLACE_BIN=1 after install"
+else
+  ok "xbgst skill REPLACE_BIN opt-in"
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"
   exit 1

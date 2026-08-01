@@ -1,7 +1,15 @@
 {
   "name": "grok-build-livepatch",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Standalone livepatch (also bundled inside xbgst-stack 1.1.6+). Prefer marketplace xbgst-stack for full stack.",
-  "author": { "name": "VeigaPunk", "url": "https://github.com/VeigaPunk" },
-  "keywords": ["livepatch", "grok-build", "grok-stable", "xbgst"]
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
+  "keywords": [
+    "livepatch",
+    "grok-build",
+    "grok-stable",
+    "xbgst"
+  ]
 }

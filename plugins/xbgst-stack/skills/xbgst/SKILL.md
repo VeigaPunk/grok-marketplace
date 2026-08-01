@@ -94,15 +94,18 @@ xbgst for Grok **ships with** the CLI livepatch that hard-bans `general-purpose`
 |-------|------|
 | xbgst skill + agents + commands | Judge orchestration |
 | `livepatch/` inside **xbgst-stack** plugin | Host CLI ban + 6h re-apply |
-| skill **xbgst-livepatch** | Install/verify timer and REPLACE_BIN |
-| `scripts/install-host.sh` | Idempotent host wire-up (agents + livepatch timer) |
+| skill **xbgst-livepatch** | Install/verify timer; REPLACE_BIN is **opt-in** |
+| `scripts/install-host.sh` | Idempotent host wire-up (agents + livepatch timer, no REPLACE_BIN by default) |
 
 After installing **xbgst-stack**:
 
 ```bash
 bash <xbgst-stack>/scripts/install-host.sh
-GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 \
+# safe re-apply (builds under ~/.local/opt/…; does not replace active CLI)
+GROK_LIVEPATCH_FORCE=1 \
   bash <xbgst-stack>/livepatch/scripts/check-and-patch.sh
+# only when user explicitly wants ~/.grok/bin/grok swapped:
+# GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 bash <xbgst-stack>/livepatch/scripts/check-and-patch.sh
 ```
 
 If the host still has stock Grok Build, run livepatch install first (skill **xbgst-livepatch**).

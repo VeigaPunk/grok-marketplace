@@ -1,10 +1,19 @@
 {
   "name": "xbgst-stack",
-  "version": "1.1.6",
-  "description": "Grok-native xbgst stack + livepatch. Timer REPLACE_BIN opt-in only; smoke-gates; no heuer-planning (ds4cc). Channel: grok-stable.",
-  "author": { "name": "VeigaPunk", "url": "https://github.com/VeigaPunk" },
+  "version": "1.1.7",
+  "description": "Grok-native xbgst stack + livepatch. Docs/timer REPLACE_BIN opt-in; smoke-gates; no heuer-planning (ds4cc). Channel: grok-stable.",
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
   "homepage": "https://github.com/VeigaPunk/grok-marketplace",
   "repository": "https://github.com/VeigaPunk/grok-marketplace",
   "license": "MIT OR Apache-2.0",
-  "keywords": ["xbgst", "godspeed", "grok-stable", "livepatch", "agents"]
+  "keywords": [
+    "xbgst",
+    "godspeed",
+    "grok-stable",
+    "livepatch",
+    "agents"
+  ]
 }
