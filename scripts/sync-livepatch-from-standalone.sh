@@ -30,18 +30,15 @@ if [[ ! -d "$STAND/scripts" || ! -d "$STAND/patches" ]]; then
 fi
 
 check_drift() {
+  # Payload that must match standalone (docs/README may carry marketplace notes).
   local dest=$1
   local drift=0
-  for sub in scripts patches systemd docs; do
+  for sub in scripts patches systemd; do
     if ! diff -rq "$STAND/$sub" "$dest/$sub" >/dev/null 2>&1; then
       echo "DRIFT $dest/$sub"
       drift=1
     fi
   done
-  if ! diff -q "$STAND/README.md" "$dest/README.md" >/dev/null 2>&1; then
-    echo "DRIFT $dest/README.md"
-    drift=1
-  fi
   return "$drift"
 }
 

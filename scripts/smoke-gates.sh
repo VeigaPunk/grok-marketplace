@@ -115,7 +115,19 @@ else
   bad "standalone livepatch gates.sh"
 fi
 
-# Nested livepatch trees should match ~/Projects/grok-build-livepatch when present
+# Dual nested trees (xbgst-stack/livepatch vs plugins/grok-build-livepatch) payload match
+dual_ok=1
+for sub in scripts patches systemd; do
+  if ! diff -rq "plugins/xbgst-stack/livepatch/$sub" "plugins/grok-build-livepatch/$sub" >/dev/null 2>&1; then
+    dual_ok=0
+    bad "nest vs plug DRIFT on $sub"
+  fi
+done
+if [[ "$dual_ok" -eq 1 ]]; then
+  ok "nest==plug livepatch payload"
+fi
+
+# Nested trees should match ~/Projects/grok-build-livepatch when present (scripts/patches/systemd)
 if [[ -d "${STANDALONE:-$HOME/Projects/grok-build-livepatch}/scripts" ]]; then
   if bash "$ROOT/scripts/sync-livepatch-from-standalone.sh" --check >/dev/null 2>&1; then
     ok "livepatch nested trees match standalone"
