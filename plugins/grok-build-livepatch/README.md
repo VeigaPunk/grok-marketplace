@@ -20,19 +20,7 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 
 Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
 
-## Preferred for Grok users: marketplace stack
-
-Livepatch is **bundled** in [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) as part of **xbgst-stack** (agents + skills + livepatch). Prefer:
-
-```bash
-grok plugin marketplace add VeigaPunk/grok-marketplace
-grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
-```
-
-This standalone tree remains for livepatch-only clones. When nested under `grok-marketplace`, `scripts/publish.sh` **refuses** (do not hijack marketplace remotes).
-
-## Quick install (standalone livepatch-only, every 6h)
+## Quick install (local, every 6h)
 
 ```bash
 git clone https://github.com/VeigaPunk/grok-build-livepatch.git
@@ -40,19 +28,34 @@ cd grok-build-livepatch
 chmod +x scripts/*.sh
 ./scripts/check-and-patch.sh --help   # usage only; no network
 ./scripts/install-timer.sh --help
+./scripts/gates.sh                   # bash -n + --help (+ install-timer --status)
+./scripts/gates.sh --with-patch      # also clean-tree git apply --check (network)
 ./scripts/check-and-patch.sh          # first run (clone/fetch + cargo — network-heavy)
-./scripts/install-timer.sh            # systemd --user timer @ 6h
+./scripts/install-timer.sh            # systemd --user timer @ 6h (binds ExecStart to this ROOT)
 ```
+
+Re-run `./scripts/install-timer.sh` after upgrades. It stamps `~/.local/state/grok-build-livepatch/preferred-install-root` and resolves ROOT as: `GROK_LIVEPATCH_ROOT` → stamp (if still valid) → this checkout. Use `./scripts/install-timer.sh --status` to verify the unit `ExecStart`. Plugin/marketplace copies of this script must be updated to honor the stamp, or they can rebind the timer; prefer installing from this public repo.
 
 There is **no dry-run** that skips network on the zero-arg path; only `--help`/`-h` exits before clone/build.
 
-Optional: replace the installed `grok` binary after a successful build:
+Optional: put the livepatch build on your active CLI (the 6h timer builds under
+`~/.local/opt/grok-build-livepatch/grok` but does **not** replace `~/.grok/bin/grok`
+unless you opt in):
 
 ```bash
+# after a successful build exists:
+./scripts/install-timer.sh --status     # shows active_cli=stock-or-other|livepatch
+./scripts/install-timer.sh --link-bin   # symlink ~/.grok/bin/grok → livepatch build
+
+# or rebuild and replace in one shot:
 GROK_LIVEPATCH_REPLACE_BIN=1 ./scripts/check-and-patch.sh
 ```
 
-State + logs: `~/.local/state/grok-build-livepatch/`
+State + logs: `~/.local/state/grok-build-livepatch/` (`last-result` may be `ok`, `ok-reassert`, `noop`, `already-applied`, `needs-rebase`, or `fail`).
+
+**Already-applied:** reverse-`git apply --check` success is pure noop. A bare forward `git apply --check` on an already-patched tree is expected to fail and is **not** the ship gate — use a clean upstream clone for integrity checks.
+
+**Version-match light path:** when `last-patched-version` equals the current upstream tag, the timer re-asserts the patch + unit smoke on a clean tip and **skips** a full release rebuild if `~/.local/opt/grok-build-livepatch/grok` already exists (unless `GROK_LIVEPATCH_FORCE=1` or `GROK_LIVEPATCH_REPLACE_BIN=1`).
 
 ## Musketeer / Grok scheduler (6h prompt)
 
