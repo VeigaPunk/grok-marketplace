@@ -85,7 +85,7 @@ CONFIDENCE: high | medium | low
 
 - Primary: native tools
 - Secondary: native tools
-- Escalation: `advisor()` for multi-factor architectural trade-offs
+- Escalation: deepen ACH / counter-proposal in-session (no advisor()/xask)
 
 ## Interaction with other agents
 

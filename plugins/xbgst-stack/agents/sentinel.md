@@ -83,7 +83,7 @@ Fall back to manual grep patterns when scanners aren't installed.
 
 - Primary: native tools (escalate to xhigh only when explicitly requested for deep architectural exploit chains — xhigh reasoning is slow)
 - Secondary: native tools
-- Escalation: `advisor()` for multi-hop exploit chains (false-negative-sensitive)
+- Escalation: multi-hop chains via extra in-session tool passes (no advisor()/xask); prefer proof over speculation
 
 ## Interaction with other agents
 

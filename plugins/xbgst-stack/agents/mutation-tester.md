@@ -77,13 +77,12 @@ SURVIVING MUTANTS: <count>
 CRITICAL GAPS: <list of untested code paths>
 ```
 
-## Delegation (DUAL-MODE — pick by target count)
+## Delegation (Grok host — pick by target count)
 
-- **(a) Single mutation, ≤4 targets:** native tools — fast spot-check via codex spark path.
-- **(b) Systematic ≥5 targets / breadth discovery:** native tools — gemini low = `# ThinkingBudget: 512`, 1 call returns 10 mutation candidates with structured rationale per probe.
-- **Selection rule:** count your mutation targets first. ≤4 → (a). ≥5 OR you don't yet know which targets matter → (b). Don't mix (a) and (b) for the same axis — pick one, run, report.
-- **Secondary:** native tools for target discovery (defaults to godspeed loadout, no effort flag — discovery is cheap).
-- **Escalation:** `advisor()` for complex mutation strategies (cross-cutting test architecture).
+- **(a) Single mutation, ≤4 targets:** mutate → run tests → revert; report score.
+- **(b) Systematic ≥5 targets / breadth discovery:** parallel native probes; list candidates with short rationale each; then mutate-run-revert on survivors.
+- **Selection rule:** count targets first. ≤4 → (a). ≥5 OR unknown targets → (b). Don't mix for the same axis.
+- **No xask / advisor() / codex / Gemini.** Stay in-session.
 
 ## Interaction with other agents
 
