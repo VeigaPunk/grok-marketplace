@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
-# Create public GitHub repo (needs GH_TOKEN / gh auth), then push via SSH.
-# PAT human steps: docs/PUBLISH.md
+# Create public GitHub repo for standalone VeigaPunk/grok-build-livepatch.
+# REFUSE when this tree is nested under VeigaPunk/grok-marketplace (ship main there instead).
 #
 #   export GH_TOKEN=ghp_...   # or github_pat_...
 #   ./scripts/publish.sh
-# Or:
-#   op run --env-file=<(printf '%s\n' 'GH_TOKEN=op://Personal/GitHub CLI/credential') -- ./scripts/publish.sh
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+
+if [[ "$ROOT" == *"/grok-marketplace/"* ]] || [[ "$ROOT" == *"/plugins/grok-build-livepatch" && -f "$ROOT/../../.grok-plugin/marketplace.json" ]]; then
+  echo "REFUSE: publish.sh under grok-marketplace must not rewrite remotes to grok-build-livepatch."
+  echo "Ship the marketplace: cd repo root → git push -u origin main → tag grok-stable."
+  exit 2
+fi
 
 usage() {
   cat <<'EOF'

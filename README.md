@@ -57,6 +57,14 @@ grok plugin install grok-build-livepatch --trust
 | `livepatch/` | Patch + 6h systemd timer |
 | `scripts/install-host.sh` | Idempotent host wire-up |
 
+## Local gates
+
+```bash
+./scripts/smoke-gates.sh
+```
+
+Validates both plugins, asserts **heuer-planning** is absent, checks README install form, and that nested `publish.sh` scripts refuse under this repo.
+
 ## Out of scope
 
 - **heuer-planning** → install from ds4cc if you want full SAT skill load for critic
