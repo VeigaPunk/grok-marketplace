@@ -160,11 +160,21 @@ if [[ -f plugins/xbgst-stack/livepatch/.standalone-tip && -f plugins/grok-build-
 fi
 
 # Nested trees should match ~/Projects/grok-build-livepatch when present (scripts/patches/systemd)
-if [[ -d "${STANDALONE:-$HOME/Projects/grok-build-livepatch}/scripts" ]]; then
+STAND="${STANDALONE:-$HOME/Projects/grok-build-livepatch}"
+if [[ -d "$STAND/scripts" ]]; then
   if bash "$ROOT/scripts/sync-livepatch-from-standalone.sh" --check >/dev/null 2>&1; then
     ok "livepatch nested trees match standalone"
   else
     bad "livepatch nested trees DRIFT (run scripts/sync-livepatch-from-standalone.sh)"
+  fi
+  if [[ -f plugins/xbgst-stack/livepatch/.standalone-tip ]] && command -v git >/dev/null 2>&1; then
+    tip=$(tr -d '[:space:]' <plugins/xbgst-stack/livepatch/.standalone-tip)
+    head=$(git -C "$STAND" rev-parse --short HEAD 2>/dev/null || true)
+    if [[ -n "$head" && "$tip" != "$head" ]]; then
+      bad "standalone-tip stamp $tip ≠ standalone HEAD $head (re-run sync)"
+    else
+      ok "standalone-tip stamp == standalone HEAD ($tip)"
+    fi
   fi
 else
   ok "livepatch sync-check skipped (no standalone clone)"

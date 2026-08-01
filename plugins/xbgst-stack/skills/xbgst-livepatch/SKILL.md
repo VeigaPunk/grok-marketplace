@@ -77,6 +77,17 @@ Timer unit **defaults** `GROK_LIVEPATCH_REPLACE_BIN=1` so the ban is on the **ac
 Opt out: set `Environment=GROK_LIVEPATCH_REPLACE_BIN=0` on the unit, or run once with `GROK_LIVEPATCH_REPLACE_BIN=0`.  
 Also: `install-timer.sh --link-bin` symlinks the active CLI to the livepatch build if already built.
 
+## Maintainer: sync from standalone
+
+When `~/Projects/grok-build-livepatch` moves, update nested trees from marketplace root:
+
+```bash
+./scripts/sync-livepatch-from-standalone.sh   # or ./scripts/sync-livepatch.sh
+./scripts/smoke-gates.sh
+./scripts/ship-check.sh
+# commit on main → push → retag grok-stable
+```
+
 ## Do not
 
 - Run `livepatch/scripts/publish.sh` from inside **grok-marketplace** (refuses; would target wrong GitHub repo).

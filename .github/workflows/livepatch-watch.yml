@@ -11,7 +11,11 @@ on:
     branches: [main]
     paths:
       - "plugins/xbgst-stack/livepatch/patches/**"
+      - "plugins/xbgst-stack/livepatch/scripts/**"
+      - "plugins/xbgst-stack/livepatch/systemd/**"
       - "plugins/grok-build-livepatch/patches/**"
+      - "plugins/grok-build-livepatch/scripts/**"
+      - "plugins/grok-build-livepatch/systemd/**"
       - ".github/workflows/livepatch-watch.yml"
 
 jobs:

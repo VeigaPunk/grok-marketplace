@@ -75,6 +75,7 @@ Validates both plugins (or JSON-only if no `grok`), asserts **heuer-planning** i
 ./scripts/sync-livepatch-from-standalone.sh          # rsync into both nested trees
 ./scripts/sync-livepatch-from-standalone.sh --check  # drift only
 ./scripts/smoke-gates.sh
+./scripts/ship-check.sh                              # clean tree + main + tag peel hints
 # then commit on main + move tag grok-stable
 ```
 
