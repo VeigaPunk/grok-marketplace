@@ -43,6 +43,18 @@ else
   ok "README marketplace add without @ref"
 fi
 
+if rg -n 'marketplace add .*-marketplace@' plugins/xbgst-stack/skills/xbgst-livepatch/SKILL.md >/dev/null 2>&1; then
+  bad "xbgst-livepatch skill must not use broken marketplace add @ref"
+else
+  ok "xbgst-livepatch skill install form"
+fi
+
+if ! rg -n 'veigapunk/grok-marketplace|local/grok-marketplace' plugins/xbgst-stack/skills/xbgst-livepatch/SKILL.md >/dev/null 2>&1; then
+  bad "xbgst-livepatch skill should document install pins"
+else
+  ok "xbgst-livepatch skill has install pins"
+fi
+
 # Nested publish must refuse
 if bash plugins/xbgst-stack/livepatch/scripts/publish.sh >/dev/null 2>&1; then
   bad "nested livepatch publish.sh should refuse"

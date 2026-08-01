@@ -20,7 +20,19 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 
 Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
 
-## Quick install (local, every 6h)
+## Preferred for Grok users: marketplace stack
+
+Livepatch is **bundled** in [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) as part of **xbgst-stack** (agents + skills + livepatch). Prefer:
+
+```bash
+grok plugin marketplace add VeigaPunk/grok-marketplace
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
+bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+```
+
+This standalone tree remains for livepatch-only clones. When nested under `grok-marketplace`, `scripts/publish.sh` **refuses** (do not hijack marketplace remotes).
+
+## Quick install (standalone livepatch-only, every 6h)
 
 ```bash
 git clone https://github.com/VeigaPunk/grok-build-livepatch.git
