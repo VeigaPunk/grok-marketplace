@@ -119,4 +119,13 @@ fi
 printf '%s\n' "$TIP" >"$ROOT/plugins/xbgst-stack/livepatch/.standalone-tip"
 printf '%s\n' "$TIP" >"$PLUG/.standalone-tip"
 echo "→ wrote .standalone-tip=$TIP"
+
+# Rebind host timer to stack LP when rebind helper exists (local machines only).
+if [[ -x "$ROOT/scripts/rebind-livepatch-timer.sh" ]] && [[ "${SYNC_SKIP_REBIND:-}" != "1" ]]; then
+  if [[ -d "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/systemd" ]] || systemctl --user status >/dev/null 2>&1; then
+    echo "→ rebind-livepatch-timer after sync"
+    bash "$ROOT/scripts/rebind-livepatch-timer.sh" || echo "WARN rebind failed (non-fatal for sync)"
+  fi
+fi
+
 echo "→ next: ./scripts/smoke-gates.sh && ./scripts/ship-check.sh && commit on main"

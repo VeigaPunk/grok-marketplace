@@ -2,6 +2,11 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.20
+
+- Sync livepatch to standalone tip with unit-bound gates; auto-rebind timer after sync when user systemd is available.
+- Smoke-gates: full `gates.sh` on nest; twin plug uses bash -n when unit is bound to nest (one unit / one ROOT).
+
 ## 1.1.19
 
 - `scripts/rebind-livepatch-timer.sh` — force systemd unit onto marketplace stack `livepatch/` (clear stale Projects stamp).

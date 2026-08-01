@@ -132,16 +132,32 @@ else
   bad "xbgst skill should document REPLACE_BIN default"
 fi
 
+# Full gates on stack nest (preferred marketplace timer ROOT when host unit exists).
 if bash plugins/xbgst-stack/livepatch/scripts/gates.sh >/dev/null 2>&1; then
   ok "xbgst-stack livepatch gates.sh"
 else
-  bad "xbgst-stack livepatch gates.sh"
+  bad "xbgst-stack livepatch gates.sh (try ./scripts/rebind-livepatch-timer.sh)"
 fi
 
-if bash plugins/grok-build-livepatch/scripts/gates.sh >/dev/null 2>&1; then
-  ok "standalone livepatch gates.sh"
+# Twin tree shares one user unit — only one ROOT can match ExecStart.
+# On CI (no unit) both full gates pass; on host with unit→nest, only offline subset for plug.
+UNIT_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user/grok-build-livepatch.service"
+if [[ ! -f "$UNIT_FILE" ]] || grep -q 'plugins/grok-build-livepatch' "$UNIT_FILE" 2>/dev/null; then
+  if bash plugins/grok-build-livepatch/scripts/gates.sh >/dev/null 2>&1; then
+    ok "plugin livepatch gates.sh"
+  else
+    bad "plugin livepatch gates.sh"
+  fi
 else
-  bad "standalone livepatch gates.sh"
+  plug_bn=0
+  for s in plugins/grok-build-livepatch/scripts/*.sh; do
+    bash -n "$s" || plug_bn=1
+  done
+  if [[ "$plug_bn" -eq 0 ]]; then
+    ok "plugin livepatch bash -n (full gates skipped: unit bound to nest)"
+  else
+    bad "plugin livepatch bash -n"
+  fi
 fi
 
 # Dual nested trees (xbgst-stack/livepatch vs plugins/grok-build-livepatch) payload match
