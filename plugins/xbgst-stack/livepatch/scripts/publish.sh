@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # Standalone livepatch-repo publisher — NOT for VeigaPunk/grok-marketplace.
-# When this tree is nested under xbgst-stack (marketplace), refuse to run.
-#
-#   export GH_TOKEN=ghp_...   # or github_pat_...
-#   ./scripts/publish.sh
+# When nested under marketplace / xbgst-stack: --help works; real runs REFUSE (exit 2).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
@@ -24,7 +21,6 @@ case "${1:-}" in
   --help|-h) usage; exit 0 ;;
 esac
 
-# Refuse real runs when shipped inside grok-marketplace / xbgst-stack
 if [[ -f "$ROOT/../../plugin.json" ]] || [[ "$ROOT" == *"/plugins/xbgst-stack/livepatch"* ]] || [[ "$ROOT" == *"/grok-marketplace/"* ]]; then
   echo "REFUSE: publish.sh under marketplace/xbgst-stack targets VeigaPunk/grok-build-livepatch."
   echo "To ship the marketplace, from the repo root: commit on main, then git push -u origin main"
@@ -50,7 +46,6 @@ if ! gh repo view VeigaPunk/grok-build-livepatch >/dev/null 2>&1; then
     --description "Livepatch Grok Build CLI: hard-ban general-purpose/explore; 6h upstream re-apply"
 fi
 
-# Prefer SSH remote for push (works when gh token has create but agent has push keys)
 if git remote get-url origin >/dev/null 2>&1; then
   git remote set-url origin git@github.com:VeigaPunk/grok-build-livepatch.git
 else
@@ -58,5 +53,4 @@ else
 fi
 
 git push -u origin main
-gh repo view VeigaPunk/grok-build-livepatch 2>/dev/null || true
-echo "Public: https://github.com/VeigaPunk/grok-build-livepatch"
+echo "Pushed main → origin (SSH)"

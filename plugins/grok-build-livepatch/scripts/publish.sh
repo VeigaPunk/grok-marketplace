@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # Create public GitHub repo for standalone VeigaPunk/grok-build-livepatch.
-# REFUSE when this tree is nested under VeigaPunk/grok-marketplace (ship main there instead).
-#
-#   export GH_TOKEN=ghp_...   # or github_pat_...
-#   ./scripts/publish.sh
+# When nested under grok-marketplace: --help works; real runs REFUSE (exit 2).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
@@ -48,7 +45,6 @@ if ! gh repo view VeigaPunk/grok-build-livepatch >/dev/null 2>&1; then
     --description "Livepatch Grok Build CLI: hard-ban general-purpose/explore; 6h upstream re-apply"
 fi
 
-# Prefer SSH remote for push (works when gh token has create but agent has push keys)
 if git remote get-url origin >/dev/null 2>&1; then
   git remote set-url origin git@github.com:VeigaPunk/grok-build-livepatch.git
 else
@@ -56,5 +52,4 @@ else
 fi
 
 git push -u origin main
-gh repo view VeigaPunk/grok-build-livepatch 2>/dev/null || true
-echo "Public: https://github.com/VeigaPunk/grok-build-livepatch"
+echo "Pushed main → origin (SSH)"

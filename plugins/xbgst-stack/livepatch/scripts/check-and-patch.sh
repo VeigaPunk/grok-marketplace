@@ -289,6 +289,7 @@ main() {
 
   # Full reverse-clean already-applied: integrity already proven; skip heavy rebuild
   if [[ "${APPLY_STATUS:-}" == "already-applied" ]]; then
+    ensure_cli_link
     echo "${upstream:-$(ts)}" >"$STATE_DIR/last-patched-version"
     echo "already-applied $(ts)" >"$STATE_DIR/last-result"
     log "=== livepatch already-applied (noop rebuild) ==="
