@@ -8,19 +8,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Refuse when shipped inside grok-marketplace / xbgst-stack
-if [[ -f "$ROOT/../../plugin.json" ]] || [[ "$ROOT" == *"/plugins/xbgst-stack/livepatch"* ]] || [[ "$ROOT" == *"/grok-marketplace/"* ]]; then
-  echo "REFUSE: publish.sh under marketplace/xbgst-stack targets VeigaPunk/grok-build-livepatch."
-  echo "To ship the marketplace, from the repo root: commit on main, then git push -u origin main"
-  echo "and move annotated tag grok-stable. Do not use this script."
-  exit 2
-fi
-
 usage() {
   cat <<'EOF'
 Usage: publish.sh [--help|-h]
 
 Create VeigaPunk/grok-build-livepatch (public) if missing, then git push -u origin main over SSH.
+Under grok-marketplace / xbgst-stack this script REFUSE(s) real runs (exit 2) — ship marketplace main instead.
 
 Requires GH_TOKEN or existing gh login for repo create. Push uses origin SSH URL.
 See docs/PUBLISH.md for exact PAT steps when gh auth fails.
@@ -30,6 +23,14 @@ EOF
 case "${1:-}" in
   --help|-h) usage; exit 0 ;;
 esac
+
+# Refuse real runs when shipped inside grok-marketplace / xbgst-stack
+if [[ -f "$ROOT/../../plugin.json" ]] || [[ "$ROOT" == *"/plugins/xbgst-stack/livepatch"* ]] || [[ "$ROOT" == *"/grok-marketplace/"* ]]; then
+  echo "REFUSE: publish.sh under marketplace/xbgst-stack targets VeigaPunk/grok-build-livepatch."
+  echo "To ship the marketplace, from the repo root: commit on main, then git push -u origin main"
+  echo "and move annotated tag grok-stable. Do not use this script."
+  exit 2
+fi
 
 if [[ -z "${GH_TOKEN:-}" ]]; then
   if ! gh auth status >/dev/null 2>&1; then

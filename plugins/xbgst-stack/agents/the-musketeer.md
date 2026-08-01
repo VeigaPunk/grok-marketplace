@@ -46,7 +46,7 @@ grok-web "$(cat /tmp/grok-prompt-$$.md)"
 rm /tmp/grok-prompt-$$.md
 ```
 
-Use `.md` extension (not `.txt`) — it signals "this is content intended for an LLM, not a shell script" and aligns with the open TODO in `README.md` about eventually switching to file-attach ingestion.
+Use `.md` extension (not `.txt`) — signals content intended for an LLM, not a shell script.
 
 ## Output shape
 

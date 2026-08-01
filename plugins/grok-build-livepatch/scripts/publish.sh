@@ -8,17 +8,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-if [[ "$ROOT" == *"/grok-marketplace/"* ]] || [[ "$ROOT" == *"/plugins/grok-build-livepatch" && -f "$ROOT/../../.grok-plugin/marketplace.json" ]]; then
-  echo "REFUSE: publish.sh under grok-marketplace must not rewrite remotes to grok-build-livepatch."
-  echo "Ship the marketplace: cd repo root → git push -u origin main → tag grok-stable."
-  exit 2
-fi
-
 usage() {
   cat <<'EOF'
 Usage: publish.sh [--help|-h]
 
 Create VeigaPunk/grok-build-livepatch (public) if missing, then git push -u origin main over SSH.
+When nested under grok-marketplace this script REFUSE(s) real runs (exit 2).
 
 Requires GH_TOKEN or existing gh login for repo create. Push uses origin SSH URL.
 See docs/PUBLISH.md for exact PAT steps when gh auth fails.
@@ -28,6 +23,12 @@ EOF
 case "${1:-}" in
   --help|-h) usage; exit 0 ;;
 esac
+
+if [[ "$ROOT" == *"/grok-marketplace/"* ]] || [[ "$ROOT" == *"/plugins/grok-build-livepatch" && -f "$ROOT/../../.grok-plugin/marketplace.json" ]]; then
+  echo "REFUSE: publish.sh under grok-marketplace must not rewrite remotes to grok-build-livepatch."
+  echo "Ship the marketplace: cd repo root → git push -u origin main → tag grok-stable."
+  exit 2
+fi
 
 if [[ -z "${GH_TOKEN:-}" ]]; then
   if ! gh auth status >/dev/null 2>&1; then

@@ -104,6 +104,18 @@ else
   ok "xbgst skill REPLACE_BIN opt-in"
 fi
 
+if bash plugins/xbgst-stack/livepatch/scripts/gates.sh >/dev/null 2>&1; then
+  ok "xbgst-stack livepatch gates.sh"
+else
+  bad "xbgst-stack livepatch gates.sh"
+fi
+
+if bash plugins/grok-build-livepatch/scripts/gates.sh >/dev/null 2>&1; then
+  ok "standalone livepatch gates.sh"
+else
+  bad "standalone livepatch gates.sh"
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"
   exit 1

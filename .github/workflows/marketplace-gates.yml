@@ -62,4 +62,7 @@ jobs:
           print("OK  version lockstep", xs)
           PY
 
+          bash plugins/xbgst-stack/livepatch/scripts/gates.sh
+          bash plugins/grok-build-livepatch/scripts/gates.sh
+
           test "$fail" -eq 0

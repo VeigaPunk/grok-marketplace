@@ -1,3 +1,6 @@
+# NOTE: This nested workflow is NOT executed by GitHub when shipped under grok-marketplace.
+# Active CI lives at repo root: .github/workflows/livepatch-watch.yml
+
 name: watch-grok-build-release
 
 on:
