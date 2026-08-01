@@ -70,6 +70,19 @@ else
   if [[ "$code" -eq 2 ]]; then ok "standalone-path publish.sh refuse under marketplace (2)"; else bad "standalone publish.sh exit $code (want 2)"; fi
 fi
 
+# install-host must not hardcode REPLACE_BIN=1 in the generated unit template
+if rg -n 'Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host.sh must not hardcode REPLACE_BIN=1 (opt-in only)"
+else
+  ok "install-host REPLACE_BIN opt-in"
+fi
+
+if ! rg -n 'install-timer\.sh' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host should delegate timer install to install-timer.sh"
+else
+  ok "install-host uses install-timer.sh"
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"
   exit 1

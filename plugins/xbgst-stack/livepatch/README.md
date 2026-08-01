@@ -20,7 +20,17 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 
 Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
 
-## Quick install (local, every 6h)
+## Preferred: marketplace xbgst-stack
+
+```bash
+grok plugin marketplace add VeigaPunk/grok-marketplace
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
+bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+```
+
+Timer units do **not** set `GROK_LIVEPATCH_REPLACE_BIN` by default (safe). Opt in only when you want the active CLI swapped.
+
+## Quick install (standalone livepatch-only, every 6h)
 
 ```bash
 git clone https://github.com/VeigaPunk/grok-build-livepatch.git
@@ -29,7 +39,7 @@ chmod +x scripts/*.sh
 ./scripts/check-and-patch.sh --help   # usage only; no network
 ./scripts/install-timer.sh --help
 ./scripts/check-and-patch.sh          # first run (clone/fetch + cargo — network-heavy)
-./scripts/install-timer.sh            # systemd --user timer @ 6h
+./scripts/install-timer.sh            # systemd --user timer @ 6h (no REPLACE_BIN by default)
 ```
 
 There is **no dry-run** that skips network on the zero-arg path; only `--help`/`-h` exits before clone/build.

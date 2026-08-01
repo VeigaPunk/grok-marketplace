@@ -1,7 +1,7 @@
 {
   "name": "xbgst-stack",
-  "version": "1.1.5",
-  "description": "Grok-native xbgst stack + livepatch. Documented marketplace install pins; smoke-gates; no heuer-planning (ds4cc). Channel: grok-stable.",
+  "version": "1.1.6",
+  "description": "Grok-native xbgst stack + livepatch. Timer REPLACE_BIN opt-in only; smoke-gates; no heuer-planning (ds4cc). Channel: grok-stable.",
   "author": { "name": "VeigaPunk", "url": "https://github.com/VeigaPunk" },
   "homepage": "https://github.com/VeigaPunk/grok-marketplace",
   "repository": "https://github.com/VeigaPunk/grok-marketplace",

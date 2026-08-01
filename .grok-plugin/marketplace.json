@@ -5,15 +5,15 @@
   "plugins": [
     {
       "name": "xbgst-stack",
-      "version": "1.1.5",
-      "description": "Full Grok xbgst: specialists, /xbgst, livepatch/, smoke-gates, install pins. No heuer-planning (ds4cc).",
+      "version": "1.1.6",
+      "description": "Full Grok xbgst + livepatch; REPLACE_BIN opt-in timer; smoke-gates. No heuer-planning (ds4cc).",
       "category": "orchestration",
       "source": { "type": "local", "path": "./plugins/xbgst-stack" },
       "keywords": ["xbgst", "godspeed", "grok-stable", "livepatch"]
     },
     {
       "name": "grok-build-livepatch",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "Livepatch only (also inside xbgst-stack).",
       "category": "development",
       "source": { "type": "local", "path": "./plugins/grok-build-livepatch" },
