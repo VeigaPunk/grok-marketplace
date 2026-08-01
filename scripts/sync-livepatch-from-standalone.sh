@@ -31,11 +31,25 @@ fi
 
 check_drift() {
   # Payload that must match standalone (docs/README may carry marketplace notes).
+  # Exclude sync-stack-livepatch.sh — marketplace replaces it with a safe overlay.
   local dest=$1
   local drift=0
-  for sub in scripts patches systemd; do
+  for sub in patches systemd; do
     if ! diff -rq "$STAND/$sub" "$dest/$sub" >/dev/null 2>&1; then
       echo "DRIFT $dest/$sub"
+      drift=1
+    fi
+  done
+  # scripts: compare file-by-file except marketplace-owned sync-stack-livepatch.sh
+  local f base
+  for f in "$STAND/scripts/"*; do
+    [[ -f "$f" ]] || continue
+    base=$(basename "$f")
+    if [[ "$base" == "sync-stack-livepatch.sh" ]]; then
+      continue
+    fi
+    if ! diff -q "$f" "$dest/scripts/$base" >/dev/null 2>&1; then
+      echo "DRIFT $dest/scripts/$base"
       drift=1
     fi
   done
@@ -84,10 +98,25 @@ for DEST in "$NEST" "$PLUG"; do
     done
   fi
   chmod +x "$DEST/scripts/"*.sh 2>/dev/null || true
+  # Standalone ships sync-stack-livepatch.sh that rewrites install-host to prefer
+  # Projects/. Replace with marketplace-safe variant (never clobbers install-host).
+  if [[ -f "$ROOT/scripts/overlays/sync-stack-livepatch.marketplace-safe.sh" ]]; then
+    cp -a "$ROOT/scripts/overlays/sync-stack-livepatch.marketplace-safe.sh" \
+      "$DEST/scripts/sync-stack-livepatch.sh"
+    chmod +x "$DEST/scripts/sync-stack-livepatch.sh"
+  fi
   echo "  synced → $DEST"
 done
+
+# Always restore marketplace-first install-host (never let nested tools rewrite it).
+if [[ -f "$ROOT/scripts/overlays/install-host.xbgst-stack.sh" ]]; then
+  cp -a "$ROOT/scripts/overlays/install-host.xbgst-stack.sh" \
+    "$ROOT/plugins/xbgst-stack/scripts/install-host.sh"
+  chmod +x "$ROOT/plugins/xbgst-stack/scripts/install-host.sh"
+  echo "→ restored install-host from scripts/overlays/install-host.xbgst-stack.sh"
+fi
 
 printf '%s\n' "$TIP" >"$ROOT/plugins/xbgst-stack/livepatch/.standalone-tip"
 printf '%s\n' "$TIP" >"$PLUG/.standalone-tip"
 echo "→ wrote .standalone-tip=$TIP"
-echo "→ next: ./scripts/smoke-gates.sh && commit on main"
+echo "→ next: ./scripts/smoke-gates.sh && ./scripts/ship-check.sh && commit on main"

@@ -2,6 +2,12 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.18
+
+- Marketplace overlays: `scripts/overlays/install-host.xbgst-stack.sh` + safe `sync-stack-livepatch`.
+- After every standalone livepatch sync, re-apply install-host overlay (prevents Projects-CANON clobber).
+- Smoke-gates: install-host must match overlay; nested sync-stack must not rewrite host.
+
 ## 1.1.17
 
 - Document public install + maintainer ship loop in CHANGELOG.

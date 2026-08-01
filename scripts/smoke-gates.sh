@@ -102,6 +102,22 @@ else
   ok "install-host marketplace-first (no Projects CANON preference)"
 fi
 
+if [[ -f scripts/overlays/install-host.xbgst-stack.sh ]]; then
+  if diff -q scripts/overlays/install-host.xbgst-stack.sh plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+    ok "install-host matches marketplace overlay"
+  else
+    bad "install-host drifts from scripts/overlays/install-host.xbgst-stack.sh"
+  fi
+fi
+
+if [[ -f plugins/xbgst-stack/livepatch/scripts/sync-stack-livepatch.sh ]] \
+  && rg -n 'prefer canonical Projects livepatch|Managed/synced by grok-build-livepatch' \
+    plugins/xbgst-stack/livepatch/scripts/sync-stack-livepatch.sh >/dev/null 2>&1; then
+  bad "nested sync-stack-livepatch.sh still rewrites install-host (need marketplace-safe overlay)"
+else
+  ok "nested sync-stack-livepatch is marketplace-safe"
+fi
+
 # Unit template intentionally defaults REPLACE_BIN=1 (ban on active CLI)
 if rg -n '^Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/livepatch/systemd/grok-build-livepatch.service >/dev/null 2>&1; then
   ok "timer unit defaults REPLACE_BIN=1 (ban active)"
