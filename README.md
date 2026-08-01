@@ -17,13 +17,12 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 
-# Wire host agents/skills/commands + livepatch timer (no binary replace by default)
+# Wire host agents/skills/commands + livepatch timer
+# (timer unit defaults REPLACE_BIN=1 so active CLI gets the ban)
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
-# Optional: rebuild/re-apply patch without swapping ~/.grok/bin/grok
 GROK_LIVEPATCH_FORCE=1 \
   bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
-# Opt-in only — replace active CLI:
-# GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 bash .../check-and-patch.sh
+# opt out of binary replace: GROK_LIVEPATCH_REPLACE_BIN=0 …
 ```
 
 If both GitHub and a local path marketplace are registered, the CLI requires a **pin**:

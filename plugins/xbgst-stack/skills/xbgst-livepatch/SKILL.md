@@ -27,11 +27,10 @@ grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 # keep a prior standalone stamp: GROK_LIVEPATCH_KEEP_STAMP=1 bash .../install-host.sh
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 
-# build/apply patch (optional binary replace — invasive)
+# re-apply (timer unit defaults REPLACE_BIN=1 → active CLI stays banned)
 GROK_LIVEPATCH_FORCE=1 \
   bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
-# only when you intend to replace ~/.grok/bin/grok:
-# GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 bash .../check-and-patch.sh
+# opt out for one run: GROK_LIVEPATCH_REPLACE_BIN=0 …
 ```
 
 Do **not** use `marketplace add …@grok-stable` (CLI treats `@` as part of the git host). Channel pin is the git tag on the repo; `main` tracks it at ship.
@@ -74,7 +73,9 @@ grok --version
 
 ## REPLACE_BIN
 
-`GROK_LIVEPATCH_REPLACE_BIN=1` overwrites `~/.grok/bin/grok` with the patched build. **Opt-in only.** Default path builds under `~/.local/opt/grok-build-livepatch/` without replacing the active CLI.
+Timer unit **defaults** `GROK_LIVEPATCH_REPLACE_BIN=1` so the ban is on the **active** CLI (`~/.grok/bin/grok`), not only under `~/.local/opt/…`.  
+Opt out: set `Environment=GROK_LIVEPATCH_REPLACE_BIN=0` on the unit, or run once with `GROK_LIVEPATCH_REPLACE_BIN=0`.  
+Also: `install-timer.sh --link-bin` symlinks the active CLI to the livepatch build if already built.
 
 ## Do not
 

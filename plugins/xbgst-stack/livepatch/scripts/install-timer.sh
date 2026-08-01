@@ -14,7 +14,8 @@ no network from this script).
   --status     Print preferred root, unit ExecStart, and whether the active
                ~/.grok/bin/grok is the livepatch build (no changes).
   --link-bin   Symlink ~/.grok/bin/grok → ~/.local/opt/grok-build-livepatch/grok
-               if that binary exists (opt-in; timer unit defaults REPLACE_BIN=1).
+               if that binary exists. Timer unit defaults REPLACE_BIN=1 (ban on active CLI;
+               set Environment=GROK_LIVEPATCH_REPLACE_BIN=0 to opt out).
 
 Root resolution (first match wins):
   1) GROK_LIVEPATCH_ROOT if it contains scripts/check-and-patch.sh

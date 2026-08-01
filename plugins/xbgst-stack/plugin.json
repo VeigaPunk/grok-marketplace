@@ -1,7 +1,7 @@
 {
   "name": "xbgst-stack",
-  "version": "1.1.10",
-  "description": "Grok-native xbgst stack + livepatch. install-host binds timer to stack LP; gates+CI; no heuer-planning (ds4cc). Channel: grok-stable.",
+  "version": "1.1.11",
+  "description": "Grok-native xbgst stack + livepatch. Marketplace-first timer bind; unit REPLACE_BIN=1 for active ban; no heuer-planning (ds4cc).",
   "author": {
     "name": "VeigaPunk",
     "url": "https://github.com/VeigaPunk"
