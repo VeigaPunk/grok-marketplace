@@ -10,16 +10,22 @@ bad() { echo "FAIL $*"; fail=1; }
 
 echo "→ smoke-gates: $ROOT"
 
-if grok plugin validate plugins/xbgst-stack >/dev/null; then
-  ok "validate xbgst-stack"
+# Grok CLI plugin validate (skip on CI hosts without grok: SMOKE_SKIP_GROK=1)
+if [[ "${SMOKE_SKIP_GROK:-}" == "1" ]] || ! command -v grok >/dev/null 2>&1; then
+  ok "validate plugins skipped (no grok / SMOKE_SKIP_GROK=1)"
+  python3 -c 'import json; json.load(open("plugins/xbgst-stack/plugin.json")); json.load(open("plugins/grok-build-livepatch/plugin.json"))' \
+    && ok "plugin.json JSON" || bad "plugin.json JSON"
 else
-  bad "validate xbgst-stack"
-fi
-
-if grok plugin validate plugins/grok-build-livepatch >/dev/null; then
-  ok "validate grok-build-livepatch"
-else
-  bad "validate grok-build-livepatch"
+  if grok plugin validate plugins/xbgst-stack >/dev/null; then
+    ok "validate xbgst-stack"
+  else
+    bad "validate xbgst-stack"
+  fi
+  if grok plugin validate plugins/grok-build-livepatch >/dev/null; then
+    ok "validate grok-build-livepatch"
+  else
+    bad "validate grok-build-livepatch"
+  fi
 fi
 
 if [[ -d plugins/xbgst-stack/skills/heuer-planning ]]; then
@@ -125,6 +131,32 @@ for sub in scripts patches systemd; do
 done
 if [[ "$dual_ok" -eq 1 ]]; then
   ok "nest==plug livepatch payload"
+fi
+
+# Catalog versions lockstep with plugin.json
+if python3 - <<'PY'
+import json, sys
+m=json.load(open(".grok-plugin/marketplace.json"))
+xs=json.load(open("plugins/xbgst-stack/plugin.json"))["version"]
+lp=json.load(open("plugins/grok-build-livepatch/plugin.json"))["version"]
+cats={p["name"]:p["version"] for p in m["plugins"]}
+assert cats.get("xbgst-stack")==xs, (cats, xs)
+assert cats.get("grok-build-livepatch")==lp, (cats, lp)
+assert xs==lp, (xs, lp)
+print(xs)
+PY
+then
+  ok "version lockstep catalog==plugins"
+else
+  bad "version lockstep catalog==plugins"
+fi
+
+if [[ -f plugins/xbgst-stack/livepatch/.standalone-tip && -f plugins/grok-build-livepatch/.standalone-tip ]]; then
+  if diff -q plugins/xbgst-stack/livepatch/.standalone-tip plugins/grok-build-livepatch/.standalone-tip >/dev/null; then
+    ok "standalone-tip stamps match"
+  else
+    bad "standalone-tip stamps differ between nest and plug"
+  fi
 fi
 
 # Nested trees should match ~/Projects/grok-build-livepatch when present (scripts/patches/systemd)

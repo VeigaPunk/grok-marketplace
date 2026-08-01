@@ -63,9 +63,11 @@ grok plugin install grok-build-livepatch --trust
 
 ```bash
 ./scripts/smoke-gates.sh
+# CI / hosts without grok CLI:
+SMOKE_SKIP_GROK=1 ./scripts/smoke-gates.sh
 ```
 
-Validates both plugins, asserts **heuer-planning** is absent, checks README install form, and that nested `publish.sh` scripts refuse under this repo. When `~/Projects/grok-build-livepatch` exists, also asserts nested livepatch trees match that tip.
+Validates both plugins (or JSON-only if no `grok`), asserts **heuer-planning** is absent, checks README install form, version lockstep, dual nested livepatch equality, and that nested `publish.sh` scripts refuse under this repo. When `~/Projects/grok-build-livepatch` exists, also asserts nested trees match that tip.
 
 ### Sync livepatch from standalone
 
