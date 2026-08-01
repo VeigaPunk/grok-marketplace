@@ -1,5 +1,7 @@
 # Publish VeigaPunk/grok-build-livepatch (public)
 
+> **Marketplace note:** When this tree is nested under `plugins/xbgst-stack/livepatch` in **VeigaPunk/grok-marketplace**, do **not** publish from here. Ship the marketplace with `git push -u origin main` + tag `grok-stable`. `scripts/publish.sh` **refuses** (exit 2) under the marketplace path. This doc is for a **standalone** livepatch clone only.
+
 Target: **public** GitHub repository `VeigaPunk/grok-build-livepatch`.
 
 Local `origin` is SSH: `git@github.com:VeigaPunk/grok-build-livepatch.git`.
