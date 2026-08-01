@@ -2,6 +2,11 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.21
+
+- Add `FRONTIER.md` for durable next-move map when the channel is already green.
+- CI chmod includes `rebind-livepatch-timer.sh`.
+
 ## 1.1.20
 
 - Sync livepatch to standalone tip with unit-bound gates; auto-rebind timer after sync when user systemd is available.

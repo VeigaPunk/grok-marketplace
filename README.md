@@ -8,6 +8,7 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 | **Channel tag** | annotated `grok-stable` (peels to shippable `main`) |
 | **Not included** | `heuer-planning` — lives on **ds4cc** marketplace, not here |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
+| **Frontier** | [FRONTIER.md](FRONTIER.md) (next moves when green) |
 
 ## Install
 

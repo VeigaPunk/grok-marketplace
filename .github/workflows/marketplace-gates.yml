@@ -20,6 +20,12 @@ jobs:
           SMOKE_SKIP_GROK: "1"
         run: |
           chmod +x scripts/smoke-gates.sh scripts/ship-check.sh \
-            scripts/sync-livepatch-from-standalone.sh scripts/sync-livepatch.sh
+            scripts/rebind-livepatch-timer.sh \
+            scripts/sync-livepatch-from-standalone.sh scripts/sync-livepatch.sh \
+            scripts/overlays/*.sh || true
           chmod +x plugins/xbgst-stack/livepatch/scripts/*.sh plugins/grok-build-livepatch/scripts/*.sh
+          test -f scripts/overlays/install-host.xbgst-stack.sh
+          test -f scripts/overlays/sync-stack-livepatch.marketplace-safe.sh
+          test -f FRONTIER.md
           ./scripts/smoke-gates.sh
+
