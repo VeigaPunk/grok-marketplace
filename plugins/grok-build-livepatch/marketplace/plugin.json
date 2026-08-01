@@ -1,13 +1,13 @@
 {
   "name": "grok-build-livepatch",
-  "version": "0.1.0",
-  "description": "Hard-ban general-purpose and explore subagents; 6h livepatch watcher for xai-org/grok-build.",
+  "version": "1.0.0",
+  "description": "Livepatch Grok Build CLI: hard-ban general-purpose/explore subagents; 6h re-apply against xai-org/grok-build. Tag channel: grok-stable.",
   "author": {
     "name": "VeigaPunk",
     "url": "https://github.com/VeigaPunk"
   },
-  "homepage": "https://github.com/VeigaPunk/grok-build-livepatch",
-  "repository": "https://github.com/VeigaPunk/grok-build-livepatch",
+  "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+  "repository": "https://github.com/VeigaPunk/grok-marketplace",
   "license": "MIT OR Apache-2.0",
-  "keywords": ["xbgst", "subagents", "livepatch", "grok-build"]
+  "keywords": ["livepatch", "grok-build", "subagents", "grok-stable"]
 }

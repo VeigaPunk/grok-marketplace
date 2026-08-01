@@ -1,6 +1,6 @@
 ---
 name: xbgst
-description: Godspeed orchestrator for Grok. Clone of xbrd-gdsp-fknpft with all agent roles mapped to grok models. Triggers on xbgst, xbgst command, godspeed-grok, or xbreed-godspeed-fknpft. Spawns the-planner with wwkd on round 0 then acts as the-judge for subsequent rounds. Every dispatched agent receives only the short godspeed directive. Judge alone holds full trilogy. Single activation runs all rounds to frontier; no per-round user prompts. Connector mandatory every round. distiller scribe executor labrat map to grok-4.5-fast-low. Only Rust. No Python. Spawn via fnm multishells or pure bash granularity. Hardcap 16 concurrent agents, tools={*} for every agent.
+description: Godspeed orchestrator for Grok. Clone of xbrd-gdsp-fknpft. Local-first then after each judged milestone APPROVED commit and push direct to main (no fork/PR default). Spawns the-planner WWKD then judge rounds; connector every round. Hardcap 16. Triggers xbgst godspeed-grok xbrd-gdsp-fknpft.
 metadata:
   axis_family: orchestration
   model: grok
@@ -59,6 +59,31 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Grok-native + Rust-only.** All roles map to Grok. No Claude / Opus / Sonnet / xask / Codex CLI. No Python. Use native tools, parallel bash (via fnm multishells or isolated env), and Grok reasoning. All generated code and scripts in Rust.
+
+## Local-first git posture (locked — prefer over forks/PRs)
+
+**Always work on a local clone first.** Never design around "fork → PR → merge" as the default delivery path. Direct to **`main`** after judge approval is preferred: clone locally → implement → gate → judge → commit → push `main`.
+
+### Rules
+
+1. **Local first.** Clone (or use existing local worktree) under the user's Projects path. All edits, tests, and gates run locally.
+2. **Branch policy.** Prefer working **directly on `main`** (or the repo default branch). Feature branches only when the user explicitly forbids direct-to-main or when concurrent conflicting work requires isolation. Default is **no fork, no PR stack**.
+3. **After each judged milestone** (Pareto-accepted move set with green gates for that milestone):
+   - Emit `APPROVED: <one-line reason>` (or `BLOCKED: <reason>` and keep orching — no commit).
+   - On APPROVED: stage only project files (never secrets, never credentials, respect `.gitignore`).
+   - Commit with a complete-sentence message (HEREDOC).
+   - **`git push origin HEAD:main`** (or `git push -u origin main`). Prefer SSH remotes (`git@github.com:…`).
+4. **No force-push** to shared `main` unless the user explicitly orders it.
+5. **No fork-then-merge as the happy path.** Creating a fork only to open a PR back is slower and worse for this workflow. If the remote does not exist yet, create/push the local repo to the user's GitHub as the canonical remote, then keep pushing `main`.
+6. **Scribe / executor** may perform the commit+push once the judge has stated APPROVED; judge still owns the approval call.
+7. **If push fails** (auth, missing remote): report the exact next command (e.g. set `GH_TOKEN`, `git remote add origin …`) and continue local work — do not invent a fork/PR detour unless asked.
+
+### Milestone ship loop (insert after each COMPILE that improved axes)
+
+```
+gates green? → judge APPROVED → git add → commit → git push origin main → next round
+gates red / not shippable? → BLOCKED → keep orching (no push)
+```
 
 ## Model routing (locked)
 
@@ -192,7 +217,7 @@ When the prompt contains "godspeed" or skill is activated via xbgst:
 
 **DESPAWN handling:** Acknowledge and release the session slot.
 
-**Round phases:** PROPOSE (parallel, must contain connector) → CROSS-CRITIQUE → PARETO FILTER (judge) → COMPILE (round summary). If any axis improved, dispatch next round immediately inside the same activation — do not pause, do not emit a round-boundary prompt, do not ask. The entire loop runs to completion in one response stream. Exit only with final DRAFT + AXES FINAL STATE.
+**Round phases:** PROPOSE (parallel, must contain connector) → CROSS-CRITIQUE → PARETO FILTER (judge) → COMPILE (round summary) → **if milestone shippable: APPROVED + commit + push `main` (local-first)**. If any axis improved, dispatch next round immediately inside the same activation — do not pause, do not emit a round-boundary prompt, do not ask. The entire loop runs to completion in one response stream. Exit only with final DRAFT + AXES FINAL STATE.
 
 **Autonomous iteration:** One activation = full multi-round loop. The judge orchestrates every round internally until the frontier is reached (zero axis improvement vs previous round) or the hard 4-round cap. Emit only the final DRAFT + AXES FINAL STATE. Never emit "Round N ready", "continuing", "will run", or any intermediate prompt that waits for user input. No input from the user is necessary after the initial trigger. User interrupt is the sole external control.
 
