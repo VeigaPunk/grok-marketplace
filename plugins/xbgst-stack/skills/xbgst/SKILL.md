@@ -60,30 +60,52 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Grok-native + Rust-only.** All roles map to Grok. No Claude / Opus / Sonnet / xask / Codex CLI. No Python. Use native tools, parallel bash (via fnm multishells or isolated env), and Grok reasoning. All generated code and scripts in Rust.
 
-## Local-first git posture (locked — prefer over forks/PRs)
+## Local-first git posture (locked — permanent)
 
-**Always work on a local clone first.** Never design around "fork → PR → merge" as the default delivery path. Direct to **`main`** after judge approval is preferred: clone locally → implement → gate → judge → commit → push `main`.
+**Always prefer the LOCAL clone first.** After each judged milestone is **APPROVED**, **commit and push DIRECTLY TO `main`**. Do **NOT** use fork → PR → merge as the default path. No PR stacks.
 
 ### Rules
 
-1. **Local first.** Clone (or use existing local worktree) under the user's Projects path. All edits, tests, and gates run locally.
-2. **Branch policy.** Prefer working **directly on `main`** (or the repo default branch). Feature branches only when the user explicitly forbids direct-to-main or when concurrent conflicting work requires isolation. Default is **no fork, no PR stack**.
-3. **After each judged milestone** (Pareto-accepted move set with green gates for that milestone):
-   - Emit `APPROVED: <one-line reason>` (or `BLOCKED: <reason>` and keep orching — no commit).
-   - On APPROVED: stage only project files (never secrets, never credentials, respect `.gitignore`).
-   - Commit with a complete-sentence message (HEREDOC).
-   - **`git push origin HEAD:main`** (or `git push -u origin main`). Prefer SSH remotes (`git@github.com:…`).
-4. **No force-push** to shared `main` unless the user explicitly orders it.
-5. **No fork-then-merge as the happy path.** Creating a fork only to open a PR back is slower and worse for this workflow. If the remote does not exist yet, create/push the local repo to the user's GitHub as the canonical remote, then keep pushing `main`.
-6. **Scribe / executor** may perform the commit+push once the judge has stated APPROVED; judge still owns the approval call.
-7. **If push fails** (auth, missing remote): report the exact next command (e.g. set `GH_TOKEN`, `git remote add origin …`) and continue local work — do not invent a fork/PR detour unless asked.
+1. **Local first.** Use the existing local clone (Projects path). All edits, tests, and gates run locally before any remote write.
+2. **Stay on `main`.** At session start and before ship: `git checkout main`. If work landed on a side branch: `git checkout main && git merge --ff-only <branch>` (or merge then continue on main). Feature branches only when the user explicitly forbids direct-to-main or concurrent isolation is required.
+3. **After each judged milestone** (Pareto-accepted move set with green gates):
+   - Emit `APPROVED: <one-line reason>` — or `BLOCKED: <reason>` and keep orching (no commit/push).
+   - On APPROVED: stage **project files only** (never secrets, never credentials; respect `.gitignore`; typically leave `.xbgst/` untracked if gitignored).
+   - Commit with a complete-sentence message via HEREDOC.
+   - **`git push -u origin main`** over **SSH** (`git@github.com:VeigaPunk/<repo>.git`). If `origin` is missing, add it for this repo under VeigaPunk and push `main`.
+4. **No force-push.** No rewrite of published history unless the user explicitly orders it.
+5. **No fork-then-PR happy path.** Do not create a fork only to open a PR. Canonical delivery is local → judge → commit → push `main`.
+6. **Scribe / executor** may run commit+push only after the judge states `APPROVED:`; judge owns the approval call.
+7. **If push fails** (auth, missing remote): report the exact fix, keep the local tree green, continue orching — do not invent a fork/PR detour unless asked.
 
-### Milestone ship loop (insert after each COMPILE that improved axes)
+### Milestone ship loop (after each COMPILE that improved axes)
 
 ```
-gates green? → judge APPROVED → git add → commit → git push origin main → next round
-gates red / not shippable? → BLOCKED → keep orching (no push)
+on main? → gates green? → APPROVED: <reason> → stage → commit (HEREDOC) → git push -u origin main (SSH) → next milestone
+not shippable? → BLOCKED → keep orching (no commit/push)
 ```
+
+
+## Host substrate: grok-build-livepatch (ships with xbgst-stack)
+
+xbgst for Grok **ships with** the CLI livepatch that hard-bans `general-purpose` and `explore` at spawn validation. Not a separate product.
+
+| Piece | Role |
+|-------|------|
+| xbgst skill + agents + commands | Judge orchestration |
+| `livepatch/` inside **xbgst-stack** plugin | Host CLI ban + 6h re-apply |
+| skill **xbgst-livepatch** | Install/verify timer and REPLACE_BIN |
+| `scripts/install-host.sh` | Idempotent host wire-up (agents + livepatch timer) |
+
+After installing **xbgst-stack**:
+
+```bash
+bash <xbgst-stack>/scripts/install-host.sh
+GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 \
+  bash <xbgst-stack>/livepatch/scripts/check-and-patch.sh
+```
+
+If the host still has stock Grok Build, run livepatch install first (skill **xbgst-livepatch**).
 
 ## Model routing (locked)
 
