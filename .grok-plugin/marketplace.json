@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "xbgst-stack",
-      "version": "1.1.12",
+      "version": "1.1.13",
       "description": "Full Grok xbgst + livepatch; root CI; REPLACE_BIN opt-in. No heuer-planning (ds4cc).",
       "category": "orchestration",
       "source": {
@@ -24,7 +24,7 @@
     },
     {
       "name": "grok-build-livepatch",
-      "version": "1.1.12",
+      "version": "1.1.13",
       "description": "Livepatch only (also inside xbgst-stack).",
       "category": "development",
       "source": {

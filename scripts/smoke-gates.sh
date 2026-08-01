@@ -115,6 +115,17 @@ else
   bad "standalone livepatch gates.sh"
 fi
 
+# Nested livepatch trees should match ~/Projects/grok-build-livepatch when present
+if [[ -d "${STANDALONE:-$HOME/Projects/grok-build-livepatch}/scripts" ]]; then
+  if bash "$ROOT/scripts/sync-livepatch-from-standalone.sh" --check >/dev/null 2>&1; then
+    ok "livepatch nested trees match standalone"
+  else
+    bad "livepatch nested trees DRIFT (run scripts/sync-livepatch-from-standalone.sh)"
+  fi
+else
+  ok "livepatch sync-check skipped (no standalone clone)"
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"
   exit 1
