@@ -1,4 +1,64 @@
 #!/usr/bin/env bash
+# Sync this public livepatch tree into local xbgst-stack copies and rebind timer.
+# Local-only; no network (except if you later run check-and-patch).
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: sync-stack-livepatch.sh [--help|-h] [--no-timer]
+
+Copy scripts/, systemd/, patches/ from this repo into known local stack
+livepatch trees, rewrite xbgst-stack install-host.sh to prefer Projects,
+and re-run install-timer from this checkout (unless --no-timer).
+
+Targets (if present):
+  ~/Projects/grok-marketplace/plugins/xbgst-stack/livepatch
+  ~/.grok/installed-plugins/xbgst-stack-*/livepatch
+  matching install-host.sh next to those trees
+EOF
+}
+
+case "${1:-}" in
+  --help|-h) usage; exit 0 ;;
+esac
+
+NO_TIMER=0
+case "${1:-}" in
+  --no-timer) NO_TIMER=1 ;;
+  "") ;;
+  *)
+    echo "Unknown option: $1" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CANON="$ROOT"
+
+sync_tree() {
+  local dest="$1"
+  [[ -d "$dest" ]] || return 0
+  mkdir -p "$dest/scripts" "$dest/systemd" "$dest/patches"
+  cp -a "$ROOT/scripts/"*.sh "$dest/scripts/"
+  cp -a "$ROOT/systemd/"* "$dest/systemd/" 2>/dev/null || true
+  cp -a "$ROOT/patches/"* "$dest/patches/" 2>/dev/null || true
+  chmod +x "$dest/scripts/"*.sh
+  echo "synced → $dest"
+}
+
+# Prefer-Projects install-host body for the livepatch block (idempotent rewrite of timer section).
+patch_install_host() {
+  local host="$1"
+  [[ -f "$host" ]] || return 0
+  if grep -q 'prefer canonical Projects livepatch' "$host" 2>/dev/null \
+    && grep -q 'GROK_LIVEPATCH_FORCE_STACK_LP' "$host" 2>/dev/null; then
+    echo "install-host already Projects-prefer: $host"
+    return 0
+  fi
+  # Full replace of file is safer than fragile sed; keep agents/skills/commands copy logic.
+  cat >"$host" <<'HOSTEOF'
+#!/usr/bin/env bash
 # Wire xbgst-stack + livepatch on this host (idempotent).
 # Managed/synced by grok-build-livepatch scripts/sync-stack-livepatch.sh
 #
@@ -72,3 +132,29 @@ else
 fi
 
 echo "✓ xbgst-stack host install complete"
+HOSTEOF
+  chmod +x "$host"
+  echo "rewrote install-host → $host"
+}
+
+# --- targets ---
+MKT_LP="$HOME/Projects/grok-marketplace/plugins/xbgst-stack/livepatch"
+MKT_HOST="$HOME/Projects/grok-marketplace/plugins/xbgst-stack/scripts/install-host.sh"
+sync_tree "$MKT_LP"
+patch_install_host "$MKT_HOST"
+
+shopt -s nullglob
+for d in "$HOME"/.grok/installed-plugins/xbgst-stack-*/livepatch; do
+  sync_tree "$d"
+  host="$(dirname "$d")/scripts/install-host.sh"
+  patch_install_host "$host"
+done
+shopt -u nullglob
+
+if [[ "$NO_TIMER" -eq 0 ]]; then
+  echo "→ rebind timer from $CANON"
+  bash "$CANON/scripts/install-timer.sh"
+  bash "$CANON/scripts/install-timer.sh" --status || true
+fi
+
+echo "SYNC_OK"
