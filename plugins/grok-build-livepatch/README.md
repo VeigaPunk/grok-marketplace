@@ -105,15 +105,13 @@ xbgst / xbrd godspeed walks should spawn **specialists** (`the-planner`, `scout`
 
 ### Host install vs this repo
 
-**In VeigaPunk/grok-marketplace:** `xbgst-stack` `install-host.sh` is **marketplace-first** — it binds the 6h timer to the nested `livepatch/` under xbgst-stack by default (`KEEP_STAMP` / `GROK_LIVEPATCH_ROOT` override).
-
-**This standalone-shaped tree** (or `~/Projects/grok-build-livepatch`): use `./scripts/install-timer.sh` when this checkout is the intended timer root.
+Prefer this public clone as the timer root. Running `./scripts/install-timer.sh`
+from a checkout **binds the unit to that checkout** (stamp no longer blocks reclaim).
+`GROK_LIVEPATCH_KEEP_STAMP=1` keeps a prior stamp; `GROK_LIVEPATCH_ROOT=…` forces a path.
 
 ```bash
-bash <xbgst-stack>/scripts/install-host.sh
-# or from this tree:
-./scripts/install-timer.sh
-./scripts/install-timer.sh --status
+cd ~/Projects/grok-build-livepatch && ./scripts/install-timer.sh
+./scripts/install-timer.sh --status   # ExecStart + ban_in_binary=yes + active_cli=livepatch
 ```
 
 ## License
