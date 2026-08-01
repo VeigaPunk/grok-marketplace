@@ -1,6 +1,8 @@
 # Shared Orchestration Protocol
 
-Referenced by `/xbreed`, `/xbt`, `/xgs`, `/xbgst`. Do not duplicate — load this file.
+**Grok Build host:** Primary orchestration is skill **xbgst** (no mandatory xask). This file is **legacy Claude / optional cross-model** reference only. Grok `/xbgst` does not require loading this file.
+
+Referenced by older Claude `/xbreed`, `/xbt`, `/xgs`. Do not treat as default Grok path.
 
 ## Godspeed Mode Block
 
