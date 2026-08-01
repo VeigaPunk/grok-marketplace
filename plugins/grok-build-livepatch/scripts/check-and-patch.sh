@@ -77,13 +77,14 @@ fetch_upstream_version() {
   local tag
   tag=$(git ls-remote --tags --refs https://github.com/xai-org/grok-build.git 2>/dev/null \
     | awk -F/ '{print $NF}' | grep -E '^[0-9]' | sort -V | tail -1 || true)
+  tag=$(printf '%s' "${tag:-}" | tr -d '[:space:]')
   if [[ -n "${tag:-}" ]]; then
     echo "$tag"
     return
   fi
   # Fallback: grok update check leaves version.json
   local v
-  v=$(read_version_json "$VERSION_FILE")
+  v=$(read_version_json "$VERSION_FILE" | head -1 | tr -d '[:space:]')
   if [[ -n "${v:-}" ]]; then
     echo "$v"
     return
@@ -103,6 +104,13 @@ ensure_source() {
     git clone --depth 1 https://github.com/xai-org/grok-build.git "$SRC_DIR"
   fi
   log "fetching upstream in $SRC_DIR"
+  # Shallow-safe: advance origin/main (or master) explicitly, then tags.
+  # Bare `fetch --tags` alone can leave origin/main stale on depth-1 clones.
+  if ! git -C "$SRC_DIR" fetch --depth 1 --force origin main:refs/remotes/origin/main 2>&1 | tee -a "$LOG"; then
+    git -C "$SRC_DIR" fetch --depth 1 --force origin master:refs/remotes/origin/master 2>&1 | tee -a "$LOG" \
+      || git -C "$SRC_DIR" fetch --force origin 2>&1 | tee -a "$LOG" \
+      || log "WARN: fetch origin failed"
+  fi
   git -C "$SRC_DIR" fetch --tags --force origin 2>&1 | tee -a "$LOG" || true
   # Prefer main/synced tip
   git -C "$SRC_DIR" checkout -f main 2>/dev/null || git -C "$SRC_DIR" checkout -f master 2>/dev/null || true
