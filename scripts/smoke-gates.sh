@@ -70,9 +70,10 @@ else
   if [[ "$code" -eq 2 ]]; then ok "standalone-path publish.sh refuse under marketplace (2)"; else bad "standalone publish.sh exit $code (want 2)"; fi
 fi
 
-# install-host must not hardcode REPLACE_BIN=1 in the generated unit template
-if rg -n 'Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
-  bad "install-host.sh must not hardcode REPLACE_BIN=1 (opt-in only)"
+# install-host must not embed a default unit with REPLACE_BIN (opt-in sed under env is OK)
+if rg -n 'Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/scripts/install-host.sh \
+  | rg -v 'sed -i|GROK_LIVEPATCH_REPLACE_BIN:-|tip:|opt-in|echo ' >/dev/null 2>&1; then
+  bad "install-host.sh embeds default REPLACE_BIN unit env (opt-in only)"
 else
   ok "install-host REPLACE_BIN opt-in"
 fi
