@@ -73,9 +73,10 @@ Validates both plugins (or JSON-only if no `grok`), asserts **heuer-planning** i
 ### Sync livepatch from standalone
 
 ```bash
-./scripts/sync-livepatch-from-standalone.sh          # rsync into both nested trees
+./scripts/sync-livepatch-from-standalone.sh          # rsync + restore install-host overlay
 ./scripts/sync-livepatch-from-standalone.sh --check  # drift only
 ./scripts/smoke-gates.sh
+./scripts/rebind-livepatch-timer.sh                  # force 6h unit onto stack livepatch/
 ./scripts/ship-check.sh                              # clean tree + main + tag peel hints
 # then commit on main + move tag grok-stable
 ```

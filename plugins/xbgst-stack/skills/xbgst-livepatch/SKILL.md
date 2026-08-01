@@ -84,6 +84,7 @@ When `~/Projects/grok-build-livepatch` moves, update nested trees from marketpla
 ```bash
 ./scripts/sync-livepatch-from-standalone.sh   # or ./scripts/sync-livepatch.sh
 ./scripts/smoke-gates.sh
+./scripts/rebind-livepatch-timer.sh           # unit must ExecStart stack livepatch/
 ./scripts/ship-check.sh
 # commit on main → push → retag grok-stable
 ```
