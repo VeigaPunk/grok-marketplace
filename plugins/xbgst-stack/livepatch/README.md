@@ -59,26 +59,18 @@ State + logs: `~/.local/state/grok-build-livepatch/` (`last-result` may be `ok`,
 
 ## Musketeer / Grok scheduler (6h prompt)
 
-If you prefer Grok-native scheduling (or [the-musketeer](https://github.com/search?q=the-musketeer) web bridge) instead of systemd:
+Prefer systemd (`install-timer.sh` / stack `install-host.sh`). Optional Grok `/loop`:
 
 ```text
-Every 6 hours: run the grok-build-livepatch watcher.
-
-cd ~/Projects/grok-build-livepatch && ./scripts/check-and-patch.sh
-Report: last-result, whether patch applied, whether cargo test banned_subagent passed.
-If exit 2 (needs-rebase), open/refresh the livepatch-break issue and draft a rebased patch.
-Do not spawn general-purpose or explore subagents while doing this.
-```
-
-In Grok Build TUI:
-
-```text
-/loop 6h cd ~/Projects/grok-build-livepatch && ./scripts/check-and-patch.sh; tail -20 ~/.local/state/grok-build-livepatch/watch.log
+/loop 6h LP=$(ls -d ~/.grok/installed-plugins/xbgst-stack-*/livepatch 2>/dev/null | head -1); LP=${LP:-$HOME/Projects/grok-marketplace/plugins/xbgst-stack/livepatch}; GROK_LIVEPATCH_FORCE=1 bash "$LP/scripts/check-and-patch.sh"; tail -20 ~/.local/state/grok-build-livepatch/watch.log
 ```
 
 ## GitHub Actions
 
-`.github/workflows/watch-release.yml` runs on a **6h cron**, applies the patch to a fresh clone of `xai-org/grok-build`, runs `cargo test -p xai-tool-types banned_subagent`, and opens a `livepatch-break` issue if the patch no longer applies.
+When this tree is nested under **grok-marketplace**, nested `.github/workflows` are **not** executed. Use repo-root workflows:
+
+- `.github/workflows/livepatch-watch.yml`
+- `.github/workflows/marketplace-gates.yml`
 
 ## Publish this repo (maintainers)
 

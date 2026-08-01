@@ -34,13 +34,23 @@ fi
 
 if [[ -d "$LP/scripts" ]]; then
   chmod +x "$LP/scripts/"*.sh
-  # Prefer canonical unit install (no REPLACE_BIN by default; units use @ROOT@)
-  bash "$LP/scripts/install-timer.sh"
+  # Bind the 6h timer to THIS stack's livepatch tree (marketplace-first).
+  # Override: GROK_LIVEPATCH_KEEP_STAMP=1 keeps preferred-install-root if already set.
+  # Override: GROK_LIVEPATCH_ROOT=/path for an explicit root.
+  if [[ -n "${GROK_LIVEPATCH_ROOT:-}" ]]; then
+    echo "→ install-timer with GROK_LIVEPATCH_ROOT=$GROK_LIVEPATCH_ROOT"
+    bash "$LP/scripts/install-timer.sh"
+  elif [[ "${GROK_LIVEPATCH_KEEP_STAMP:-}" == "1" ]]; then
+    echo "→ install-timer honoring preferred-install-root stamp (KEEP_STAMP=1)"
+    bash "$LP/scripts/install-timer.sh"
+  else
+    echo "→ install-timer binding ROOT to stack livepatch: $LP"
+    GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh"
+  fi
   # If caller opted into REPLACE_BIN, append env to the installed unit once
   if [[ "${GROK_LIVEPATCH_REPLACE_BIN:-}" == "1" ]]; then
     UNIT="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user/grok-build-livepatch.service"
     if [[ -f "$UNIT" ]] && ! grep -q 'GROK_LIVEPATCH_REPLACE_BIN=1' "$UNIT"; then
-      # Insert after [Service]
       sed -i '/^\[Service\]/a Environment=GROK_LIVEPATCH_REPLACE_BIN=1' "$UNIT"
       systemctl --user daemon-reload
       echo "✓ REPLACE_BIN enabled on timer unit (opt-in)"
@@ -48,7 +58,8 @@ if [[ -d "$LP/scripts" ]]; then
   else
     echo "  tip: timer does not replace ~/.grok/bin/grok (set GROK_LIVEPATCH_REPLACE_BIN=1 to opt in)"
   fi
-  echo "✓ livepatch timer enabled (root=$LP)"
+  bash "$LP/scripts/install-timer.sh" --status || true
+  echo "✓ livepatch timer enabled (stack LP=$LP)"
   echo "  apply now: GROK_LIVEPATCH_FORCE=1 bash $LP/scripts/check-and-patch.sh"
   echo "  replace bin: GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 bash $LP/scripts/check-and-patch.sh"
 else

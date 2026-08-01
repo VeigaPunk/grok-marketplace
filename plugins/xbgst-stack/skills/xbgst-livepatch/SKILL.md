@@ -23,6 +23,8 @@ grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 # grok plugin install xbgst-stack@local/grok-marketplace --trust
 
 # wire agents/skills/commands + timer
+# binds 6h unit to THIS stack's livepatch/ (sets preferred-install-root)
+# keep a prior standalone stamp: GROK_LIVEPATCH_KEEP_STAMP=1 bash .../install-host.sh
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 
 # build/apply patch (optional binary replace — invasive)
