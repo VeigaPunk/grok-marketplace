@@ -19,6 +19,7 @@ jobs:
         env:
           SMOKE_SKIP_GROK: "1"
         run: |
-          chmod +x scripts/smoke-gates.sh scripts/sync-livepatch-from-standalone.sh scripts/sync-livepatch.sh
+          chmod +x scripts/smoke-gates.sh scripts/ship-check.sh \
+            scripts/sync-livepatch-from-standalone.sh scripts/sync-livepatch.sh
           chmod +x plugins/xbgst-stack/livepatch/scripts/*.sh plugins/grok-build-livepatch/scripts/*.sh
           ./scripts/smoke-gates.sh

@@ -81,9 +81,12 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 ### Milestone ship loop (after each COMPILE that improved axes)
 
 ```
-on main? → gates green? → APPROVED: <reason> → stage → commit (HEREDOC) → git push -u origin main (SSH) → next milestone
+on main? → ./scripts/smoke-gates.sh green? → APPROVED: <reason> → stage → commit (HEREDOC)
+  → git push -u origin main (SSH) → retag grok-stable if needed → ./scripts/ship-check.sh
 not shippable? → BLOCKED → keep orching (no commit/push)
 ```
+
+For this marketplace repo, prefer `./scripts/ship-check.sh` before declaring ship done.
 
 
 ## Host substrate: grok-build-livepatch (ships with xbgst-stack)

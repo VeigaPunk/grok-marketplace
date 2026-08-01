@@ -95,6 +95,13 @@ else
   ok "install-host binds GROK_LIVEPATCH_ROOT to stack LP"
 fi
 
+# Prevent regression to Projects-canonical preference (marketplace-first policy)
+if rg -n 'prefer canonical Projects|FORCE_STACK_LP|CANON=.*grok-build-livepatch' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host must not prefer Projects/grok-build-livepatch over stack LP"
+else
+  ok "install-host marketplace-first (no Projects CANON preference)"
+fi
+
 # Unit template intentionally defaults REPLACE_BIN=1 (ban on active CLI)
 if rg -n '^Environment=GROK_LIVEPATCH_REPLACE_BIN=1' plugins/xbgst-stack/livepatch/systemd/grok-build-livepatch.service >/dev/null 2>&1; then
   ok "timer unit defaults REPLACE_BIN=1 (ban active)"

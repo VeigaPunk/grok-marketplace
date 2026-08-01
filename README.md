@@ -7,6 +7,7 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 | **Repo** | [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) |
 | **Channel tag** | annotated `grok-stable` (peels to shippable `main`) |
 | **Not included** | `heuer-planning` — lives on **ds4cc** marketplace, not here |
+| **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 
 ## Install
 
