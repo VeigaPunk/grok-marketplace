@@ -84,6 +84,12 @@ else
   ok "install-host uses install-timer.sh"
 fi
 
+if ! rg -n 'GROK_LIVEPATCH_ROOT="\$LP"' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host should bind timer ROOT to stack livepatch via GROK_LIVEPATCH_ROOT"
+else
+  ok "install-host binds GROK_LIVEPATCH_ROOT to stack LP"
+fi
+
 # Primary README install block must not require REPLACE_BIN on the default path
 # (opt-in may appear only in comments / dedicated opt-in lines)
 if awk '/^```bash$/,/^```$/' README.md | head -20 | rg -n 'GROK_LIVEPATCH_REPLACE_BIN=1' | rg -v '^\s*#' >/dev/null 2>&1; then
