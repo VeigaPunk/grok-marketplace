@@ -47,13 +47,24 @@ mkdir -p "$STATE_DIR" "$INSTALL_DIR"
 ts() { date -u +%Y-%m-%dT%H:%M:%SZ; }
 log() { echo "[$(ts)] $*" | tee -a "$LOG"; }
 
+# Read version.json without requiring python3 (jq preferred; python3 fallback).
+read_version_json() {
+  local f="$1"
+  [[ -f "$f" ]] || return 0
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.stable_version // .version // empty' "$f" 2>/dev/null || true
+    return 0
+  fi
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("stable_version") or d.get("version") or "")' "$f" 2>/dev/null || true
+  fi
+}
+
 current_installed() {
   if [[ -x "$BIN_LINK" ]]; then
     "$BIN_LINK" --version 2>/dev/null | head -1 | sed -E 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/' || true
   fi
-  if [[ -f "$VERSION_FILE" ]]; then
-    python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("stable_version") or json.load(open(sys.argv[1])).get("version",""))' "$VERSION_FILE" 2>/dev/null || true
-  fi
+  read_version_json "$VERSION_FILE"
 }
 
 # Latest public release tag on xai-org/grok-build (or VERSION from install channel)
@@ -67,8 +78,10 @@ fetch_upstream_version() {
     return
   fi
   # Fallback: grok update check leaves version.json
-  if [[ -f "$VERSION_FILE" ]]; then
-    python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("stable_version") or d.get("version",""))' "$VERSION_FILE"
+  local v
+  v=$(read_version_json "$VERSION_FILE")
+  if [[ -n "${v:-}" ]]; then
+    echo "$v"
     return
   fi
   echo ""
@@ -95,7 +108,9 @@ ensure_source() {
   fi
 }
 
+# Sets APPLY_STATUS: applied | already-applied | three-way | needs-rebase | fail
 apply_patch() {
+  APPLY_STATUS=fail
   cd "$SRC_DIR"
   # clean any previous livepatch branch
   git checkout -B livepatch/ban-generic-subagents
@@ -103,21 +118,27 @@ apply_patch() {
   if git apply --check "$PATCH" 2>"$STATE_DIR/apply-check.err"; then
     git apply "$PATCH"
     log "patch applied cleanly"
+    APPLY_STATUS=applied
     return 0
   fi
-  # 2) already applied: reverse would succeed OR ban symbols present
-  if git apply --reverse --check "$PATCH" 2>"$STATE_DIR/apply-reverse-check.err" \
-    || git grep -q 'is_banned_subagent_type' -- '*.rs' 2>/dev/null; then
-    log "patch already present — noop"
+  # 2) already applied only if reverse --check succeeds (do not OR-grep symbols alone)
+  if git apply --reverse --check "$PATCH" 2>"$STATE_DIR/apply-reverse-check.err"; then
+    log "patch already present (reverse-check OK) — already-applied"
+    APPLY_STATUS=already-applied
     return 0
+  fi
+  if git grep -q 'is_banned_subagent_type' -- '*.rs' 2>/dev/null; then
+    log "WARN: ban symbols present but reverse --check failed — trying 3-way"
   fi
   # 3) try 3-way
   if git apply --3way "$PATCH" 2>"$STATE_DIR/apply-3way.err"; then
     log "patch applied with 3-way merge"
+    APPLY_STATUS=three-way
     return 0
   fi
   # 4) needs human
   log "PATCH FAILED — needs human rebase"
+  APPLY_STATUS=needs-rebase
   cat "$STATE_DIR/apply-check.err" >>"$LOG" || true
   cat "$STATE_DIR/apply-reverse-check.err" >>"$LOG" 2>/dev/null || true
   cat "$STATE_DIR/apply-3way.err" >>"$LOG" || true
@@ -127,17 +148,10 @@ apply_patch() {
 build_and_install() {
   cd "$SRC_DIR"
   log "cargo build --release (xai-tool-types + grok binary if present)"
-  # Build the whole workspace release binary if there is a default bin
-  if cargo metadata --no-deps --format-version 1 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); print(any(p.get("name")=="xai-grok-pager-bin" or "grok" in p.get("name","") for p in d.get("packages",[])))' | grep -q True; then
-    cargo build --release -p xai-tool-types 2>&1 | tee -a "$LOG"
-    # Prefer pager-bin if exists
-    if cargo build --release -p xai-grok-pager-bin 2>&1 | tee -a "$LOG"; then
-      :
-    else
-      cargo build --release 2>&1 | tee -a "$LOG" || true
-    fi
-  else
-    cargo build --release -p xai-tool-types 2>&1 | tee -a "$LOG"
+  # No python/jq probe: always build the typed crate, then best-effort binary packages.
+  cargo build --release -p xai-tool-types 2>&1 | tee -a "$LOG"
+  if ! cargo build --release -p xai-grok-pager-bin 2>&1 | tee -a "$LOG"; then
+    cargo build --release 2>&1 | tee -a "$LOG" || true
   fi
 
   # Find built grok binary
@@ -176,17 +190,22 @@ main() {
 
   ensure_source
 
-  # Always re-apply on tip when upstream tag/version advances OR force
+  # Always re-apply on tip when upstream tag/version advances OR force.
+  # Noop only when reverse --check proves full livepatch (same bar as apply_patch).
   if [[ "${GROK_LIVEPATCH_FORCE:-0}" != "1" && -n "$upstream" && "$upstream" == "$last" ]]; then
-    # still ensure working tree has ban constants if source drifted
-    if git -C "$SRC_DIR" grep -q 'is_banned_subagent_type' -- '*.rs' 2>/dev/null; then
-      log "already patched for $upstream — noop"
+    if git -C "$SRC_DIR" apply --reverse --check "$PATCH" 2>"$STATE_DIR/apply-reverse-check.err"; then
+      log "already patched for $upstream (reverse-check OK) — noop"
       echo "noop" >"$STATE_DIR/last-result"
       exit 0
     fi
-    log "version match but ban symbols missing — re-applying"
+    if git -C "$SRC_DIR" grep -q 'is_banned_subagent_type' -- '*.rs' 2>/dev/null; then
+      log "WARN: version match + ban symbols but reverse --check failed — re-applying"
+    else
+      log "version match but livepatch not reverse-clean — re-applying"
+    fi
   fi
 
+  APPLY_STATUS=fail
   set +e
   apply_patch
   rc=$?
@@ -199,6 +218,14 @@ main() {
   if [[ $rc -ne 0 ]]; then
     echo "fail" >"$STATE_DIR/last-result"
     exit 1
+  fi
+
+  # Full reverse-clean already-applied: integrity already proven; skip heavy rebuild
+  if [[ "${APPLY_STATUS:-}" == "already-applied" ]]; then
+    echo "${upstream:-$(ts)}" >"$STATE_DIR/last-patched-version"
+    echo "already-applied $(ts)" >"$STATE_DIR/last-result"
+    log "=== livepatch already-applied (noop rebuild) ==="
+    exit 0
   fi
 
   run_unit_smoke
