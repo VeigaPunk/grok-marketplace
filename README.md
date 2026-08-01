@@ -1,24 +1,63 @@
 # veigapunk-grok-stable
 
-**xbgst-stack ships with grok-build-livepatch wired in.**
+Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/commands + bundled livepatch).
 
-Tag: `grok-stable`
+| | |
+|--|--|
+| **Repo** | [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) |
+| **Channel tag** | annotated `grok-stable` (peels to shippable `main`) |
+| **Not included** | `heuer-planning` — lives on **ds4cc** marketplace, not here |
+
+## Install
+
+`grok plugin marketplace add` takes a URL, `user/repo`, or local path. **Do not** append `@ref` to marketplace add (CLI treats it as part of the git host path).
 
 ```bash
-grok plugin marketplace add VeigaPunk/grok-marketplace@grok-stable
-# local:
-grok plugin marketplace add /home/vgpnk1337/Projects/grok-marketplace
+# Primary (public)
+grok plugin marketplace add VeigaPunk/grok-marketplace
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 
-grok plugin install xbgst-stack --trust
+# Wire host agents/skills/commands + livepatch timer
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 GROK_LIVEPATCH_FORCE=1 GROK_LIVEPATCH_REPLACE_BIN=1 \
   bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
 ```
 
-| Path in xbgst-stack | Role |
-|---------------------|------|
-| `agents/` | xbrd specialists |
-| `skills/xbgst` | judge (local-first → main) |
-| `skills/xbgst-livepatch` | install/verify CLI livepatch |
-| `livepatch/` | patch + 6h systemd |
-| `scripts/install-host.sh` | wire agents + timer |
+If both GitHub and a local path marketplace are registered, the CLI requires a **pin**:
+
+```bash
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust   # remote catalog
+grok plugin install xbgst-stack@local/grok-marketplace --trust        # local path catalog
+```
+
+Local dev:
+
+```bash
+grok plugin marketplace add /path/to/grok-marketplace
+grok plugin install xbgst-stack@local/grok-marketplace --trust
+```
+
+Git channel pin (docs / clone): `VeigaPunk/grok-marketplace@grok-stable`
+
+Optional second plugin (same livepatch, also inside xbgst-stack):
+
+```bash
+grok plugin install grok-build-livepatch --trust
+```
+
+## xbgst-stack layout
+
+| Path | Role |
+|------|------|
+| `agents/` | Grok specialists (`the-planner`, `scout`, `executor`, …); GP/explore are banned stubs |
+| `skills/xbgst` | Judge: local-first → commit → push `main` |
+| `skills/xbgst-livepatch` | Install/verify CLI livepatch |
+| `skills/the-janitor` | 1Password / secrets |
+| `commands/` | `/xbgst`, `/xbgst-livepatch`, aliases |
+| `livepatch/` | Patch + 6h systemd timer |
+| `scripts/install-host.sh` | Idempotent host wire-up |
+
+## Out of scope
+
+- **heuer-planning** → install from ds4cc if you want full SAT skill load for critic
+- Nested `livepatch/scripts/publish.sh` targets the **standalone livepatch repo**, not this marketplace — do not run it from here for marketplace ship

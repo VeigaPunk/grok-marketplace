@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
-# Create public GitHub repo (needs GH_TOKEN / gh auth), then push via SSH.
-# PAT human steps: docs/PUBLISH.md
+# Standalone livepatch-repo publisher — NOT for VeigaPunk/grok-marketplace.
+# When this tree is nested under xbgst-stack (marketplace), refuse to run.
 #
 #   export GH_TOKEN=ghp_...   # or github_pat_...
 #   ./scripts/publish.sh
-# Or:
-#   op run --env-file=<(printf '%s\n' 'GH_TOKEN=op://Personal/GitHub CLI/credential') -- ./scripts/publish.sh
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+
+# Refuse when shipped inside grok-marketplace / xbgst-stack
+if [[ -f "$ROOT/../../plugin.json" ]] || [[ "$ROOT" == *"/plugins/xbgst-stack/livepatch"* ]] || [[ "$ROOT" == *"/grok-marketplace/"* ]]; then
+  echo "REFUSE: publish.sh under marketplace/xbgst-stack targets VeigaPunk/grok-build-livepatch."
+  echo "To ship the marketplace, from the repo root: commit on main, then git push -u origin main"
+  echo "and move annotated tag grok-stable. Do not use this script."
+  exit 2
+fi
 
 usage() {
   cat <<'EOF'
