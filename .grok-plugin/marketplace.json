@@ -1,0 +1,34 @@
+{
+  "name": "veigapunk-grok-stable",
+  "description": "VeigaPunk Grok-stable marketplace — xbgst orchestration agents/skills/commands + Grok Build CLI livepatch. Install channel tag: grok-stable.",
+  "owner": {
+    "name": "VeigaPunk",
+    "email": "vgpnk@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "xbgst-stack",
+      "version": "1.0.0",
+      "description": "Grok-native xbgst/xbrd godspeed stack: the-planner, scout, reviewer, labrat, executor, connector, distiller, simplifier, the-revenger, sentinel, critic, mutation-tester, scribe, the-janitor, the-musketeer; skills xbgst + the-janitor; commands /xbgst /xgs /xbt /xbreed.",
+      "category": "orchestration",
+      "source": {
+        "type": "local",
+        "path": "./plugins/xbgst-stack"
+      },
+      "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+      "keywords": ["xbgst", "godspeed", "grok-stable", "agents"]
+    },
+    {
+      "name": "grok-build-livepatch",
+      "version": "1.0.0",
+      "description": "Hard-ban general-purpose/explore in Grok Build CLI; 6h systemd livepatch scripts and patch file.",
+      "category": "development",
+      "source": {
+        "type": "local",
+        "path": "./plugins/grok-build-livepatch"
+      },
+      "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+      "keywords": ["livepatch", "grok-build", "grok-stable"]
+    }
+  ]
+}

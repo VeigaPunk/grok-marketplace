@@ -1,0 +1,13 @@
+{
+  "name": "grok-build-livepatch",
+  "version": "1.0.0",
+  "description": "Livepatch Grok Build CLI: hard-ban general-purpose/explore subagents; 6h re-apply against xai-org/grok-build. Tag channel: grok-stable.",
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
+  "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+  "repository": "https://github.com/VeigaPunk/grok-marketplace",
+  "license": "MIT OR Apache-2.0",
+  "keywords": ["livepatch", "grok-build", "subagents", "grok-stable"]
+}

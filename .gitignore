@@ -1,0 +1,4 @@
+.xbgst/
+target/
+*.log
+.env

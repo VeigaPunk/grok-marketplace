@@ -1,0 +1,13 @@
+{
+  "name": "xbgst-stack",
+  "version": "1.0.0",
+  "description": "Grok-native xbgst/xbrd godspeed stack: specialist agents, /xbgst commands, xbgst + the-janitor skills. Tag channel: grok-stable.",
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
+  "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+  "repository": "https://github.com/VeigaPunk/grok-marketplace",
+  "license": "MIT OR Apache-2.0",
+  "keywords": ["xbgst", "godspeed", "xbrd", "grok-stable", "agents", "orchestration"]
+}
