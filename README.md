@@ -89,6 +89,21 @@ CI (GitHub Actions, root only):
 
 Nested `plugins/**/.github/workflows` are **not** run by GitHub; keep root workflows in sync.
 
+
+## Recommended Grok CLI config
+
+Ship-aligned host config for this marketplace + livepatch ban:
+
+- Template: [`plugins/xbgst-stack/livepatch/docs/cli-config.toml`](plugins/xbgst-stack/livepatch/docs/cli-config.toml)
+- Standalone copy: [VeigaPunk/grok-build-livepatch `docs/cli-config.toml`](https://github.com/VeigaPunk/grok-build-livepatch/blob/main/docs/cli-config.toml)
+
+```bash
+# merge into ~/.grok/config.toml then:
+grok plugin marketplace add VeigaPunk/grok-marketplace
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
+bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+```
+
 ## Out of scope
 
 - **heuer-planning** → install from ds4cc if you want full SAT skill load for critic
