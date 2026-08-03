@@ -92,7 +92,7 @@ Nested `plugins/**/.github/workflows` are **not** run by GitHub; keep root workf
 
 ## Recommended Grok CLI config
 
-**Grok Builder site:** [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/grok-build-livepatch/)
+**Grok Builder site:** [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/ds4cc-marketplace/)
 
 Ship-aligned host config for this marketplace + livepatch ban:
 
