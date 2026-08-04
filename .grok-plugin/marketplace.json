@@ -9,7 +9,7 @@
     {
       "name": "xbgst-stack",
       "version": "1.1.21",
-      "description": "Full Grok xbgst + livepatch; root CI; REPLACE_BIN opt-in. No heuer-planning (ds4cc).",
+      "description": "Full Grok xbgst + livepatch; root CI; REPLACE_BIN enabled by default (set to 0 to opt out). No heuer-planning (ds4cc).",
       "category": "orchestration",
       "source": {
         "type": "local",
