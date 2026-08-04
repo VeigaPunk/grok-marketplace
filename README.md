@@ -46,7 +46,7 @@ Git channel pin (docs / clone): `VeigaPunk/grok-marketplace@grok-stable`
 Optional second plugin (same livepatch, also inside xbgst-stack):
 
 ```bash
-grok plugin install grok-build-livepatch --trust
+grok plugin install grok-build-livepatch@veigapunk/grok-marketplace --trust
 ```
 
 ## xbgst-stack layout
