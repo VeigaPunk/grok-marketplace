@@ -92,9 +92,11 @@ Nested `plugins/**/.github/workflows` are **not** run by GitHub; keep root workf
 
 ## Recommended Grok CLI config
 
-**Grok Builder site:** [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/ds4cc-marketplace/)
+**Primary Grok Builder install UX:** [veigapunk.github.io/ds4cc-marketplace](https://veigapunk.github.io/ds4cc-marketplace/)  
+**Config on primary site:** [grok-cli-config.toml](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml)  
+**Optional livepatch docs mirror:** [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/grok-build-livepatch/)
 
-Ship-aligned host config for this marketplace + livepatch ban:
+Ship-aligned host config for this marketplace + livepatch ban (plugins at **1.1.22**):
 
 - Template: [`plugins/xbgst-stack/livepatch/docs/cli-config.toml`](plugins/xbgst-stack/livepatch/docs/cli-config.toml)
 - Standalone copy: [VeigaPunk/grok-build-livepatch `docs/cli-config.toml`](https://github.com/VeigaPunk/grok-build-livepatch/blob/main/docs/cli-config.toml)
@@ -106,7 +108,16 @@ grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 ```
 
+## Related stack
+
+| Piece | Role | Link |
+|-------|------|------|
+| **grok-marketplace** (this repo) | Grok `xbgst-stack` + nested livepatch | [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) |
+| **grok-build-livepatch** | CLI hard-ban GP/explore; 6h timer; optional Pages mirror | [VeigaPunk/grok-build-livepatch](https://github.com/VeigaPunk/grok-build-livepatch) |
+| **ds4cc-marketplace** | Multi-CLI marketplace + **primary** Grok Builder site | [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) · [site](https://veigapunk.github.io/ds4cc-marketplace/) |
+| **xbrd-spark / sekhmet** | L3 swarm substrate (≤64 jobs); ships via ds4cc as `sekhmet` | [VeigaPunk/xbrd-spark](https://github.com/VeigaPunk/xbrd-spark) |
+
 ## Out of scope
 
-- **heuer-planning** → install from ds4cc if you want full SAT skill load for critic
+- **heuer-planning** → install from [ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) if you want full SAT skill load for critic
 - Nested `livepatch/scripts/publish.sh` targets the **standalone livepatch repo**, not this marketplace — do not run it from here for marketplace ship
