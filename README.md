@@ -116,6 +116,7 @@ bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 | **grok-build-livepatch** | CLI hard-ban GP/explore; 6h timer; optional Pages mirror | [VeigaPunk/grok-build-livepatch](https://github.com/VeigaPunk/grok-build-livepatch) |
 | **ds4cc-marketplace** | Multi-CLI marketplace + **primary** Grok Builder site | [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) · [site](https://veigapunk.github.io/ds4cc-marketplace/) |
 | **xbrd-spark / sekhmet** | L3 swarm substrate (≤64 jobs); ships via ds4cc as `sekhmet` | [VeigaPunk/xbrd-spark](https://github.com/VeigaPunk/xbrd-spark) |
+| **sekhmet-l3** | Public L3 usage + GATE evidence (luna + fast) | [VeigaPunk/sekhmet-l3](https://github.com/VeigaPunk/sekhmet-l3) |
 | **xbgst-site** | Public xbgst hub | [site](https://veigapunk.github.io/xbgst-site/) · [VeigaPunk/xbgst-site](https://github.com/VeigaPunk/xbgst-site) |
 
 ## Out of scope
