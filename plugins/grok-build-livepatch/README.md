@@ -21,9 +21,17 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 
 Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
 
+## Public site (Titanium / ds4cc Pages)
+
+Primary Grok Builder install + config lives on the **ds4cc marketplace** GitHub Pages (same site as Codex Titanium builds):
+
+**https://veigapunk.github.io/ds4cc-marketplace/** · config: [grok-cli-config.toml](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml)
+
+Optional mirror under this repo `docs/` (if Pages enabled): `https://veigapunk.github.io/grok-build-livepatch/`
+
 ## Recommended CLI config (website / host)
 
-Public template: **[docs/cli-config.toml](docs/cli-config.toml)** — marketplace sources, `xbgst-stack`, models, UI `permission_mode`, and subagent toggles aligned with the hard-ban.
+Public template: **[docs/cli-config.toml](docs/cli-config.toml)** (also on the Pages site) — marketplace sources, `xbgst-stack`, models, UI `permission_mode`, and subagent toggles aligned with the hard-ban.
 
 ```bash
 # merge into your host config (do not commit secrets)

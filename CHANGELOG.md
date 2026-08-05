@@ -2,6 +2,11 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.22
+
+- Sync livepatch to standalone tip `5e4c8e1` (cli-config `max_concurrent = 16`, public docs pages assets).
+- Standalone-tip stamps lockstep; local smoke-gates green when standalone clone present.
+
 ## 1.1.21
 
 - Add `FRONTIER.md` for durable next-move map when the channel is already green.
