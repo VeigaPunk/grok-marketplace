@@ -2,6 +2,12 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.23
+
+- Sync livepatch to standalone tip `6692f4a` (rebase: ban-generic-subagents for grok-build 1.0.0).
+- Standalone-tip stamps and plugin version lockstep refreshed.
+- Docs/CHANGELOG catch-up for post-1.1.22 sync commits already on main.
+
 ## 1.1.22
 
 - Sync livepatch to standalone tip `5e4c8e1` (cli-config `max_concurrent = 16`, public docs pages assets).
