@@ -9,20 +9,33 @@ PLUG="$ROOT/plugins/grok-build-livepatch"
 
 usage() {
   cat <<'EOF'
-Usage: sync-livepatch-from-standalone.sh [--help|-h] [--check]
+Usage: sync-livepatch-from-standalone.sh [--help|-h] [--check] [--install-timer|--rebind-timer]
 
   (default)  rsync scripts/patches/systemd/docs/README from standalone into
              plugins/xbgst-stack/livepatch and plugins/grok-build-livepatch.
   --check    exit 0 if already in sync (no writes); exit 1 if drift.
+  --install-timer   rebind host timer to this stack LP after sync
+  --rebind-timer    same as --install-timer
+  --no-timer        compatibility no-op (manual mode)
   STANDALONE=/path  override source clone (default ~/Projects/grok-build-livepatch).
 
 Does not touch: plugin.json, marketplace/, install-host.sh, root .github/.
 EOF
 }
 
-case "${1:-}" in
-  --help|-h) usage; exit 0 ;;
-esac
+INSTALL_TIMER=0
+CHECK_ONLY=0
+for arg in "$@"; do
+  case "$arg" in
+    --help|-h) usage; exit 0 ;;
+    --check) CHECK_ONLY=1 ;;
+    --install-timer|--rebind-timer) INSTALL_TIMER=1 ;;
+    --no-timer) : ;; # compatibility no-op; manual mode is already the default
+    --*) echo "Unknown option: $arg" >&2; usage >&2; exit 1 ;;
+    "") ;;
+    *) echo "Unexpected positional arg: $arg" >&2; usage >&2; exit 1 ;;
+  esac
+done
 
 if [[ ! -d "$STAND/scripts" || ! -d "$STAND/patches" ]]; then
   echo "FAIL: standalone livepatch not found at $STAND" >&2
@@ -56,7 +69,7 @@ check_drift() {
   return "$drift"
 }
 
-if [[ "${1:-}" == "--check" ]]; then
+if [[ "$CHECK_ONLY" -eq 1 ]]; then
   fail=0
   check_drift "$NEST" || fail=1
   check_drift "$PLUG" || fail=1
@@ -120,8 +133,8 @@ printf '%s\n' "$TIP" >"$ROOT/plugins/xbgst-stack/livepatch/.standalone-tip"
 printf '%s\n' "$TIP" >"$PLUG/.standalone-tip"
 echo "→ wrote .standalone-tip=$TIP"
 
-# Rebind host timer to stack LP when rebind helper exists (local machines only).
-if [[ -x "$ROOT/scripts/rebind-livepatch-timer.sh" ]] && [[ "${SYNC_SKIP_REBIND:-}" != "1" ]]; then
+# Rebind host timer to stack LP only when explicitly opted in.
+if [[ "$INSTALL_TIMER" -eq 1 ]] && [[ -x "$ROOT/scripts/rebind-livepatch-timer.sh" ]] && [[ "${SYNC_SKIP_REBIND:-}" != "1" ]]; then
   if [[ -d "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/systemd" ]] || systemctl --user status >/dev/null 2>&1; then
     echo "→ rebind-livepatch-timer after sync"
     bash "$ROOT/scripts/rebind-livepatch-timer.sh" || echo "WARN rebind failed (non-fatal for sync)"

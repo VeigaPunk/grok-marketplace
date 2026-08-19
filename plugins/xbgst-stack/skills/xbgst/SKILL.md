@@ -97,13 +97,14 @@ xbgst for Grok **ships with** the CLI livepatch that hard-bans `general-purpose`
 |-------|------|
 | xbgst skill + agents + commands | Judge orchestration |
 | `livepatch/` inside **xbgst-stack** plugin | Host CLI ban + 6h re-apply |
-| skill **xbgst-livepatch** | Install/verify timer; unit defaults REPLACE_BIN=1 (ban on active CLI) |
-| `scripts/install-host.sh` | Wire agents + bind timer to stack `livepatch/` (marketplace-first) |
+| skill **xbgst-livepatch** | Apply/verify manually; optional timer defaults REPLACE_BIN=1 |
+| `scripts/install-host.sh` | Wire agents + optional timer bind to stack `livepatch/` (marketplace-first) |
 
 After installing **xbgst-stack**:
 
 ```bash
 bash <xbgst-stack>/scripts/install-host.sh
+# optional: timer opt-in via `--install-timer`
 # re-apply / rebuild (timer unit defaults REPLACE_BIN=1 so active CLI stays banned)
 GROK_LIVEPATCH_FORCE=1 \
   bash <xbgst-stack>/livepatch/scripts/check-and-patch.sh

@@ -88,6 +88,11 @@ if ! rg -n 'install-timer\.sh' plugins/xbgst-stack/scripts/install-host.sh >/dev
 else
   ok "install-host uses install-timer.sh"
 fi
+if ! rg -n 'install-timer\.sh.*\$\{GROK_LIVEPATCH_ROOT\}/scripts/install-timer\.sh|--install-timer|--rebind-timer' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host should expose explicit --install-timer/--rebind-timer"
+else
+  ok "install-host timer wiring is explicit opt-in"
+fi
 
 if ! rg -n 'GROK_LIVEPATCH_ROOT="\$LP"' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
   bad "install-host should bind timer ROOT to stack livepatch via GROK_LIVEPATCH_ROOT"
@@ -108,6 +113,119 @@ if [[ -f scripts/overlays/install-host.xbgst-stack.sh ]]; then
   else
     bad "install-host drifts from scripts/overlays/install-host.xbgst-stack.sh"
   fi
+  if ! rg -n 'install-host\.xbgst-stack\.sh|--install-timer|--rebind-timer|--no-timer' scripts/overlays/install-host.xbgst-stack.sh >/dev/null 2>&1; then
+    bad "overlay install-host should expose timer opt-in"
+  else
+    ok "overlay install-host exposes timer opt-in"
+  fi
+fi
+
+# Exercise host-install argument behavior with a fake timer: default and
+# compatibility --no-timer must not call it; explicit opt-in must call it.
+timer_probe=$(mktemp -d)
+mkdir -p "$timer_probe/stack/scripts" "$timer_probe/stack/livepatch/scripts"
+cp plugins/xbgst-stack/scripts/install-host.sh "$timer_probe/stack/scripts/install-host.sh"
+cat >"$timer_probe/stack/livepatch/scripts/install-timer.sh" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"$TIMER_MARKER"
+EOF
+chmod +x "$timer_probe/stack/livepatch/scripts/install-timer.sh"
+if TIMER_MARKER="$timer_probe/calls" HOME="$timer_probe/home" GROK_HOME="$timer_probe/grok" \
+    bash "$timer_probe/stack/scripts/install-host.sh" >/dev/null \
+    && [[ ! -e "$timer_probe/calls" ]] \
+    && TIMER_MARKER="$timer_probe/calls" HOME="$timer_probe/home" GROK_HOME="$timer_probe/grok" \
+      bash "$timer_probe/stack/scripts/install-host.sh" --no-timer >/dev/null \
+    && [[ ! -e "$timer_probe/calls" ]]; then
+  ok "install-host default and --no-timer leave timer untouched"
+else
+  bad "install-host changed timer without explicit opt-in"
+fi
+if TIMER_MARKER="$timer_probe/calls" HOME="$timer_probe/home" GROK_HOME="$timer_probe/grok" \
+    bash "$timer_probe/stack/scripts/install-host.sh" --install-timer >/dev/null \
+    && [[ -s "$timer_probe/calls" ]]; then
+  ok "install-host --install-timer invokes optional timer installer"
+else
+  bad "install-host --install-timer did not invoke timer installer"
+fi
+rm -rf "$timer_probe"
+
+if rg -n -- '--install-timer|--rebind-timer|--no-timer' scripts/overlays/sync-stack-livepatch.marketplace-safe.sh >/dev/null 2>&1 \
+  && rg -n -- '--install-timer|--rebind-timer|--no-timer' scripts/sync-livepatch-from-standalone.sh >/dev/null 2>&1; then
+  ok "sync scripts expose explicit timer opt-in"
+else
+  bad "sync scripts missing explicit timer opt-in"
+fi
+
+if rg -n 'INSTALL_TIMER=0' scripts/sync-livepatch-from-standalone.sh scripts/overlays/sync-stack-livepatch.marketplace-safe.sh >/dev/null 2>&1 \
+  && rg -n 'if \[\[ "\$INSTALL_TIMER" -eq 1 \]\]' scripts/sync-livepatch-from-standalone.sh scripts/overlays/sync-stack-livepatch.marketplace-safe.sh >/dev/null 2>&1 \
+  && rg -n -- '--no-timer\) : ;;' scripts/sync-livepatch-from-standalone.sh scripts/overlays/sync-stack-livepatch.marketplace-safe.sh >/dev/null 2>&1; then
+  ok "sync timer changes are opt-in; --no-timer is a compatibility no-op"
+else
+  bad "sync timer defaults or --no-timer compatibility behavior regressed"
+fi
+
+# Reproduce the installed-plugin layout. The script's only sync target would be
+# its own livepatch root, so it must no-op rather than cp a file onto itself.
+sync_probe=$(mktemp -d)
+sync_lp="$sync_probe/home/.grok/installed-plugins/xbgst-stack-1.2.3/livepatch"
+mkdir -p "$sync_lp/scripts" "$sync_lp/systemd" "$sync_lp/patches"
+cp scripts/overlays/sync-stack-livepatch.marketplace-safe.sh \
+  "$sync_lp/scripts/sync-stack-livepatch.sh"
+cat >"$sync_lp/scripts/install-timer.sh" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"$TIMER_MARKER"
+exit "${TIMER_EXIT:-0}"
+EOF
+chmod +x "$sync_lp/scripts/"*.sh
+sync_before=$(sha256sum "$sync_lp/scripts/sync-stack-livepatch.sh")
+if TIMER_MARKER="$sync_probe/timer-calls" \
+    bash "$sync_lp/scripts/sync-stack-livepatch.sh" >"$sync_probe/default.out" \
+    && [[ ! -e "$sync_probe/timer-calls" ]] \
+    && rg -n 'skip sync self-copy:' "$sync_probe/default.out" >/dev/null \
+    && [[ "$sync_before" == "$(sha256sum "$sync_lp/scripts/sync-stack-livepatch.sh")" ]]; then
+  ok "versioned installed-plugin sync exits zero without self-copy"
+else
+  bad "versioned installed-plugin sync self-copy regression"
+fi
+if TIMER_MARKER="$sync_probe/timer-calls" \
+    bash "$sync_lp/scripts/sync-stack-livepatch.sh" --no-timer >/dev/null \
+    && [[ ! -e "$sync_probe/timer-calls" ]]; then
+  ok "installed-plugin --no-timer remains a compatibility no-op"
+else
+  bad "installed-plugin --no-timer changed timer state"
+fi
+if TIMER_MARKER="$sync_probe/timer-calls" \
+    bash "$sync_lp/scripts/sync-stack-livepatch.sh" --install-timer >/dev/null \
+    && [[ -s "$sync_probe/timer-calls" ]]; then
+  ok "installed-plugin timer remains explicit opt-in"
+else
+  bad "installed-plugin --install-timer did not invoke timer installer"
+fi
+set +e
+TIMER_MARKER="$sync_probe/timer-calls" TIMER_EXIT=42 \
+  bash "$sync_lp/scripts/sync-stack-livepatch.sh" --install-timer >/dev/null
+timer_failure_code=$?
+set -e
+if [[ "$timer_failure_code" -eq 42 ]]; then
+  ok "installed-plugin timer installer failure propagates exit 42"
+else
+  bad "installed-plugin timer installer failure was suppressed (exit $timer_failure_code)"
+fi
+rm -rf "$sync_probe"
+
+if cmp -s scripts/overlays/sync-stack-livepatch.marketplace-safe.sh \
+    plugins/xbgst-stack/livepatch/scripts/sync-stack-livepatch.sh \
+  && cmp -s scripts/overlays/sync-stack-livepatch.marketplace-safe.sh \
+    plugins/grok-build-livepatch/scripts/sync-stack-livepatch.sh; then
+  ok "marketplace-safe sync overlay matches both vendored copies"
+else
+  bad "marketplace-safe sync overlay drifts from vendored copies"
+fi
+
+if rg -n 'cron: "0 \*/6 \* \* \*"' .github/workflows/livepatch-watch.yml >/dev/null 2>&1; then
+  ok "GitHub livepatch watch remains on six-hour schedule"
+else
+  bad "GitHub livepatch watch six-hour schedule changed"
 fi
 
 if [[ -f plugins/xbgst-stack/livepatch/scripts/sync-stack-livepatch.sh ]] \

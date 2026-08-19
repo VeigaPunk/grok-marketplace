@@ -40,6 +40,7 @@ cp docs/cli-config.toml ~/.grok/config.toml   # or merge by hand
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+# optional timer: repeat install-host.sh with --install-timer
 ./scripts/install-timer.sh --link-bin
 ./scripts/install-timer.sh --status   # expect active_cli=livepatch
 ```
@@ -56,7 +57,8 @@ chmod +x scripts/*.sh
 ./scripts/gates.sh --with-patch      # also clean-tree git apply --check (network)
 ./scripts/check-and-patch.sh          # first run (clone/fetch + cargo — network-heavy)
 ./scripts/install-timer.sh            # systemd --user timer @ 6h (binds ExecStart to this ROOT)
-./scripts/sync-stack-livepatch.sh    # optional: sync into local xbgst-stack copies + rebind
+./scripts/sync-stack-livepatch.sh    # sync copies; leaves timers untouched by default
+./scripts/sync-stack-livepatch.sh --install-timer # optional timer rebind
 ```
 
 Re-run `./scripts/install-timer.sh` after upgrades. It stamps `~/.local/state/grok-build-livepatch/preferred-install-root` and resolves ROOT as: `GROK_LIVEPATCH_ROOT` → stamp (if still valid) → this checkout. Use `./scripts/install-timer.sh --status` to verify the unit `ExecStart`. Plugin/marketplace copies of this script must be updated to honor the stamp, or they can rebind the timer; prefer installing from this public repo.

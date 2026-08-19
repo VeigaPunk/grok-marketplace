@@ -9,7 +9,7 @@
     {
       "name": "xbgst-stack",
       "version": "1.1.23",
-      "description": "Full Grok xbgst + livepatch; root CI; REPLACE_BIN enabled by default (set to 0 to opt out). No heuer-planning (ds4cc).",
+      "description": "Full Grok xbgst + manual livepatch; optional timer via --install-timer. No heuer-planning (ds4cc).",
       "category": "orchestration",
       "source": {
         "type": "local",
@@ -25,7 +25,7 @@
     {
       "name": "grok-build-livepatch",
       "version": "1.1.23",
-      "description": "Livepatch only (also inside xbgst-stack).",
+      "description": "Manual livepatch (also inside xbgst-stack); timer install is opt-in.",
       "category": "development",
       "source": {
         "type": "local",

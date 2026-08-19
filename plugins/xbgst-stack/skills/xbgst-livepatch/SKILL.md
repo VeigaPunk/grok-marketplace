@@ -2,7 +2,7 @@
 name: xbgst-livepatch
 description: >
   Install and maintain the Grok Build CLI livepatch that ships with xbgst-stack.
-  Hard-bans general-purpose and explore at CLI level; re-applies every 6h.
+  Hard-bans general-purpose and explore at CLI level; manual apply is default.
   Triggers: xbgst-livepatch, livepatch grok, ban general-purpose, install timer,
   grok-build-livepatch, REPLACE_BIN.
 ---
@@ -22,10 +22,12 @@ grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 # local clone catalog:
 # grok plugin install xbgst-stack@local/grok-marketplace --trust
 
-# wire agents/skills/commands + timer
-# binds 6h unit to THIS stack's livepatch/ (sets preferred-install-root)
-# keep a prior standalone stamp: GROK_LIVEPATCH_KEEP_STAMP=1 bash .../install-host.sh
+# wire agents/skills/commands (manual mode default; timer optional)
+# timer opt-in binds the 6h unit to THIS stack's livepatch/
+# timer opt-in can keep a prior stamp: GROK_LIVEPATCH_KEEP_STAMP=1 bash .../install-host.sh --install-timer
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+# optional timer opt-in:
+# bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh --install-timer
 
 # re-apply (timer unit defaults REPLACE_BIN=1 → active CLI stays banned)
 GROK_LIVEPATCH_FORCE=1 \
@@ -56,20 +58,21 @@ Resolve root (first match):
 
 ```bash
 bash <xbgst-stack>/scripts/install-host.sh
+# optional timer opt-in: bash <xbgst-stack>/scripts/install-host.sh --install-timer
 ```
 
-Copies agents → `~/.grok/agents`, skills → `~/.grok/skills`, commands → `~/.grok/commands`, enables user timer.
+Copies agents → `~/.grok/agents`, skills → `~/.grok/skills`, commands → `~/.grok/commands` (timer optional).
 
-## Verify
+## Verify manual patch
 
 ```bash
 ./scripts/smoke-gates.sh   # from marketplace repo root (local gates)
 readlink -f ~/.grok/bin/grok
-systemctl --user status grok-build-livepatch.timer
-systemctl --user list-timers 'grok-build-livepatch*'
 cat ~/.local/state/grok-build-livepatch/last-result 2>/dev/null || true
 grok --version
 ```
+
+After explicit `--install-timer`, additionally verify with `systemctl --user status grok-build-livepatch.timer`.
 
 ## REPLACE_BIN
 
@@ -84,7 +87,7 @@ When `~/Projects/grok-build-livepatch` moves, update nested trees from marketpla
 ```bash
 ./scripts/sync-livepatch-from-standalone.sh   # or ./scripts/sync-livepatch.sh
 ./scripts/smoke-gates.sh
-./scripts/rebind-livepatch-timer.sh           # unit must ExecStart stack livepatch/
+./scripts/sync-livepatch-from-standalone.sh --install-timer   # optional: rebind unit to stack LP
 ./scripts/ship-check.sh
 # commit on main → push → retag grok-stable
 ```

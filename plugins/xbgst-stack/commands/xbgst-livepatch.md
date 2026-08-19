@@ -1,5 +1,5 @@
 ---
-description: Install/verify bundled grok-build-livepatch (ban GP/explore, 6h timer).
+description: Apply/verify bundled grok-build-livepatch manually; timer is opt-in.
 ---
 
 # /xbgst-livepatch
@@ -14,6 +14,8 @@ else
   STACK=$(ls -d ~/.grok/installed-plugins/xbgst-stack-* 2>/dev/null | head -1)
 fi
 bash "$STACK/scripts/install-host.sh"
+# optional:
+# bash "$STACK/scripts/install-host.sh" --install-timer
 # patch/build without replacing bin unless user asked:
 GROK_LIVEPATCH_FORCE=1 bash "$STACK/livepatch/scripts/check-and-patch.sh"
 # REPLACE_BIN only if user explicitly wants active CLI swapped

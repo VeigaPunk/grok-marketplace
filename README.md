@@ -19,12 +19,12 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 
-# Wire host agents/skills/commands + livepatch timer
-# (timer unit defaults REPLACE_BIN=1 so active CLI gets the ban)
+# Wire host agents/skills/commands (manual/livepatch default)
+# (timer is optional, opt-in via --install-timer)
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 GROK_LIVEPATCH_FORCE=1 \
   bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
-# opt out of binary replace: GROK_LIVEPATCH_REPLACE_BIN=0 …
+# timer wiring (optional): append --install-timer
 ```
 
 If both GitHub and a local path marketplace are registered, the CLI requires a **pin**:
@@ -58,7 +58,7 @@ grok plugin install grok-build-livepatch@veigapunk/grok-marketplace --trust
 | `skills/xbgst-livepatch` | Install/verify CLI livepatch |
 | `skills/the-janitor` | 1Password / secrets |
 | `commands/` | `/xbgst`, `/xbgst-livepatch`, aliases |
-| `livepatch/` | Patch + 6h systemd timer |
+| `livepatch/` | Manual patch + optional 6h systemd timer |
 | `scripts/install-host.sh` | Idempotent host wire-up |
 
 ## Local gates
@@ -74,10 +74,10 @@ Validates both plugins (or JSON-only if no `grok`), asserts **heuer-planning** i
 ### Sync livepatch from standalone
 
 ```bash
-./scripts/sync-livepatch-from-standalone.sh          # rsync + restore install-host overlay
-./scripts/sync-livepatch-from-standalone.sh --check  # drift only
+./scripts/sync-livepatch-from-standalone.sh                # rsync + restore install-host overlay
+./scripts/sync-livepatch-from-standalone.sh --check        # drift only
+./scripts/sync-livepatch-from-standalone.sh --install-timer # optional timer rebind after sync
 ./scripts/smoke-gates.sh
-./scripts/rebind-livepatch-timer.sh                  # force 6h unit onto stack livepatch/
 ./scripts/ship-check.sh                              # clean tree + main + tag peel hints
 # then commit on main + move tag grok-stable
 ```

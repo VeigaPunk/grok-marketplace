@@ -5,35 +5,38 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: sync-stack-livepatch.sh [--help|-h] [--no-timer]
+Usage: sync-stack-livepatch.sh [--help|-h] [--install-timer|--rebind-timer] [--no-timer]
 
 Copy scripts/, systemd/, patches/ from this livepatch tree into sibling/known
 stack livepatch dirs. Does NOT rewrite xbgst-stack install-host.sh.
 
-  --no-timer   skip install-timer rebind
+  --install-timer   rebind timer to stack LP after sync
+  --rebind-timer    same as --install-timer
+  --no-timer        compatibility no-op (manual mode)
 EOF
 }
 
-case "${1:-}" in
-  --help|-h) usage; exit 0 ;;
-esac
-
-NO_TIMER=0
-case "${1:-}" in
-  --no-timer) NO_TIMER=1 ;;
-  "") ;;
-  *)
-    echo "Unknown option: $1" >&2
-    usage >&2
-    exit 1
-    ;;
-esac
+INSTALL_TIMER=0
+for arg in "$@"; do
+  case "$arg" in
+    --help|-h) usage; exit 0 ;;
+    --install-timer|--rebind-timer) INSTALL_TIMER=1 ;;
+    --no-timer) : ;; # compatibility no-op; manual mode is already the default
+    --*) echo "Unknown option: $arg" >&2; usage >&2; exit 1 ;;
+    "") ;;
+    *) echo "Unexpected positional arg: $arg" >&2; usage >&2; exit 1 ;;
+  esac
+done
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 sync_tree() {
   local dest="$1"
   [[ -d "$dest" ]] || return 0
+  if [[ "$dest" == "$ROOT" ]]; then
+    echo "skip sync self-copy: $dest"
+    return 0
+  fi
   mkdir -p "$dest/scripts" "$dest/systemd" "$dest/patches"
   cp -a "$ROOT/scripts/"*.sh "$dest/scripts/" 2>/dev/null || true
   # re-apply marketplace-safe copy of this script after cp
@@ -65,11 +68,11 @@ else
   sync_tree "$ROOT"
 fi
 
-if [[ "$NO_TIMER" -eq 0 ]]; then
+if [[ "$INSTALL_TIMER" -eq 1 ]]; then
   LP="$ROOT"
   if [[ -x "$LP/scripts/install-timer.sh" ]]; then
     echo "→ rebind timer to $LP"
-    GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh" || true
+    GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh"
   fi
 fi
 

@@ -14,7 +14,7 @@ Re-run `./scripts/ship-check.sh` to refresh; do not trust this block without it.
 | Tag | `grok-stable^{}` == `HEAD` |
 | Gates | `./scripts/smoke-gates.sh` + `./scripts/ship-check.sh` PASS |
 | Livepatch stamp | `plugins/*/.standalone-tip` == `~/Projects/grok-build-livepatch` HEAD (if clone present) |
-| Host timer | `./scripts/rebind-livepatch-timer.sh` if unit drifts to Projects |
+| Host timer | Optional; `./scripts/rebind-livepatch-timer.sh` only when timer mode is desired |
 
 ## Consumer install
 
@@ -30,7 +30,8 @@ Git pin: tag `grok-stable` on this repo.
 ## Maintainer loop (when standalone moves)
 
 ```bash
-./scripts/sync-livepatch-from-standalone.sh   # rsync + install-host overlay + rebind
+./scripts/sync-livepatch-from-standalone.sh   # rsync + install-host overlay; no timer changes
+# optional: append --install-timer to rebind the host timer
 ./scripts/smoke-gates.sh
 ./scripts/ship-check.sh
 # commit → push main → retag grok-stable
@@ -38,7 +39,7 @@ Git pin: tag `grok-stable` on this repo.
 
 Overlays (do not delete):
 
-- `scripts/overlays/install-host.xbgst-stack.sh` — marketplace-first timer bind  
+- `scripts/overlays/install-host.xbgst-stack.sh` — manual default; marketplace-first timer opt-in
 - `scripts/overlays/sync-stack-livepatch.marketplace-safe.sh` — never rewrite install-host  
 
 ## Open frontier (non-blocking)
