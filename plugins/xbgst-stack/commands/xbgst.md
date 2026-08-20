@@ -11,7 +11,7 @@ You are on **Grok Build**. This command is the Grok host path of xbrd-godspeed.
 
 1. Load skill **xbgst** (`Skill` / skill file under the installed plugin or `~/.grok/skills/xbgst`).
 2. Follow that skill exactly for `$ARGUMENTS` (or the user task).
-3. **Round 0:** spawn `the-planner` first (WWKD). Wait for plan artifact.
+3. **Round 0:** spawn `the-planner` first. Planner **loads skill `wwkd`**. Wait for plan artifact.
 4. Then judge: name axes → parallel specialists (always include `connector`) → Pareto → ship on APPROVED.
 
 ## Hard rules (Grok host)
@@ -19,7 +19,7 @@ You are on **Grok Build**. This command is the Grok host path of xbrd-godspeed.
 - **No xask / no Claude TeamCreate** as the default path. Spawn native Grok subagent types from this plugin (`scout`, `reviewer`, `labrat`, `executor`, `connector`, `distiller`, `simplifier`, `the-revenger`, `sentinel`, `critic`, `mutation-tester`, `scribe`, `the-planner`, `the-janitor`, …).
 - **Never** `general-purpose` or `explore` (banned; livepatch hard-bans them).
 - **Local-first:** after each judged milestone APPROVED → commit project files → `git push -u origin main` (SSH). No fork→PR default. No force-push of `main`.
-- **Language lock in skill:** Rust-only for generated scripts/tooling when the skill says so.
+- **Language:** match the repo. No Rust lock.
 - **Connector** mandatory every PROPOSE round after Round 0.
 - Godspeed injection on every teammate (short 4-rule block from the skill).
 
