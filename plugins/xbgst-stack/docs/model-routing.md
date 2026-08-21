@@ -9,8 +9,11 @@
 
 | Binary | Who may invoke it | Who must not |
 |---|---|---|
-| `codex` (stock `@openai/codex`, omarchy/npx wrapper) | Daybreak Blue lab ping; Exception E2 `cdx-revenger-*` | sekhmet L3 workers |
-| `codex-titanium` (Titanium ELF) | **sekhmet L3 workers only** | Daybreak; L2 (`prime-agent-l2.sh` / `prime-agent`); Grok-host E2 |
+| `xask` (PATH protocol → `xbreed ask`) | optional user-ON FIRST Bash inside named `gx-*` (see `commands/references/xbreed-shared.md` consult table) | sekhmet L3; spawn argv; judge-as-xask; Gemma/`g`/`gemini`; grok-as-xask-model |
+| `xbreed` (ask CLI; stock `codex` only) | invoked by protocol `xask` | honor `CODEX_BIN`; `codex-titanium`; L3 workers |
+| `codex` (stock `@openai/codex`, omarchy/npx wrapper) | Daybreak Blue lab ping; Exception E2 `cdx-revenger-*`; via `xbreed ask codex` | sekhmet L3 workers |
+| `xask-l3` (sekhmet shim; bare `sekhmet run`, Titanium default) | **sekhmet L3 only** | gx-* FIRST tool; E2; L1 judge; protocol `xask` lane |
+| `codex-titanium` (Titanium ELF) | **sekhmet L3 workers only** | Daybreak; L2 (`prime-agent-l2.sh` / `prime-agent`); Grok-host E2; `xbreed ask` |
 | direct `prime-agent --provider openai-codex` | optional attachable L2-loop behind a named `gx-*` route owner; existing user-owned ChatGPT/Codex OAuth only | L1 judge, L2-select, L3; never exec `codex-titanium` |
 | `prime-agent` via `scripts/prime-agent-l2.sh` | legacy xAI-only compatibility path (fail-closed) | OpenAI route; never wrap or exec `codex-titanium` |
 

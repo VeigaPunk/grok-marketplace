@@ -48,6 +48,26 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 **Banned:** `general-purpose`, `explore`.
 
+## Optional user-ON xask consult (codex lanes only)
+
+Default remains Grok-native spawn of `gx-*`. When the user asks for actual xbrd / cross-model and PATH `xask` is the protocol binary (`xbreed ask`), specialists may run **one FIRST Bash consult** inside the already-spawned `gx-*`. Never spawn type `xask`. Never use `xask-l3` from specialists. Gemma/`g`/`gemini` SUBBED. Do not pass `--direct`, `--model-id gpt-5.6-luna`, or route through `codex-titanium`.
+
+Two argv only:
+
+| Class | Exact FIRST Bash |
+|---|---|
+| expendable (spark) | `xask --spark --gs codex '<q>'` |
+| review-class (gpt55-low) | `xask --gpt55 --gs -e low codex '<q>'` |
+
+| Role | Consult |
+|---|---|
+| `scout`, `labrat`, `executor`, `connector` | spark |
+| `reviewer`, `sentinel`, `critic`, `mutation-tester` | gpt55-low (breadth) |
+| `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
+| `the-revenger` | **Exception E2** stock `codex exec -m gpt-5.6-luna` — **not** xask |
+
+Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Chain: `xask` → `xbreed ask codex` → stock `codex`. Binary split: `docs/model-routing.md`.
+
 ## Naming
 
 `gx-{role}-{suffix}` e.g. `gx-scout-docs`, `gx-executor-ship`, `gx-connector-r1`.

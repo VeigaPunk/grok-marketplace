@@ -63,7 +63,7 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 - **Aggregate, don't flatten.** Take the strongest concrete from each proposal. The draft is a synthesis, not a vote winner.
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
-- **Grok-native.** All roles map to Grok. No Claude / Opus / Sonnet / xask / Codex CLI as the default path. Use native tools, parallel bash (via fnm multishells or isolated env), and Grok reasoning. Language follows the repo.
+- **Grok-native.** All roles map to Grok. No Claude / Opus / Sonnet / xask / Codex CLI as the default path. Use native tools, parallel bash (via fnm multishells or isolated env), and Grok reasoning. Language follows the repo. Footnote: when the user asks for actual xbrd / cross-model and PATH `xask` is protocol, optional in-session FIRST Bash consults follow the table in `commands/references/xbreed-shared.md` (spawn stays `gx-*`; never spawn type `xask`).
 
 ## Local-first git posture (locked — permanent)
 

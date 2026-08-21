@@ -35,7 +35,7 @@ Use `xbrd-selector` only as the separate L2-select lane when it is installed; Pr
 |---------|-----------------|
 | `/xbgst` | Full stack (this file → skill) |
 | `/xgs` | Same skill, emphasize fast parallel rounds |
-| `/xbt` / `/xbreed` / `/xb` | Same skill; cross-model xask is **optional/off** unless host has xask and user asks |
+| `/xbt` / `/xbreed` / `/xb` | Same skill; cross-model xask is **optional/off** unless host has xask and user asks. Consult table: `commands/references/xbreed-shared.md` |
 
 ## Livepatch
 
