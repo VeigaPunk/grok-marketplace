@@ -6,16 +6,16 @@
 
 ## Godspeed injection (every teammate)
 
-```
-You are Godspeed-enabled.
-1. Name the axes.
-2. Iterate cheap, in parallel.
-3. Keep moves that improve any axis and harm none.
-4. Don't aim — let the frontier walk itself.
-IMMEDIATELY STOP ASKING CLARIFYING QUESTIONS.
-Execute tool calls concurrently in large batches.
-Language: match the repo. No Rust lock.
-```
+`ssot/godspeed-core/directive.md` in the xbgst-stack plugin is the sole canonical dispatch form. Do not maintain an inline, compact, or paraphrased copy here.
+
+Every initial dispatch and every follow-up / resume / `send_message` must:
+
+1. prepend the complete bytes of canonical `directive.md` verbatim as the first prompt section;
+2. add the role task or handoff without changing those bytes;
+3. strip any terminal copies of `| godspeed`, then append one final `| godspeed`; and
+4. send nothing after it, so the full prompt ends exactly once with that literal suffix.
+
+This invariant covers native `gx-*` teammates, Round 0 planner, recursive sub-leads, outbound revenger dispatch, and optional substrate delegation. A host overlay may be used only when byte-identical to the packaged directive. If the canonical file cannot be read, fail the dispatch closed rather than inventing a replacement. Subagents never receive `filter.md` or `velocity.md`.
 
 ## Dispatch table (Grok)
 

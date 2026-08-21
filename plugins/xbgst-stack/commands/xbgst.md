@@ -21,7 +21,7 @@ You are on **Grok Build**. This command is the Grok host path of xbrd-godspeed.
 - **Local-first:** after each judged milestone APPROVED → commit project files → `git push -u origin main` (SSH). No fork→PR default. No force-push of `main`.
 - **Language:** match the repo. No Rust lock.
 - **Connector** mandatory every PROPOSE round after Round 0.
-- Godspeed injection on every teammate (short 4-rule block from the skill).
+- Godspeed injection on every teammate: prepend byte-exact `ssot/godspeed-core/directive.md` (quintessential subagent form).
 
 ## Optional substrate route
 
