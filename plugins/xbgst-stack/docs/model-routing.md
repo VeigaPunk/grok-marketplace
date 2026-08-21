@@ -9,9 +9,12 @@
 
 | Binary | Who may invoke it | Who must not |
 |---|---|---|
-| `xask` (PATH protocol → `xbreed ask`) | optional user-ON FIRST Bash inside named `gx-*` (see `commands/references/xbreed-shared.md` consult table) | sekhmet L3; spawn argv; judge-as-xask; Gemma/`g`/`gemini`; grok-as-xask-model |
-| `xbreed` (ask CLI; stock `codex` only) | invoked by protocol `xask` | honor `CODEX_BIN`; `codex-titanium`; L3 workers |
-| `codex` (stock `@openai/codex`, omarchy/npx wrapper) | Daybreak Blue lab ping; Exception E2 `cdx-revenger-*`; via `xbreed ask codex` | sekhmet L3 workers |
+| `xask` (PATH protocol) | optional user-ON FIRST Bash inside named `gx-*` / grok-CLI subleads (consult table) | sekhmet L3; spawn argv; judge-as-xask; Gemma/`g`/`gemini`; gx-* FIRST `xask grok` |
+| `xask --gs grok` (lead oneshot) | host/script oneshot only (`grok --always-approve --no-subagents --verbatim -p`) | gx-* FIRST bash; L2 teammate consult; titanium |
+| `xask … cdx` (alias of `codex`) | L2 consult → `xbreed ask codex` → stock ChatGPT Codex | Token Plan `-p`; `codex-titanium`; sekhmet |
+| `xask --gs qwen38\|ds-flash\|ds-pro` | L2 Token Plan **opt-in** → wrappers `codex-qwen38` / `codex-ds-*` → `codex -p <profile>` (xask unsets `CODEX_BIN`) | default Codex; L3 spark; gx-* without user naming the profile |
+| `xbreed` (ask CLI; stock ChatGPT `codex`) | invoked by protocol `xask` for `codex`/`cdx` | honor `CODEX_BIN`; `codex-titanium`; Token Plan `-p`; L3 workers |
+| `codex` (stock `@openai/codex`) | Daybreak Blue; Exception E2 `cdx-revenger-*`; `xbreed ask codex`; Token Plan only via `-p` / wrappers | sekhmet L3 workers (use `codex-titanium`) |
 | `xask-l3` (sekhmet shim; bare `sekhmet run`, Titanium default) | **sekhmet L3 only** | gx-* FIRST tool; E2; L1 judge; protocol `xask` lane |
 | `codex-titanium` (Titanium ELF) | **sekhmet L3 workers only** | Daybreak; L2 (`prime-agent-l2.sh` / `prime-agent`); Grok-host E2; `xbreed ask` |
 | direct `prime-agent --provider openai-codex` | optional attachable L2-loop behind a named `gx-*` route owner; existing user-owned ChatGPT/Codex OAuth only | L1 judge, L2-select, L3; never exec `codex-titanium` |

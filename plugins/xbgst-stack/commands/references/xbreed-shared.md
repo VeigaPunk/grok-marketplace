@@ -48,25 +48,35 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 **Banned:** `general-purpose`, `explore`.
 
-## Optional user-ON xask consult (codex lanes only)
+## Optional user-ON xask consult (Codex router)
 
-Default remains Grok-native spawn of `gx-*`. When the user asks for actual xbrd / cross-model and PATH `xask` is the protocol binary (`xbreed ask`), specialists may run **one FIRST Bash consult** inside the already-spawned `gx-*`. Never spawn type `xask`. Never use `xask-l3` from specialists. Gemma/`g`/`gemini` SUBBED. Do not pass `--direct`, `--model-id gpt-5.6-luna`, or route through `codex-titanium`.
+Default remains Grok-native spawn of `gx-*` (or grok-CLI pane subleads in the teammate harness). When the user asks for actual xbrd / cross-model and PATH `xask` is protocol, specialists may run **one FIRST Bash consult**. They act by toolcalls only: `xask` (IMCP envelope) plus native grok tools. Intra-team bus is `xbreed team mailbox write|drain`, not Claude `SendMessage`. Never spawn type `xask`. Never use `xask-l3`. Gemma/`g`/`gemini` SUBBED.
 
-Two argv only:
+Umwelt: grok is the **caller** (L2 host). Consult callees are Codex-router lanes. Do not `xask grok` as FIRST bash from a grok teammate (that is grok-consults-grok).
 
-| Class | Exact FIRST Bash |
+L2 FIRST Bash (copy-paste):
+
+| Class | Exact argv | Router |
+|---|---|---|
+| stock ChatGPT (`cdx`) | `xask --gpt55 --gs -e low cdx '<q>'` | `xbreed ask codex` → stock `codex exec` |
+| Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38` → `codex -p qwen38` (opt-in; xask unsets `CODEX_BIN`) |
+| Token Plan flash | `xask --gs ds-flash '<q>'` | `codex-ds-flash` → `codex -p ds-flash` |
+| Token Plan pro | `xask --gs ds-pro '<q>'` | `codex-ds-pro` → `codex -p ds-pro` |
+
+| Role | L2 consult |
 |---|---|
-| expendable (spark) | `xask --spark --gs codex '<q>'` |
-| review-class (gpt55-low) | `xask --gpt55 --gs -e low codex '<q>'` |
-
-| Role | Consult |
-|---|---|
-| `scout`, `labrat`, `executor`, `connector` | spark |
-| `reviewer`, `sentinel`, `critic`, `mutation-tester` | gpt55-low (breadth) |
+| `scout`, `labrat`, `executor`, `connector` | `cdx` gpt55-low **or** `qwen38` when the user named Token Plan |
+| `reviewer`, `sentinel`, `critic`, `mutation-tester` | `cdx` gpt55-low **or** Token Plan profile the user named |
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
-| `the-revenger` | **Exception E2** stock `codex exec -m gpt-5.6-luna` — **not** xask |
+| `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
 
-Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Chain: `xask` → `xbreed ask codex` → stock `codex`. Binary split: `docs/model-routing.md`.
+Lead/script oneshot only (not gx-* FIRST bash): `xask --gs grok '<q>'` → `grok --always-approve --no-subagents --verbatim -p`.
+
+`--spark` still forwards to `xbreed ask --spark` (gpt-5.4-mini) this ship. Remap to sekhmet/xbrd-spark is **E-spark**, not L2 FIRST bash (that would steal L3 titanium into teammate consults).
+
+Forbidden from gx-* FIRST bash: `xask grok`; `xask-l3`; `gemma\|g\|gemini`; `xask --spark grok\|qwen38\|ds-*`; `codex-titanium`; exporting `CODEX_BIN` on Token Plan/grok execs (xask must `env -u`).
+
+Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `docs/model-routing.md`.
 
 ## Naming
 
