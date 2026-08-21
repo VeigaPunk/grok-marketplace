@@ -119,6 +119,10 @@ GROK_LIVEPATCH_FORCE=1 \
 
 If the host still has stock Grok Build, run livepatch install first (skill **xbgst-livepatch**).
 
+## Host substrate: prime-agent L2-loop (optional)
+
+**Optional L2-loop** beside L2-select: skill **xbgst-primeagent** / `/xbgst-primeagent` → `scripts/prime-agent-l2.sh` → user-level `prime-agent` (xAI only; fail-closed without `XAI_API_KEY`). Not the judge, not L3, not xbrd-selector. Long-running `gx-*` work may reattach sessions under `~/.xbgst/prime-agent/sessions`; `/refine` is harness lessons with rollback and must not write `~/.grok/skills`.
+
 ## Model routing (locked)
 
 - **Judge / xbgst** runs on **Grok** at high effort.
