@@ -337,6 +337,81 @@ else
   ok "livepatch sync-check skipped (no standalone clone)"
 fi
 
+# orch-parity (M07): grok plugin install skips skill symlinks.
+if [[ -d plugins/xbgst-stack/skills/godspeed && -d plugins/xbgst-stack/skills/wwkd ]]; then
+  ok "skills godspeed+wwkd present"
+else
+  bad "skills godspeed/wwkd missing"
+fi
+orch_reg_ok=1
+for f in \
+  plugins/xbgst-stack/skills/godspeed/SKILL.md \
+  plugins/xbgst-stack/skills/godspeed/directive.md \
+  plugins/xbgst-stack/skills/wwkd/SKILL.md \
+  plugins/xbgst-stack/ssot/godspeed-core/directive.md \
+  plugins/xbgst-stack/ssot/godspeed-core/filter.md \
+  plugins/xbgst-stack/ssot/godspeed-core/velocity.md
+do
+  if [[ -L "$f" ]]; then
+    bad "$f is a symlink (grok install skips symlinks)"
+    orch_reg_ok=0
+  elif [[ ! -f "$f" ]]; then
+    bad "$f missing (want regular file)"
+    orch_reg_ok=0
+  fi
+done
+if [[ "$orch_reg_ok" -eq 1 ]]; then
+  ok "orch ssot/skills regular files (godspeed/directive.md not a symlink)"
+fi
+if cmp -s plugins/xbgst-stack/skills/godspeed/directive.md \
+        plugins/xbgst-stack/ssot/godspeed-core/directive.md; then
+  ok "godspeed/directive.md matches ssot copy"
+else
+  bad "godspeed/directive.md drifts from ssot/godspeed-core/directive.md"
+fi
+
+kim_extra=$(rg -n 'the-kimiraikkoner' plugins/xbgst-stack | rg -v 'HOST-ORCH-INVENTORY\.txt' | rg -v 'continue' || true)
+if [[ -n "$kim_extra" ]]; then
+  bad "the-kimiraikkoner under plugins/xbgst-stack (only inventory [banned] or skip-lists allowed)"
+else
+  ok "the-kimiraikkoner only in inventory/skip-lists"
+fi
+
+if rg -n 'vgpnk1337' plugins/xbgst-stack >/dev/null 2>&1; then
+  bad "vgpnk1337 must not appear under plugins/xbgst-stack"
+else
+  ok "no vgpnk1337 under xbgst-stack"
+fi
+
+inv=plugins/xbgst-stack/HOST-ORCH-INVENTORY.txt
+if [[ -f "$inv" ]] && rg -n '^godspeed$' "$inv" >/dev/null && rg -n '^wwkd$' "$inv" >/dev/null; then
+  ok "HOST-ORCH-INVENTORY names wwkd godspeed"
+else
+  bad "HOST-ORCH-INVENTORY missing or does not name wwkd godspeed"
+fi
+
+if { [[ -f plugins/xbgst-stack/hooks/hooks.json ]] && rg -n 'install-host\.sh' plugins/xbgst-stack/hooks/hooks.json >/dev/null 2>&1; } \
+  || { [[ -f hooks/hooks.json ]] && rg -n 'install-host\.sh' hooks/hooks.json >/dev/null 2>&1; }; then
+  bad "hooks.json must not exec install-host.sh"
+else
+  ok "no hooks.json exec of install-host.sh"
+fi
+
+if [[ -f scripts/sync-orch-ssot.sh && -d "${HOME}/Projects/xbgst/myskills" ]]; then
+  if bash scripts/sync-orch-ssot.sh --check >/dev/null 2>&1; then
+    ok "sync-orch-ssot --check"
+  else
+    bad "sync-orch-ssot --check (orch ssot/skills drift)"
+  fi
+fi
+
+# Prefer requiring the oneliner; WARN (not FAIL) if still racing into existence.
+if [[ -f scripts/install-xbgst-stack.sh ]]; then
+  ok "install-xbgst-stack.sh present"
+else
+  echo "WARN install-xbgst-stack.sh missing (oneliner race)"
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"
   exit 1

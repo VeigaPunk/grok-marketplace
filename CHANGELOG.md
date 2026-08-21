@@ -2,6 +2,13 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## 1.1.24
+
+- Vendor this host’s grok-orch surface into `xbgst-stack`: skills `godspeed` + `wwkd`, `ssot/godspeed-core` trilogy, symlink overlay via `install-host.sh` (dir symlink if dest missing; per-file if dest is a real dir).
+- Primary consumer install is `scripts/install-xbgst-stack.sh` (curl|bash one-liner): marketplace add + `plugin install --trust` + that plugin’s `install-host`; merge-enable only; no livepatch FORCE apply; `--from-tree` for local overfit.
+- Phase 0 paths fall back to the plugin tree (no `~/Projects` required). `scout.md` YAML no longer uses a bare `tools: *` alias.
+- Host dirt stripped (`vgpnk1337` path). No SessionStart hook. No `heuer-planning`. No `the-kimiraikkoner`.
+
 ## 1.1.23
 
 - Sync livepatch to standalone tip `6692f4a` (rebase: ban-generic-subagents for grok-build 1.0.0).
@@ -72,9 +79,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 ## Install (consumers)
 
 ```bash
-grok plugin marketplace add VeigaPunk/grok-marketplace
-grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-stack.sh | bash
 ```
 
-Do **not** append `@grok-stable` to `marketplace add` (CLI path bug). Git channel pin remains the `grok-stable` tag on this repo.
+Equivalent 3-step without FORCE apply; do **not** append `@grok-stable` to `marketplace add` (CLI path bug). Conservative raw pin: `…/grok-stable/scripts/install-xbgst-stack.sh`. Git channel pin remains the `grok-stable` tag on this repo.

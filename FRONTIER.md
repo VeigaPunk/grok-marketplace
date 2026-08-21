@@ -19,13 +19,20 @@ Re-run `./scripts/ship-check.sh` to refresh; do not trust this block without it.
 ## Consumer install
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-stack.sh | bash
+```
+
+Equivalent 3-step (no livepatch FORCE apply):
+
+```bash
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+STACK=$(grok plugin details xbgst-stack | sed -n 's/^[[:space:]]*path:[[:space:]]*//p')
+bash "$STACK/scripts/install-host.sh"
 ```
 
 Do **not** use `marketplace add …@grok-stable` (CLI treats `@` as git host path).  
-Git pin: tag `grok-stable` on this repo.
+Conservative raw pin: `…/grok-stable/scripts/install-xbgst-stack.sh`. Git channel pin: tag `grok-stable` on this repo.
 
 ## Maintainer loop (when standalone moves)
 

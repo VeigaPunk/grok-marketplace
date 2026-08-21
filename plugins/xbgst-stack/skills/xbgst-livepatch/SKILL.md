@@ -16,23 +16,22 @@ Bundled with **xbgst-stack** in **VeigaPunk/grok-marketplace**. Keeps Grok Build
 ## Prefer marketplace install (Grok)
 
 ```bash
+# one-shot orch overlay (add + install --trust + install-host; no livepatch apply)
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-stack.sh | bash
+
+# equivalent 3-step:
 grok plugin marketplace add VeigaPunk/grok-marketplace
 # if both local + remote catalogs are registered:
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
 # local clone catalog:
 # grok plugin install xbgst-stack@local/grok-marketplace --trust
-
-# wire agents/skills/commands (manual mode default; timer optional)
-# timer opt-in binds the 6h unit to THIS stack's livepatch/
-# timer opt-in can keep a prior stamp: GROK_LIVEPATCH_KEEP_STAMP=1 bash .../install-host.sh --install-timer
 bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 # optional timer opt-in:
 # bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh --install-timer
 
-# re-apply (timer unit defaults REPLACE_BIN=1 → active CLI stays banned)
-GROK_LIVEPATCH_FORCE=1 \
-  bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
-# opt out for one run: GROK_LIVEPATCH_REPLACE_BIN=0 …
+# optional re-apply (not part of the one-liner; timer unit defaults REPLACE_BIN=1)
+# GROK_LIVEPATCH_FORCE=1 \
+#   bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
 ```
 
 Do **not** use `marketplace add …@grok-stable` (CLI treats `@` as part of the git host). Channel pin is the git tag on the repo; `main` tracks it at ship.
@@ -61,7 +60,7 @@ bash <xbgst-stack>/scripts/install-host.sh
 # optional timer opt-in: bash <xbgst-stack>/scripts/install-host.sh --install-timer
 ```
 
-Copies agents → `~/.grok/agents`, skills → `~/.grok/skills`, commands → `~/.grok/commands` (timer optional).
+Symlink overlay: `~/.grok/{agents,commands,skills,ssot}` onto this plugin (timer optional). Does not apply livepatch unless you opt in.
 
 ## Verify manual patch
 

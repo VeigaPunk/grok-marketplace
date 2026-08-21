@@ -7,11 +7,24 @@ description: Apply/verify bundled grok-build-livepatch manually; timer is opt-in
 Load skill **xbgst-livepatch** and run:
 
 ```bash
-# prefer local marketplace clone if present
-if [[ -x /home/vgpnk1337/Projects/grok-marketplace/plugins/xbgst-stack/scripts/install-host.sh ]]; then
-  STACK=/home/vgpnk1337/Projects/grok-marketplace/plugins/xbgst-stack
+GROK_HOME="${GROK_HOME:-$HOME/.grok}"
+STACK=""
+if [[ -n "${GROK_PLUGIN_ROOT:-}" && -x "${GROK_PLUGIN_ROOT}/scripts/install-host.sh" ]]; then
+  STACK="$GROK_PLUGIN_ROOT"
 else
-  STACK=$(ls -d ~/.grok/installed-plugins/xbgst-stack-* 2>/dev/null | head -1)
+  for d in "$GROK_HOME"/installed-plugins/xbgst-stack-*; do
+    [[ -f "$d/plugin.json" ]] || continue
+    if grep -q '"name"[[:space:]]*:[[:space:]]*"xbgst-stack"' "$d/plugin.json" 2>/dev/null; then
+      STACK="$d"
+      break
+    fi
+  done
+fi
+if [[ -z "$STACK" || ! -x "$STACK/scripts/install-host.sh" ]]; then
+  CAND="$HOME/Projects/xbgst/grok-marketplace/plugins/xbgst-stack"
+  if [[ -x "$CAND/scripts/install-host.sh" ]]; then
+    STACK="$CAND"
+  fi
 fi
 bash "$STACK/scripts/install-host.sh"
 # optional:

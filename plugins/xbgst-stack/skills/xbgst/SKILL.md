@@ -39,20 +39,19 @@ Do not output philosophical reasoning or verbose plans. Act directly via tool ca
 Language: match the repo. No Rust lock.
 ```
 
-When constructing a dispatch / handoff / spawn message, inject the block above as the first section of the agent's system context. Subagents inherit ONLY that short block — or the `godspeed` skill, which routes to **directive.md alone**. NEVER inject filter.md or velocity.md. The judge (you) is the only role that loads the trilogy, from SSoT:
+When constructing a dispatch / handoff / spawn message, inject the block above as the first section of the agent's system context. Subagents inherit ONLY that short block — or the `godspeed` skill, which routes to **directive.md alone**. NEVER inject filter.md or velocity.md. The judge (you) is the only role that loads the trilogy, from SSoT (first existing tree wins):
 
-- `~/.grok/ssot/godspeed-core/directive.md`
-- `~/.grok/ssot/godspeed-core/filter.md`
-- `~/.grok/ssot/godspeed-core/velocity.md`
+- `~/.grok/ssot/godspeed-core/{directive,filter,velocity}.md` (host overlay)
+- else the **xbgst-stack** plugin tree `ssot/godspeed-core/` (same three files; `plugin.json` name must be `xbgst-stack`)
 
-Read those three files when you take the judge seat. Do not rely on memory of the filter.
+Read those three files when you take the judge seat. Do not rely on memory of the filter. Do not require `~/Projects`.
 
 ## Round 0 — Mandatory planner spawn (Phase 0)
 
 On activation (any trigger matching xbgst / godspeed-grok / xbrd-gdsp-fknpft):
 
 1. **IMMEDIATELY** spawn `the-planner` as first teammate (godspeed already injected).
-2. The planner MUST load skill **`wwkd`** (`~/.grok/skills/wwkd` → myskills SSoT) and follow it. Its artifact is the skeleton baseline.
+2. The planner MUST load skill **`wwkd`** (`~/.grok/skills/wwkd`, else the xbgst-stack plugin `skills/wwkd`) and follow it. Its artifact is the skeleton baseline.
 3. Wait for planner plan artifact before naming axes or dispatching any other specialist.
 4. After plan lands, you become the-judge for all subsequent rounds.
 
@@ -175,7 +174,7 @@ Record the exact spawn command in the handoff block under `spawn_method:`.
 
 ## WWKD posture (loaded by planner on Round 0)
 
-The planner **loads skill `wwkd`** (`~/.grok/skills/wwkd` → `~/Projects/xbgst/myskills/wwkd`). That SKILL.md is SSoT. Do not inline a private WWKD.
+The planner **loads skill `wwkd`** (`~/.grok/skills/wwkd`, else xbgst-stack `skills/wwkd`). That SKILL.md is SSoT. Do not inline a private WWKD. Do not require `~/Projects`.
 
 Compression (skill remains the source):
 

@@ -12,20 +12,27 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 
 ## Install
 
-`grok plugin marketplace add` takes a URL, `user/repo`, or local path. **Do not** append `@ref` to marketplace add (CLI treats it as part of the git host path).
+**Primary** (one-shot orch overlay — marketplace add + `plugin install --trust` + that plugin’s `install-host.sh`; no livepatch apply, no `config.toml` overwrite):
 
 ```bash
-# Primary (public)
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-stack.sh | bash
+```
+
+Conservative raw pin (git tag peel; **not** `marketplace add …@tag`):  
+`https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/grok-stable/scripts/install-xbgst-stack.sh`
+
+Equivalent 3-step (same overlay; still no FORCE apply):
+
+```bash
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-
-# Wire host agents/skills/commands (manual/livepatch default)
-# (timer is optional, opt-in via --install-timer)
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
-GROK_LIVEPATCH_FORCE=1 \
-  bash ~/.grok/installed-plugins/xbgst-stack-*/livepatch/scripts/check-and-patch.sh
-# timer wiring (optional): append --install-timer
+# resolve the installed plugin dir (prefer: grok plugin details xbgst-stack), then:
+bash "$STACK/scripts/install-host.sh"
+# optional livepatch: GROK_LIVEPATCH_FORCE=1 bash "$STACK/livepatch/scripts/check-and-patch.sh"
+# optional timer: bash "$STACK/scripts/install-host.sh" --install-timer
 ```
+
+`grok plugin marketplace add` takes a URL, `user/repo`, or local path. **Do not** append `@ref` to marketplace add (CLI treats it as part of the git host path).
 
 If both GitHub and a local path marketplace are registered, the CLI requires a **pin**:
 
@@ -34,14 +41,16 @@ grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust   # remote ca
 grok plugin install xbgst-stack@local/grok-marketplace --trust        # local path catalog
 ```
 
-Local dev:
+Local dev / overfit (no network):
 
 ```bash
+bash scripts/install-xbgst-stack.sh --from-tree /path/to/grok-marketplace
+# or:
 grok plugin marketplace add /path/to/grok-marketplace
 grok plugin install xbgst-stack@local/grok-marketplace --trust
 ```
 
-Git channel pin (docs / clone): `VeigaPunk/grok-marketplace@grok-stable`
+Git channel pin (docs / clone): tag `grok-stable` on this repo (not a marketplace `@` suffix).
 
 Optional second plugin (same livepatch, also inside xbgst-stack):
 
@@ -92,20 +101,22 @@ Nested `plugins/**/.github/workflows` are **not** run by GitHub; keep root workf
 
 ## Recommended Grok CLI config
 
-**Primary Grok Builder install UX:** [veigapunk.github.io/ds4cc-marketplace](https://veigapunk.github.io/ds4cc-marketplace/)  
-**Config on primary site:** [grok-cli-config.toml](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml)  
-**Optional livepatch docs mirror:** [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/grok-build-livepatch/)
+**Primary grok-orch install:** the one-liner above (`scripts/install-xbgst-stack.sh`). It merge-enables `xbgst-stack` in an existing `~/.grok/config.toml` and never curls a remote toml over the file.
 
-Ship-aligned host config for this marketplace + livepatch ban (plugins at **1.1.22**):
+Operator / multi-CLI site (optional; not the orch default): [veigapunk.github.io/ds4cc-marketplace](https://veigapunk.github.io/ds4cc-marketplace/) · [grok-cli-config.toml](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml)  
+Optional livepatch docs mirror: [veigapunk.github.io/grok-build-livepatch](https://veigapunk.github.io/grok-build-livepatch/)
+
+Ship-aligned host config template for this marketplace + livepatch ban:
 
 - Template: [`plugins/xbgst-stack/livepatch/docs/cli-config.toml`](plugins/xbgst-stack/livepatch/docs/cli-config.toml)
 - Standalone copy: [VeigaPunk/grok-build-livepatch `docs/cli-config.toml`](https://github.com/VeigaPunk/grok-build-livepatch/blob/main/docs/cli-config.toml)
 
 ```bash
-# merge into ~/.grok/config.toml then:
+# Prefer the one-liner. Manual equivalent (merge config yourself; no FORCE apply):
 grok plugin marketplace add VeigaPunk/grok-marketplace
 grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
+STACK=$(grok plugin details xbgst-stack | sed -n 's/^[[:space:]]*path:[[:space:]]*//p')
+bash "$STACK/scripts/install-host.sh"
 ```
 
 ## Related stack

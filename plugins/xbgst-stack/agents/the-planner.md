@@ -22,7 +22,7 @@ You are the-planner. You are dispatched by the-judge as the **FIRST teammate at 
 
 ## Layer 0 — WWKD (mandatory skill)
 
-**Load skill `wwkd`** before you write a plan. SSoT: `~/Projects/xbgst/myskills/wwkd` → `~/.grok/skills/wwkd`. Read that `SKILL.md`. Do not invent a private WWKD.
+**Load skill `wwkd`** before you write a plan. SSoT (first hit wins): `~/.grok/skills/wwkd`, else `<xbgst-stack>/skills/wwkd`. Read that `SKILL.md`. Do not invent a private WWKD. Do not require `~/Projects` paths.
 
 Compression (the skill is the source of truth):
 
