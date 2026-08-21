@@ -50,27 +50,25 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 ## Optional user-ON xask consult (Codex router)
 
-Default remains Grok-native spawn of `gx-*` (or grok-CLI pane subleads in the teammate harness). When the user asks for actual xbrd / cross-model and PATH `xask` is protocol, specialists may run **one FIRST Bash consult**. They act by toolcalls only: `xask` (IMCP envelope) plus native grok tools. Intra-team bus is `xbreed team mailbox write|drain`, not Claude `SendMessage`. Never spawn type `xask`. Never use `xask-l3`. Gemma/`g`/`gemini` SUBBED.
+Default remains Grok-native spawn of `gx-*` (or grok-CLI pane subleads in the teammate harness). When the user asks for actual xbrd / cross-model and PATH `xask` is protocol, specialists may run **one FIRST Bash consult**. They act by toolcalls only: `xask` (IMCP envelope) plus native grok tools. Never spawn type `xask`. Never use `xask-l3`. Gemma/`g`/`gemini` SUBBED. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
 Umwelt: grok is the **caller** (L2 host). Consult callees are Codex-router lanes. Do not `xask grok` as FIRST bash from a grok teammate (that is grok-consults-grok).
 
-L2 FIRST Bash (copy-paste):
+L2 FIRST Bash (copy-paste — these two only):
 
 | Class | Exact argv | Router |
 |---|---|---|
 | stock ChatGPT (`cdx`) | `xask --gpt55 --gs -e low cdx '<q>'` | `xbreed ask codex` → stock `codex exec` |
 | Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38` → `codex -p qwen38` (opt-in; xask unsets `CODEX_BIN`) |
-| Token Plan flash | `xask --gs ds-flash '<q>'` | `codex-ds-flash` → `codex -p ds-flash` |
-| Token Plan pro | `xask --gs ds-pro '<q>'` | `codex-ds-pro` → `codex -p ds-pro` |
+
+`ds-flash` / `ds-pro` exist on protocol xask when the user names that profile; they are **not** teammate FIRST-bash defaults. Grok-as-xask (`xask --gs grok`) is lead/script oneshot only — not this paste grid.
 
 | Role | L2 consult |
 |---|---|
 | `scout`, `labrat`, `executor`, `connector` | `cdx` gpt55-low **or** `qwen38` when the user named Token Plan |
-| `reviewer`, `sentinel`, `critic`, `mutation-tester` | `cdx` gpt55-low **or** Token Plan profile the user named |
+| `reviewer`, `sentinel`, `critic`, `mutation-tester` | `cdx` gpt55-low **or** `qwen38` when the user named Token Plan |
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
-
-Lead/script oneshot only (not gx-* FIRST bash): `xask --gs grok '<q>'` → `grok --always-approve --no-subagents --verbatim -p`.
 
 `--spark` still forwards to `xbreed ask --spark` (gpt-5.4-mini) this ship. Remap to sekhmet/xbrd-spark is **E-spark**, not L2 FIRST bash (that would steal L3 titanium into teammate consults).
 
