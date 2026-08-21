@@ -188,7 +188,7 @@ env -i HOME=$TMPDIR TMPDIR=$TMPDIR PATH=/usr/bin:/bin \
   AGENT_ID=$AGENT_ID bash -c '...'
 ```
 
-Record the exact spawn command in the handoff block under `spawn_method:`.
+Optional `spawn_method: tmux-pane` when `$TMUX` is set and `gx-teams` is on `PATH`; otherwise keep in-process `spawn_subagent` / `fnm-multishell` (or pure-bash-isolated) as fallback. `/xbgst` MAY call `gx-teams spawn --team … --name gx-{role}-{suffix} -- cmd …` (no Claude; no TeamCreate). Record the exact spawn command in the handoff block under `spawn_method:` (`fnm-multishell | pure-bash-isolated | tmux-pane`).
 
 ## WWKD posture (loaded by planner on Round 0)
 
@@ -292,7 +292,7 @@ unknowns: [<gaps>]
 prior_brief: <distiller summary, max 200 tokens>
 token_budget: <estimate>
 depth: <current> / max <limit>
-spawn_method: fnm-multishell | pure-bash-isolated
+spawn_method: fnm-multishell | pure-bash-isolated | tmux-pane
 model: <grok | grok-4.5-fast-low>
 language: match-repo
 ```
