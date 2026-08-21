@@ -121,7 +121,7 @@ If the host still has stock Grok Build, run livepatch install first (skill **xbg
 
 ## Host substrate: prime-agent L2-loop (optional)
 
-**Optional L2-loop** beside L2-select: skill **xbgst-primeagent** / `/xbgst-primeagent` → `scripts/prime-agent-l2.sh` → user-level `prime-agent` (xAI only; fail-closed without `XAI_API_KEY`). Not the judge, not L3, not xbrd-selector. Long-running `gx-*` work may reattach sessions under `~/.xbgst/prime-agent/sessions`; `/refine` is harness lessons with rollback and must not write `~/.grok/skills`.
+**Optional L2-loop** beside L2-select: skill **xbgst-primeagent** / `/xbgst-primeagent` → `scripts/prime-agent-l2.sh` → user-level `prime-agent` (xAI only; fail-closed without `XAI_API_KEY`). Not the judge, not L3, not xbrd-selector. **Never invoke L2 with `codex-titanium`** — Titanium is reserved for sekhmet L3 workers. Long-running `gx-*` work may reattach sessions under `~/.xbgst/prime-agent/sessions`; `/refine` is harness lessons with rollback and must not write `~/.grok/skills`.
 
 ## Model routing (locked)
 
@@ -129,6 +129,7 @@ If the host still has stock Grok Build, run livepatch install first (skill **xbg
 - **distiller, scribe, executor, labrat** → **grok-4.5-fast-low**
 - **All other teammates** → **Grok** (high) with godspeed injected.
 - Spawn isolation via fnm multishells (preferred) or pure bash `env -i HOME=... TMPDIR=... PATH=...` per agent.
+- **Exception E2** (`the-revenger` only): outbound `cdx-revenger-*` via stock `codex` (never `codex-titanium`). See dispatch table footnote. Not a multi-provider rewrite.
 
 ## Sub-role dispatch table (Grok-mapped)
 
@@ -141,12 +142,14 @@ If the host still has stock Grok Build, run livepatch install first (skill **xbg
 | Cross-axis patterns, breadth | `connector` (grok + godspeed) | grok | parallel multi-axis analysis — **MANDATORY every round** | All |
 | Findings synthesis, dedup | `distiller` (grok-4.5-fast-low + godspeed) | grok-4.5-fast-low | spawned after peer outputs land, before Pareto filter; persistent across rounds | All |
 | Deletion, YAGNI | `simplifier` (grok + godspeed) | grok | direct analysis + test-after-delete | All |
-| Reverse engineering, intent reconstruction | `the-revenger` (grok + godspeed) | grok | observe-map-reproduce loop | All |
+| Reverse engineering, intent reconstruction | `the-revenger` (cdx + godspeed) | cdx | observe-map-reproduce loop | All |
 | Security auditing, adversarial analysis | `sentinel` (grok + godspeed) | grok | attacker-minded scan + exploit path proof | All |
 | Planning, Phase 0, WWKD sequencing | `the-planner` (grok + godspeed · Layer-0 wwkd) | grok | spawn FIRST at Round 0 / Phase 0 — mandatory | All |
 | Adversarial design, approach review | `critic` (grok + godspeed) | grok | attack assumptions, ACH-style | All |
 | Test validation, mutation testing | `mutation-tester` (grok + godspeed) | grok | mutate-run-revert in isolated dirs (no git worktrees) | All |
 | Documentation, audit trail | `scribe` (grok-4.5-fast-low + godspeed) | grok-4.5-fast-low | spawn after SYNTHESIS_READY, concurrent with Pareto; filter-exempt | All |
+
+**Exception E2** (`the-revenger` only): spawn is outbound stock Codex CLI named `cdx-revenger-*` (`codex exec -m gpt-5.6-luna`), not Grok `spawn_subagent`, not `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 (`prime-agent-l2.sh`) must never invoke titanium. `agents/the-revenger.md` stays `model: inherit` (`gx-revenger-*` fallback). Daybreak Blue is lab/defensive ping via stock `codex exec -m gpt-daybreak-blue-latest` (no `service_tier`). Table: `docs/model-routing.md`.
 
 ## Teammate naming convention
 

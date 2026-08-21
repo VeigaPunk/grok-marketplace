@@ -41,6 +41,7 @@ Skip for judge rounds, one-shot labrat probes, and 64-wide sekhmet swarms.
 - First ticks only in disposable cwd `/tmp/xbgst-prime-*`. Never xbgst `main`.
 - Kernel/auth stay in `~/.prime/agent/`. Telemetry off (`PRIME_AGENT_TELEMETRY=0`, `DO_NOT_TRACK=1`).
 - Never exec host `pi` — wrapper requires basename `prime-agent`.
+- Never exec `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 is `prime-agent` only.
 
 ## Install
 

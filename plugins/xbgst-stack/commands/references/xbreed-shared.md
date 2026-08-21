@@ -28,7 +28,7 @@ Language: match the repo. No Rust lock.
 | Cross-axis | `connector` | grok | multi-axis analysis — **every PROPOSE round** |
 | Dedup | `distiller` | grok-fast | synthesis before Pareto |
 | Deletion | `simplifier` | grok | delete + retest |
-| RE | `the-revenger` | grok | observe-map-reproduce |
+| RE | `the-revenger` | cdx | observe-map-reproduce (Exception E2; stock `codex exec`; `cdx-revenger-*`; never titanium) |
 | Security | `sentinel` | grok | adversarial scan |
 | Planning | `the-planner` | grok | Round 0 first; WWKD inline |
 | Design attack | `critic` | grok | ACH-style (heuer skill optional/ds4cc) |

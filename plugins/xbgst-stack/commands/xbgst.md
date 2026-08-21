@@ -16,7 +16,7 @@ You are on **Grok Build**. This command is the Grok host path of xbrd-godspeed.
 
 ## Hard rules (Grok host)
 
-- **No xask / no Claude TeamCreate** as the default path. Spawn native Grok subagent types from this plugin (`scout`, `reviewer`, `labrat`, `executor`, `connector`, `distiller`, `simplifier`, `the-revenger`, `sentinel`, `critic`, `mutation-tester`, `scribe`, `the-planner`, `the-janitor`, …).
+- **No xask / no Claude TeamCreate** as the default path. Spawn native Grok subagent types from this plugin (`scout`, `reviewer`, `labrat`, `executor`, `connector`, `distiller`, `simplifier`, `the-revenger`, `sentinel`, `critic`, `mutation-tester`, `scribe`, `the-planner`, `the-janitor`, …). **Exception E2:** dispatch `the-revenger` as `cdx-revenger-*` via stock `codex exec` (never `codex-titanium`; Titanium is sekhmet L3 only). `gx-revenger-*` inherit remains the fallback.
 - **Never** `general-purpose` or `explore` (banned; livepatch hard-bans them).
 - **Local-first:** after each judged milestone APPROVED → commit project files → `git push -u origin main` (SSH). No fork→PR default. No force-push of `main`.
 - **Language:** match the repo. No Rust lock.

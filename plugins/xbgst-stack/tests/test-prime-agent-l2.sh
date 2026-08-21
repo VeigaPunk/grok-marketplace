@@ -22,6 +22,11 @@ if grep 'basename "${PRIME_AGENT_BIN}"' "$WRAP" | grep -q '"pi"'; then
   fail "basename check must not accept pi"
 fi
 
+# Isolate AUTH_JSON from the host ~/.prime/agent (openai-codex there must not fail CI).
+AUTH_DIR="$(mktemp -d /tmp/xbgst-prime-auth.XXXXXX)"
+export PRIME_AGENT_CODING_AGENT_DIR="${AUTH_DIR}"
+trap 'rm -rf "${AUTH_DIR}"' EXIT
+
 set +e
 out="$(env -u XAI_API_KEY bash "$WRAP" -p 'noop' 2>&1)"
 rc=$?
