@@ -23,6 +23,12 @@ You are on **Grok Build**. This command is the Grok host path of xbrd-godspeed.
 - **Connector** mandatory every PROPOSE round after Round 0.
 - Godspeed injection on every teammate (short 4-rule block from the skill).
 
+## Optional substrate route
+
+L1 remains the Grok judge and sole scheduler/integrator. Default to named native `gx-*` specialists. Route long-lived intermodel work to an existing OpenAI-backed PrimeAgent only as an attachable **L2-loop**; first name a `gx-*` route owner and send `route_id`, `parent`, `task`, `scope`, `allowed_actions`, `return`, and `stop`. The return is evidence for L1, never a Pareto/`APPROVED`/ship decision. Do not allow PrimeAgent child fan-out unless the route says so.
+
+Use `xbrd-selector` only as the separate L2-select lane when it is installed; PrimeAgent never substitutes for it. Use sekhmet only as an explicit bounded L3 escalation; PrimeAgent never proxies L3 and never invokes `codex-titanium`. If PrimeAgent or its user-owned OpenAI ChatGPT/Codex OAuth is absent, continue through the native `gx-*` path. Never require PrimeAgent in the host inventory or installer. See skill **xbgst-primeagent** for attach/send/resume mechanics.
+
 ## Aliases
 
 | Command | Meaning on Grok |

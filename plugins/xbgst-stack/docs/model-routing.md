@@ -3,7 +3,7 @@
 **SSoT:** marketplace plugin **xbgst-stack** (`plugins/xbgst-stack` in grok-marketplace).  
 **Not SSoT:** installed plugin tree, gdsd crate, `prime-agent-l2.sh`, xbrd-grok skill mirror.
 
-**Judge / xbgst** runs on **Grok**. This file freezes live-probe results (M07). It does not rewrite the Grok-native roster into multi-provider. Exception **E2** is `the-revenger` only.
+**Judge / xbgst** runs on **Grok**. This file freezes live-probe results (M07) and the optional substrate boundary. It does not rewrite the Grok-native roster into multi-provider: OpenAI-backed PrimeAgent is an L2-loop runtime, not a roster role. Exception **E2** is `the-revenger` only.
 
 ## Binary split (load-bearing)
 
@@ -11,9 +11,10 @@
 |---|---|---|
 | `codex` (stock `@openai/codex`, omarchy/npx wrapper) | Daybreak Blue lab ping; Exception E2 `cdx-revenger-*` | sekhmet L3 workers |
 | `codex-titanium` (Titanium ELF) | **sekhmet L3 workers only** | Daybreak; L2 (`prime-agent-l2.sh` / `prime-agent`); Grok-host E2 |
-| `prime-agent` via `scripts/prime-agent-l2.sh` | optional long-running already-spawned `gx-*` (xAI fail-closed) | never wrap or exec `codex-titanium` |
+| direct `prime-agent --provider openai-codex` | optional attachable L2-loop behind a named `gx-*` route owner; existing user-owned ChatGPT/Codex OAuth only | L1 judge, L2-select, L3; never exec `codex-titanium` |
+| `prime-agent` via `scripts/prime-agent-l2.sh` | legacy xAI-only compatibility path (fail-closed) | OpenAI route; never wrap or exec `codex-titanium` |
 
-L2 substrate must **never** be invoked with Titanium. Titanium stays on the L3 sekhmet plane.
+L2 substrate must **never** be invoked with Titanium. Titanium stays on the L3 sekhmet plane. L1 xbgst remains the sole scheduler, Pareto/`APPROVED` authority, integrator, and shipper. The direct OpenAI lane receives the exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop` envelope and defaults child fan-out off. Credentials and provider setup stay user-owned; missing PrimeAgent or ChatGPT/Codex OAuth falls back to the native named `gx-*` path.
 
 ## Probe-gated lanes
 
@@ -65,7 +66,7 @@ Authorization: Bearer $DASHSCOPE_API_KEY
 
 | Id | Rule |
 |----|------|
-| E1 | Do not patch `scripts/prime-agent-l2.sh` provider pin. Wrapper remains xAI-only fail-closed. `tests/test-prime-agent-l2.sh` must PASS. L2 must never exec `codex-titanium`. Host `~/.prime/agent/auth.json` must stay free of openai/anthropic/github (stock Codex OAuth lives in `~/.codex/auth.json`). |
+| E1 | Do not patch `scripts/prime-agent-l2.sh` provider pin. Wrapper remains xAI-only fail-closed and must not consume OpenAI credentials. The direct `openai-codex` lane uses existing user-owned PrimeAgent ChatGPT/Codex OAuth outside the wrapper; never overwrite, copy, or automate login for it. `tests/test-prime-agent-l2.sh` and `tests/test-openai-primeagent-routing.sh` must PASS. L2 must never exec `codex-titanium`. |
 | E2 | Revenger-only roster split via stock `codex` (above). |
 | E3 | `DASHSCOPE_API_KEY` canonical. |
 | E4 | Daybreak is lab/defensive via stock `codex`, not default revenger. |
@@ -77,6 +78,6 @@ Authorization: Bearer $DASHSCOPE_API_KEY
 bash scripts/route-smoke.sh
 ```
 
-Policy greps only (no `op`, no `curl`, no secrets), then `tests/test-prime-agent-l2.sh`.
+Policy greps only (no `op`, no `curl`, no secrets), then both `tests/test-prime-agent-l2.sh` and `tests/test-openai-primeagent-routing.sh`.
 
 Pointer: xbrd-grok `docs/model-routing.md` → this file.

@@ -8,6 +8,7 @@ SKILL="$ROOT/skills/xbgst/SKILL.md"
 SHARED="$ROOT/commands/references/xbreed-shared.md"
 AGENT="$ROOT/agents/the-revenger.md"
 L2TEST="$ROOT/tests/test-prime-agent-l2.sh"
+OPENAI_L2TEST="$ROOT/tests/test-openai-primeagent-routing.sh"
 L2WRAP="$ROOT/scripts/prime-agent-l2.sh"
 PA="$ROOT/skills/xbgst-primeagent/SKILL.md"
 
@@ -126,4 +127,7 @@ echo "OK  routing policy greps"
 echo "→ route-smoke (E1): $L2TEST"
 bash "$L2TEST"
 
-echo "PASS: route-smoke policy greps + prime-agent-l2"
+echo "→ route-smoke (OpenAI L2 route): $OPENAI_L2TEST"
+bash "$OPENAI_L2TEST"
+
+echo "PASS: route-smoke policy greps + prime-agent-l2 + OpenAI optional routing"

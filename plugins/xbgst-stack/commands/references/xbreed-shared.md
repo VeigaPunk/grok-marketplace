@@ -35,6 +35,17 @@ Language: match the repo. No Rust lock.
 | Mutation | `mutation-tester` | grok | mutate-run-revert |
 | Docs | `scribe` | grok-fast | ship notes |
 
+## Substrate route table (L1 decides)
+
+| Need | Layer | Rule |
+|---|---|---|
+| Native proposal/review/implementation | L1 → named `gx-*` | default |
+| Long-lived intermodel exchange or bounded delegation | optional OpenAI-backed PrimeAgent **L2-loop** | attachable user-owned runtime; exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop`; no judge authority or unapproved child fan-out |
+| Ranked bounded choice | `xbrd-selector` **L2-select**, if separately present | PrimeAgent never substitutes; absent means L1 selects |
+| Broad bounded fan-out | sekhmet **L3**, only by explicit escalation | separate contract; PrimeAgent never proxies L3 or invokes `codex-titanium` |
+
+L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator, and shipper. PrimeAgent and its OpenAI OAuth are optional user tooling, never host-orch inventory/install requirements. Absence falls back to the named native `gx-*` path.
+
 **Banned:** `general-purpose`, `explore`.
 
 ## Naming

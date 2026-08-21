@@ -119,9 +119,20 @@ GROK_LIVEPATCH_FORCE=1 \
 
 If the host still has stock Grok Build, run livepatch install first (skill **xbgst-livepatch**).
 
-## Host substrate: prime-agent L2-loop (optional)
+## Optional substrate routing: L2-loop vs L2-select vs L3
 
-**Optional L2-loop** beside L2-select: skill **xbgst-primeagent** / `/xbgst-primeagent` → `scripts/prime-agent-l2.sh` → user-level `prime-agent` (xAI only; fail-closed without `XAI_API_KEY`). Not the judge, not L3, not xbrd-selector. **Never invoke L2 with `codex-titanium`** — Titanium is reserved for sekhmet L3 workers. Long-running `gx-*` work may reattach sessions under `~/.xbgst/prime-agent/sessions`; `/refine` is harness lessons with rollback and must not write `~/.grok/skills`.
+The **L1 judge stays xbgst on Grok**. L1 alone schedules routes, names and scores axes, runs Pareto, emits `APPROVED`, integrates returns, and ships. Substrates never inherit judge authority.
+
+| Need | Route | Boundary |
+|---|---|---|
+| Normal proposal, review, or implementation | native named `gx-*` specialist | default path; L1 judges the return |
+| Long-lived intermodel exchange, attach/resume, or bounded delegated work | **optional OpenAI-backed PrimeAgent L2-loop** via skill **xbgst-primeagent** / `/xbgst-primeagent` | existing user-owned ChatGPT/Codex OAuth (`openai-codex`); never judge, select, run Pareto, approve, or ship |
+| Ranked choice among bounded candidates | **L2-select** via `xbrd-selector`, only when separately present | PrimeAgent never imitates selection; if selector is absent, L1 judges directly |
+| Broad bounded fan-out | **L3 sekhmet**, only on explicit escalation | separate cap and return contract; PrimeAgent never proxies L3 |
+
+For an L2-loop route, L1 first assigns a named `gx-*` route owner, then supplies an exact envelope: `route_id`, `parent`, `task`, `scope`, `allowed_actions`, `return`, and `stop`. Scheduling and integration remain L1-owned. Concurrent writers use disjoint paths or worktrees named in `scope`. PrimeAgent may use its own attachable sessions and inter-agent messaging, but may not fan out children unless the envelope explicitly allows it. Returns are evidence, not decisions.
+
+PrimeAgent is optional host tooling, not a prerequisite or inventory item. Credentials and provider setup remain user-owned and outside this skill; never automate `/login`. If the binary, OpenAI ChatGPT/Codex OAuth, or route is unavailable, fall back to the existing native `gx-*` path without blocking L1 or promoting L2. Keep PrimeAgent out of `HOST-ORCH-INVENTORY.txt` and the required host installer list. The xAI-only `scripts/prime-agent-l2.sh` remains a legacy compatibility path, not the OpenAI route. **Never invoke L2 with `codex-titanium`** — Titanium is reserved for sekhmet L3 workers. `/refine` changes PrimeAgent harness lessons only and must not write `~/.grok/skills`.
 
 ## Model routing (locked)
 
