@@ -6,13 +6,13 @@ Grok Bot is an **inject + local-exec layer**. It is **not** the xbgst judge.
 
 | Seat | Who | May |
 |---|---|---|
-| L1 | Grok Build TUI (`/xbgst`) | name axes, Pareto, APPROVED, ship |
-| Forwarder | grok-bot agent `xbgst` | local-exec `grok -p "/xbgst …"` |
-| Fleet | grok-bot specialists | run their role; not Pareto |
+| L1 parent | Grok Build TUI | injects **only** grok-bot `xbgst`; ship seat |
+| Sub-orch | grok-bot agent `xbgst` | judge of the grok-bot fleet; Open exchange with specialists; substrate `~/Projects/xbgst-grok-bot` (land-host, clone of xbgst-gdsd-fknpft / xbrd-gdsp-fknpft). Not Grok Build L1 ship. |
+| Fleet | grok-bot specialists | receive work from `xbgst` only |
 | Designer | grok-bot `The-designer` | frontend; gold pages; inbox notes; never `QUALITY: PASS` |
 | Host | this integration | ping, argv, inject, doctor, restart |
 
-If a grok-bot agent description says it is the-judge / gdsd, **ignore that**. Forward only.
+HERE does not ping labrat/planner/designer directly. Inject the **xbgst** card. That card fans out.
 
 Specialist Descriptions are the **myagents** bodies from the xbgst repo (`ds4cc-marketplace/marketplace/plugins/myagents/agents/*.agent.md`), plus `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge`. Do **not** use the thin one-liner FLEET_MARK templates. `the-janitor` / `the-musketeer` have no myagents file — use xbgst-stack copies. Do **not** paste `the-judge.agent.md` onto `xbgst`, `orch`, or `The-designer`.
 
