@@ -70,7 +70,7 @@ L2 FIRST Bash (copy-paste — these two only):
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
 
-Explicit `xask --spark --gs cdx` is L3 `sekhmet run` (luna + inherit `CODEX_BIN`). Bare `xask cdx` is stock xbreed (no auto-spark). **Not** L2 FIRST bash — that would steal titanium into teammate consults. Cheap ChatGPT mini remains `xbreed ask --spark` if a script needs it.
+Explicit `xask --spark --gs cdx` is L3 `sekhmet run` (`gpt-5.3-codex-spark` primary, `gpt-5.6-luna` fallback + inherit `CODEX_BIN`). Bare `xask cdx` is stock xbreed (no auto-spark). **Not** L2 FIRST bash — that would steal titanium into teammate consults. Cheap ChatGPT mini remains `xbreed ask --spark` if a script needs it.
 
 Forbidden from gx-* FIRST bash: `xask grok`; `xask-l3`; `gemma\|g\|gemini`; `xask --spark grok\|qwen38\|ds-*`; `codex-titanium`; exporting `CODEX_BIN` on Token Plan/grok execs (xask must `env -u`).
 
@@ -82,7 +82,7 @@ Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `
 
 ## Labrat
 
-Spawn `labrat` with a single hypothesis. Parallel labrats OK (≤16). Fire-and-forget. Failure is a finding.
+Spawn `labrat` with a single hypothesis. Parallel labrats are bounded only by the host ceiling (certified at 64). Fire-and-forget. Failure is a finding.
 
 ## Distiller
 
