@@ -9,7 +9,7 @@
 
 | Binary | Who may invoke it | Who must not |
 |---|---|---|
-| `xask` (PATH protocol) | optional user-ON FIRST Bash inside named `gx-*` / grok-CLI subleads (consult table) | sekhmet L3; spawn argv; judge-as-xask; Gemma/`g`/`gemini`; gx-* FIRST `xask grok` |
+| `xask` (PATH protocol) | **xbgst-mode** FIRST Bash inside named `gx-*` (sekhmet/`codex-titanium`/`service_tier=fast`; consult table). `/xgs` must not. | spawn argv type `xask`; judge-as-xask; Gemma/`g`/`gemini`; gx-* FIRST `xask grok`; gx-* exec of `codex-titanium` |
 | `xask --gs grok` (lead oneshot) | host/script oneshot only (`grok --always-approve --no-subagents --verbatim -p`) | gx-* FIRST bash; L2 teammate consult; titanium |
 | `xask … cdx` (alias of `codex`) | L2 consult → `xbreed ask codex` → stock ChatGPT Codex | Token Plan `-p`; `codex-titanium`; sekhmet |
 | `xask --gs qwen38\|ds-flash\|ds-pro` | L2 Token Plan **opt-in** → wrappers `codex-qwen38` / `codex-ds-*` → `codex -p <profile>` (xask unsets `CODEX_BIN`) | default Codex; L3 spark; gx-* without user naming the profile |

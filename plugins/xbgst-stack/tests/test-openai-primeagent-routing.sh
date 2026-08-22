@@ -26,7 +26,7 @@ need "$SKILL" 'Keep PrimeAgent out of `HOST-ORCH-INVENTORY.txt` and the required
 
 need "$COMMAND" 'attachable **L2-loop**'
 need "$COMMAND" '`xbrd-selector` only as the separate L2-select lane'
-need "$COMMAND" 'sekhmet only as an explicit bounded L3 escalation'
+need "$COMMAND" 'sekhmet is always-on for /xbgst parallel fan-out; PrimeAgent never proxies L3'
 need "$SHARED" 'Substrate route table (L1 decides)'
 need "$SHARED" 'Absence falls back to the named native `gx-*` path.'
 

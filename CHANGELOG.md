@@ -2,6 +2,10 @@
 
 Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
+## Unreleased
+
+- Split `/xgs` (native-only, no xask) from `/xbgst` (crossbreed). Named `gx-*` runners FIRST call PATH `xask --spark --gs --service-tier fast` (sekhmet / `codex-titanium`). `/xb` `/xbt` `/xbreed` follow xbgst-mode. Gate: `plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh`.
+
 ## 1.1.24
 
 - Add [SURFACES.md](SURFACES.md): plazir27 host snapshot of CLIs, auths, overlays, and execution layers (2026-08-22). Distinct from `HOST-ORCH-INVENTORY.txt` (names fixture). Not a compat score.

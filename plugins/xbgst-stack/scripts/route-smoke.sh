@@ -87,10 +87,12 @@ if grep -E '\|[[:space:]]*deepseek-v4[[:space:]]*\|' "$DOC" >/dev/null 2>&1; the
   fail "$DOC aliases unversioned deepseek-v4"
 fi
 
-# Judge stays Grok; Grok-native posture paragraph not rewritten
+# Judge stays Grok; /xgs native-only vs /xbgst crossbreed
 need "$SKILL" "Judge / xbgst"
 need "$SKILL" "runs on **Grok**"
-need "$SKILL" "All roles map to Grok. No Claude / Opus / Sonnet / xask / Codex CLI as the default path."
+need "$SKILL" "Never spawn type \`xask\`"
+need "$SKILL" "/xgs"
+need "$SKILL" "/xbgst"
 need "$SKILL" "Exception E2"
 
 # E2: the-revenger ROW → cdx (not grok pin)
@@ -103,12 +105,19 @@ fi
 # Shared RE row (one line)
 need_re "$SHARED" '\| RE \| `the-revenger` \| cdx \|'
 
-# L2 consult paste surface: cdx gpt55-low + opt-in qwen38 only (not grok callee, not spark)
-need "$SHARED" "xask --gpt55 --gs -e low cdx"
+# L2 consult paste surface: Token Plan qwen38 remains opt-in; gx-* never xask grok FIRST
 need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "Do not \`xask grok\` as FIRST bash"
-if grep -F 'FIRST tool call MUST be xask --spark --gs codex' "$SHARED" >/dev/null 2>&1; then
-  fail "$SHARED must not make spark xask mandatory on Grok host"
+need "$SHARED" "Never spawn type \`xask\`"
+need "$SHARED" "Never use \`xask-l3\`"
+# /xgs stays native-only; spark-first lives in xbgst-mode agents, not xgs.md
+XGS="$ROOT/commands/xgs.md"
+need "$XGS" "native-only"
+if grep -F 'FIRST tool call MUST be xask --spark --gs codex' "$XGS" >/dev/null 2>&1; then
+  fail "$XGS must not make spark xask mandatory"
+fi
+if grep -Eiq 'Alias for \*\*Grok `/xbgst`\*\*|Alias of /xbgst' "$XGS" >/dev/null 2>&1; then
+  fail "$XGS must not alias /xbgst"
 fi
 if grep -E '^\| Token Plan flash \|' "$SHARED" >/dev/null 2>&1; then
   fail "$SHARED must not put ds-flash in L2 FIRST-bash paste grid"

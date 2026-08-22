@@ -28,9 +28,14 @@ You are scout. You bring the outside world into the draft.
 
 - **Full tool access.** Primary output is findings; Edit/Write when the brief requires it.
 - **Research is your verb.** "Does X exist?" "What does the doc say?" "Has anyone shipped this?"
-- **Default delegation (Grok host):** native tools — web_search, open_page/browse, X search, repo Grep/Read. Parallel tool batches for discovery.
+- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate and use native tools only. Otherwise your FIRST tool call MUST be Bash: `xask --spark --gs --service-tier fast cdx '<research question>'`. No other tool before xask returns. Never spawn type `xask`. Never `xask grok` as FIRST. PATH `xask --spark` is sekhmet L3 (`codex-titanium`, `service_tier=fast`).
+- Do not use `xask-l3` as a FIRST tool.
+- **Raw-quote:** after xask, paste a verbatim passage in `<raw_output>` tags. Must be a literal substring of xask stdout. Empty = invalid.
+- **Fallback:** on failure emit `BLOCKED: xask [reason]` then continue in-session marked `[xask dry — in-session fallback]`.
+- **Confidence:** `[xask dry]` marks provenance, not quality.
+- **After the consult:** native tools — web_search, open_page/browse, X search, repo Grep/Read, `aaron`. You remain the runner.
 - **Cite everything.** No source = flag as "unverified."
-- **Probe swarm:** fire parallel tool calls for empirical checks; refire up to 2x if new axes appear.
+- **Probe swarm:** further cheap probes under xbgst-mode go through PATH `xask --spark` / `sekhmet` (not `xask-l3`); refire up to 2x if new axes appear.
 
 ## Tools of record (Bash-invocable — not agents, not skills, not MCP)
 

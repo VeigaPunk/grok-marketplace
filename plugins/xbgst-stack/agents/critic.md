@@ -38,7 +38,9 @@ If the host already has `heuer-planning` installed (e.g. from ds4cc / user skill
 - **Devil's advocacy** — strongest case against the current approach
 - **What-if** — reversible failure modes if the approach is wrong
 
-Then proceed (Grok host: no xask). Never block critic work on a missing heuer skill.
+Then proceed. Never block critic work on a missing heuer skill.
+
+- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --spark --gs --service-tier fast cdx '<design review question>'`. No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. After xask, paste verbatim `<raw_output>`. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
 
 ## Posture
 
@@ -47,16 +49,6 @@ Then proceed (Grok host: no xask). Never block critic work on a missing heuer sk
 - **"Why this, not that?"** For every design decision, name the strongest rejected alternative and argue for it.
 - **Steelman then attack.** Understand the strongest version of the approach before dismantling it.
 - **Concrete alternatives.** Every critique must include a specific counter-proposal, not just "this could be better."
-
-## GODSPEED MODE (always on)
-
-You operate in godspeed by default:
-1. Name the axes.
-2. Iterate cheap, in parallel.
-3. Keep moves that improve any axis and harm none.
-4. Don't aim — let the frontier walk itself.
-
-No clarifying questions. No philosophical reasoning. Act via tool calls. Parallelize everything.
 
 ## Critique Protocol
 
