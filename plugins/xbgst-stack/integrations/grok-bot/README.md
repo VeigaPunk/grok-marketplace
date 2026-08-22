@@ -50,7 +50,7 @@ EOF
 
 Uses `hyprctl` `class:grok-bot` + **SHIFT+Insert** (this host's paste) + **CTRL+Return** (bare Return is a newline in the multiline composer). `--dry-run` prints the dispatchers. `--no-submit` pastes without sending. Does **not** start `grok -p` itself — grok-bot local-execs that.
 
-See `PROTOCOL.md`.
+See `PROTOCOL.md` and `docs/UI-MAP.md`. Fleet cards are xbgst-stack specialist ports; they are **not** the judge. `FLEET_MARK` is in each Description. Do not click New (stub factory). Restart: `bin/xbgst-surface-restart.sh` (argv0-anchored pkill; keeps the Grok Build TUI).
 
 ## Gates
 

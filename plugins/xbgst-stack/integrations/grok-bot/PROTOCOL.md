@@ -13,6 +13,8 @@ Grok Bot is an **inject + local-exec layer**. It is **not** the xbgst judge.
 
 If a grok-bot agent description says it is the-judge / gdsd, **ignore that**. Forward only.
 
+Fleet cards (15 specialists + `xbgst` forwarder) persist `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge` in the Description field. Do **not** click `New` / `Create new Bot` (that factory only spawns empty `New Bot` stubs). Do **not** enable the Private plugin skill named `xbgst`. Window chrome `Close` is not the dialog Close.
+
 ## Host facts (this machine)
 
 - `localToolPermission`: `always` (auto-run local shell)
