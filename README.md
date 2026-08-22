@@ -11,6 +11,52 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 | **Frontier** | [FRONTIER.md](FRONTIER.md) (next moves when green) |
 | **Surfaces** | [SURFACES.md](SURFACES.md) (host CLI/auth/layer snapshot; not HOST-ORCH names) |
 
+## ChatGPT / Codex — raw-local first, single paste
+
+The repo ships **xbgst-codex**, a skills-first universal Codex/ChatGPT plugin with the same WWKD-first orchestration invariants adapted to native Codex subagents. It keeps a flat team, uses host-governed concurrency (64 on the current Codex host), includes a connector in every proposal round, caps Pareto proposal rounds at six, and preserves L1 judge/integrator authority. `xask` is the raw local provider router; its calls are advisory while native Codex agents remain the implementation path.
+
+The default path is deliberately anti-bloat: no MCP server, bridge, background daemon, or direct rewrite of Codex config, auth, profiles, model selection, effort, or concurrency. The one paste installs the skills plugin, builds the current locked `xbreed` binary from DS4CC, and atomically installs `xbreed`, `xask`, `xask-models`, the normalized catalog, and dispatch templates under `~/.local`.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-codex.sh | bash
+```
+
+Prerequisites are the Codex CLI, Git, Cargo, and `jq`; Node.js is required only for the explicit MCP companion. Existing non-identical runtime files are backed up before atomic replacement. The DS4CC source is cloned into a temporary directory and built with `cargo build --locked --release`; the clone is removed afterward. Start a new Codex task after installation so its new skills load.
+
+The visual delegation surface works with the raw local `xask` plan/command flow. The MCP-backed in-chat companion is a separate, explicit opt-in:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-codex.sh | bash -s -- --with-mcp
+```
+
+Skills only, without the xask/xbreed runtime:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/VeigaPunk/grok-marketplace/main/scripts/install-xbgst-codex.sh | bash -s -- --plugin-only
+```
+
+Local development, with no marketplace fetch:
+
+```bash
+bash scripts/install-xbgst-codex.sh \
+  --from-tree "$PWD" \
+  --xask-tree ../ds4cc-marketplace
+bash scripts/install-xbgst-codex.sh \
+  --from-tree "$PWD" \
+  --xask-tree ../ds4cc-marketplace \
+  --dry-run
+bash scripts/smoke-xbgst-codex.sh
+```
+
+[`ds4cc.com`](https://ds4cc.com) is the user-facing distribution rule for the stack: once a component is refined, gated, and ship-ready, it graduates there as an installable marketplace item, a lightweight hosted tool, or a readable technical take. This repository remains the auditable source and bootstrap origin; DS4CC is the curated shelf, not a second runtime layer.
+
+Package entry points:
+
+- Codex marketplace: [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)
+- Plugin: [`plugins/xbgst-codex`](plugins/xbgst-codex)
+- Core protocol: [`skills/xbgst/references/xbgst-shared.md`](plugins/xbgst-codex/skills/xbgst/references/xbgst-shared.md)
+- WWKD: [`skills/wwkd/SKILL.md`](plugins/xbgst-codex/skills/wwkd/SKILL.md)
+
 ## Install
 
 **Primary** (one-shot orch overlay — marketplace add + `plugin install --trust` + that plugin’s `install-host.sh`; no livepatch apply, no `config.toml` overwrite):

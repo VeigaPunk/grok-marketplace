@@ -1,0 +1,84 @@
+# xbgst-worker hardening layer — applied after every bundle layer.
+# Contract: ../docs/dsh-pinning.md. Leaf only: a worker can never become a
+# second orchestration graph (no goal/plan/subagent/workflow/job spawning),
+# gets no interactive surfaces, and no external web tools by default.
+# Sandbox default pinned read-only (fail-safe); bridge narrows per role.
+
+# ---- Model routing: xbgst logical routes -> pi-ai xai catalog route ----
+# Aliases map here; raw API model ids appear ONLY in this file.
+- id: agent-default-model
+  config:
+    provider: grok-high
+    model: grok-4.5
+
+- id: llm-pi-ai
+  config:
+    providers:
+      # xbgst route: grok-high -> grok-4.5 @ reasoning high
+      grok-high:
+        apiKeyEnv: XAI_API_KEY
+        reasoning: high
+        models:
+          - id: grok-4.5
+      # xbgst route: grok-fast-low -> grok-4.5 @ reasoning low
+      grok-fast-low:
+        apiKeyEnv: XAI_API_KEY
+        reasoning: low
+        models:
+          - id: grok-4.5
+
+# ---- Sandbox policy: fail-safe default; per-role via session sandbox events ----
+- id: sandbox-policy
+  config:
+    mode: read-only
+
+# ---- Second-orchestrator prevention ----
+- id: goal
+  disabled: true
+- id: goal-round-driver
+  disabled: true
+- id: command-goal
+  disabled: true
+- id: tool-goal
+  disabled: true
+- id: plan-mode
+  disabled: true
+- id: subagent
+  disabled: true
+- id: subagent-spawn-in-process
+  disabled: true
+- id: subagent-fork-in-process
+  disabled: true
+- id: tool-subagent-control
+  disabled: true
+- id: tool-subagent-list-agents
+  disabled: true
+- id: tool-subagent
+  disabled: true
+- id: tool-subagent-fork
+  disabled: true
+- id: tool-subagent-report
+  disabled: true
+- id: workflow-worker-thread
+  disabled: true
+- id: tool-workflow
+  disabled: true
+- id: jobs
+  disabled: true
+- id: tool-jobs
+  disabled: true
+
+# ---- Headless-appropriate surfaces ----
+- id: user-questions
+  disabled: true
+- id: session-title-llm
+  disabled: true
+
+# ---- Network tools off by default in the worker profile ----
+# (models may still transmit externally — host/container policy owns network)
+- id: web
+  disabled: true
+- id: web-search-deepseek
+  disabled: true
+- id: tool-web
+  disabled: true

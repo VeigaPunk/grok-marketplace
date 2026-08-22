@@ -1,0 +1,41 @@
+{
+  "name": "xbgst-codex",
+  "version": "1.1.24",
+  "description": "Codex-native xbgst orchestration with WWKD planning, evidence-gated Pareto rounds, and optional xask consultation.",
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
+  "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+  "repository": "https://github.com/VeigaPunk/grok-marketplace",
+  "license": "MIT OR Apache-2.0",
+  "keywords": [
+    "xbgst",
+    "wwkd",
+    "godspeed",
+    "orchestration",
+    "delegation",
+    "codex",
+    "chatgpt"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "xbgst for Codex",
+    "shortDescription": "WWKD-first native Codex delegation",
+    "longDescription": "A Codex and ChatGPT port of xbgst: planner-first WWKD, flat native subagent teams, evidence-gated Pareto rounds, and optional cross-provider xask consultation.",
+    "developerName": "VeigaPunk",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Orchestration",
+      "Delegation",
+      "Native subagents"
+    ],
+    "websiteURL": "https://github.com/VeigaPunk/grok-marketplace",
+    "defaultPrompt": [
+      "xbgst: map this repo and build the smallest trusted slice.",
+      "Use WWKD to plan this change, then delegate the implementation.",
+      "Run an evidence-gated xbgst review of the current worktree."
+    ],
+    "brandColor": "#ECEAE4"
+  }
+}

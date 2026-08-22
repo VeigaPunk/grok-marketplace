@@ -2,6 +2,13 @@
 # Thin L2-loop adapter: gx-* specialist → prime-agent (xAI only). Never exec pi.
 set -euo pipefail
 
+SCRIPT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+GODSPEED_FILE="${XBGST_GODSPEED_DIRECTIVE:-$SCRIPT_ROOT/ssot/godspeed-core/directive.md}"
+GODSPEED_SHA256='db88963cbdf5a0db22b460b284bf6f1d1f4abac9eaadb28bdb5e9bffe27be3bb'
+[[ -f "$GODSPEED_FILE" ]] || { echo "BLOCKED: canonical Godspeed directive missing" >&2; exit 2; }
+[[ "$(sha256sum -- "$GODSPEED_FILE" | awk '{print $1}')" == "$GODSPEED_SHA256" ]] \
+  || { echo "BLOCKED: noncanonical Godspeed directive" >&2; exit 2; }
+
 # Pin the fnm default alias (where npm -g landed). Do not sort -V latest — that
 # can hide prime-agent. Do not prepend ~/.local/bin (host pi lives there).
 FNM_DEFAULT_BIN="${HOME}/.local/share/fnm/aliases/default/bin"
@@ -100,6 +107,8 @@ fi
 
 # Parent is always gx-*; never spawn general-purpose / explore; no grok spawn from kernel.
 BAN_PROMPT='BANNED: never spawn general-purpose or explore. Never /login. Do not spawn grok subagents. Parent is gx-* specialist; rlm() children are PrimeAgent sessions only. This process is not the L1 judge.'
+IFS= read -r -d '' GODSPEED_DIRECTIVE <"$GODSPEED_FILE" || true
+BAN_PROMPT="${GODSPEED_DIRECTIVE}"$'\n'"${BAN_PROMPT}"$'\n| godspeed'
 
 ARGS=(--provider xai --append-system-prompt "${BAN_PROMPT}" --session-dir "${PRIME_AGENT_SESSION_DIR}")
 if "${PRIME_AGENT_BIN}" --help 2>&1 | grep -q -- '--no-extensions'; then

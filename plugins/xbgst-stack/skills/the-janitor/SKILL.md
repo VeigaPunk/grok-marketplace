@@ -36,16 +36,26 @@ typing a vault password for every command.
 
 ## Preferred dispatch
 
-1. **Spawn the agent** (best for multi-step secret work):
+1. **Spawn the agent** (best for multi-step secret work). Before the call, read
+   the complete bytes of the packaged xbgst-stack
+   `../../ssot/godspeed-core/directive.md`. A host overlay is valid only when it
+   is byte-identical to that packaged file. Prepend those bytes verbatim to the
+   task, remove any terminal copies of `| godspeed` from the task body, and
+   append exactly one final `| godspeed`. Fail closed if the packaged directive
+   cannot be read; never transcribe or shorten it.
 
 ```
 spawn_subagent(
   subagent_type="the-janitor",
   description="[the-janitor] secrets op",
   capability_mode="execute",
-  prompt="<task: list/read-into-process/run/inject/cdp-bridge...; never echo secret values>"
+  prompt="<verbatim bytes read from ../../ssot/godspeed-core/directive.md>\n\n<task: list/read-into-process/run/inject/cdp-bridge...; never echo secret values>\n| godspeed"
 )
 ```
+
+The `prompt` value above describes construction, not replacement text: the
+actual dispatched prompt begins with the file's bytes and ends with the literal
+suffix exactly once. Apply the same construction to every follow-up or resume.
 
 2. **Or run `op` / `the-janitor` yourself** for a one-liner (same safety rules).
 

@@ -18,9 +18,3 @@ That file mirrors the SSoT (`~/.grok/ssot/godspeed-core/directive.md`). Do not c
 ## Do not load the trilogy
 
 `filter.md` and `velocity.md` are **judge-only** (`xbgst`). You never open them. You never inject them into a spawn. If you are not the xbgst judge, the directive is sufficient.
-
-## After the directive
-
-IMMEDIATELY STOP ASKING CLARIFYING QUESTIONS.
-Execute tool calls concurrently in large batches. Do not serialize what can run in parallel.
-Do not output philosophical reasoning or verbose plans. Act directly via tool calls.

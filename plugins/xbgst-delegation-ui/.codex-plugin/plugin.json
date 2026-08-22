@@ -1,0 +1,40 @@
+{
+  "name": "xbgst-delegation-ui",
+  "version": "1.1.24",
+  "description": "Opt-in visual xask router for choosing provider, model, effort, substrate, and service tier with preview-first dispatch.",
+  "author": {
+    "name": "VeigaPunk",
+    "url": "https://github.com/VeigaPunk"
+  },
+  "homepage": "https://github.com/VeigaPunk/grok-marketplace",
+  "repository": "https://github.com/VeigaPunk/grok-marketplace",
+  "license": "MIT OR Apache-2.0",
+  "keywords": [
+    "xbgst",
+    "xask",
+    "delegation",
+    "mcp",
+    "chatgpt",
+    "codex"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "xbgst Delegation UI",
+    "shortDescription": "Preview-first visual router for local xask",
+    "longDescription": "An optional burnerchrome-style MCP App for selecting an xask provider, model, effort, substrate, and service tier, previewing literal argv, and making a separate explicit dispatch.",
+    "developerName": "VeigaPunk",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "MCP server",
+      "xask routing"
+    ],
+    "websiteURL": "https://github.com/VeigaPunk/grok-marketplace",
+    "defaultPrompt": [
+      "Open the xbgst delegation console and load my local xask catalog.",
+      "Preview an xask route for this task; do not dispatch it yet.",
+      "Show me the available xask providers, models, and effort levels."
+    ],
+    "brandColor": "#ECEAE4"
+  }
+}

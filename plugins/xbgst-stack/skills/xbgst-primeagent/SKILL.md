@@ -31,11 +31,17 @@ return: <evidence/artifact schema and recipient>
 stop: <done condition, budget/cap, and abort conditions>
 ```
 
+Before the envelope, read the packaged `../../ssot/godspeed-core/directive.md`
+at call time and prepend its byte-exact contents. Normalize terminal markers and
+end the complete initial prompt with exactly one literal `| godspeed`. Apply the
+same rule to every task-bearing `prime-agent send` or resume message. Structured
+attach/list/control operations carry no task prompt and are exempt.
+
 L1 is the sole scheduler, Pareto judge, `APPROVED` authority, integrator, and shipper. PrimeAgent returns evidence, not decisions. PrimeAgent is not L2-select and never substitutes for `xbrd-selector`; it is not L3 and never proxies sekhmet. Child fan-out is forbidden unless `allowed_actions` explicitly authorizes it. Concurrent writing routes must use disjoint paths or worktrees recorded in `scope`.
 
 ## When to call
 
-Use this optional lane for long-running intermodel exchange, bounded delegated work, or a task that benefits from `prime-agent send`, `attach`, or resume. Sessions may live under `~/.xbgst/prime-agent/sessions`. First ticks use tools such as `-p` or `--mode json|rpc`. `--autonomous` only continues the bounded L2 task; it does not become an xbgst scheduler. `/refine` is local harness learning, not L1 policy.
+Use this optional lane for long-running intermodel exchange, bounded delegated work, or a task that benefits from `prime-agent send`, `attach`, or resume. Every task-bearing message prepends the canonical directive and ends exactly once with `| godspeed`. Sessions may live under `~/.xbgst/prime-agent/sessions`. First ticks use tools such as `-p` or `--mode json|rpc`. `--autonomous` only continues the bounded L2 task; it does not become an xbgst scheduler. `/refine` is local harness learning, not L1 policy.
 
 Skip judge rounds, ranked selection, one-shot labrat probes, and sekhmet swarms. If PrimeAgent, OpenAI ChatGPT/Codex OAuth, or the route is unavailable, return to the native named `gx-*` path. Absence never blocks L1 and never promotes L2.
 

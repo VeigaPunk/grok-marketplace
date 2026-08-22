@@ -95,20 +95,27 @@ class TestDeterminism(Base):
 
 
 class TestModelRoutes(Base):
+    OX = {"provider": "opencode-go", "model_id": "ox-alpha-free"}
+    GRK = {"provider": "grok", "model_id": "grok-4.6"}
     EXPECTED = {
-        "the-critic": {"provider": "chatgpt", "model_id": "gpt-5.6-sol"},
-        "the-reviewer": {"provider": "chatgpt", "model_id": "gpt-5.6-sol"},
-        "the-mutation-tester": {"provider": "chatgpt", "model_id": "gpt-5.6-sol"},
-        "the-sentinel": {"provider": "chatgpt", "model_id": "gpt-5.6-sol"},
-        "the-revenger": {"provider": "chatgpt", "model_id": "gpt-daybreak-blue-latest"},
-        "the-labrat": {"provider": "grok", "model_id": "grok-4.6"},
-        "the-netsshark": {"provider": "grok", "model_id": "grok-4.6"},
-        "the-scout": {"provider": "token-plan", "model_id": "qwen3.8-max"},
-        "the-distiller": {"provider": "token-plan", "model_id": "qwen3.8-max"},
+        "the-critic": OX,
+        "the-reviewer": OX,
+        "the-mutation-tester": OX,
+        "the-sentinel": GRK,
+        "the-revenger": OX,
+        "the-labrat": GRK,
+        "the-netsshark": GRK,
+        "the-scout": OX,
+        "the-distiller": OX,
+        "the-executor": OX,
+        "the-planner": OX,
+        "the-architect": OX,
+        "the-connector": OX,
+        "the-simplifier": OX,
+        "the-scribe": OX,
     }
     HOST_NATIVE = {
-        "orch", "the-judge", "the-planner", "the-executor", "the-connector",
-        "the-simplifier", "the-scribe", "the-architect",
+        "orch", "the-judge",
         "the-almanacker", "the-kimiraikkoner",
         "the-musketeer", "the-puppeteer",
     }
@@ -125,7 +132,7 @@ class TestModelRoutes(Base):
             for a in d["agents"]
             if a["delegation"] and a["delegation"].get("model_route")
         ]
-        self.assertEqual(len(routes), 9)
+        self.assertEqual(len(routes), 15)
 
     def test_delegations_carry_no_command_strings(self):
         d = json.loads(run().stdout)
@@ -145,6 +152,7 @@ class TestLiveRoutes(Base):
         "openai": {"access": "OPENAISECRETTOKEN", "refresh": "OPENAIREFRESH"},
         "xai": {"access": "XAISECRETTOKEN"},
         "alibaba-token-plan": {"access": "ALIBABASECRETTOKEN"},
+        "opencode-go": {"access": "OPENCODEGOSECRET"},
     }
 
     def authfile(self, data):
@@ -168,31 +176,19 @@ class TestLiveRoutes(Base):
             if a["delegation"] and a["name"] in self.EXPECTED
         }
 
-    def test_live_chatgpt_only_falls_back(self):
+    def test_live_chatgpt_only_all_lanes_null(self):
         r = self.run_live(self.authfile({"openai": {"access": "OPENAISECRETTOKEN"}}))
         self.assertEqual(r.returncode, 0, r.stderr)
         d = json.loads(r.stdout)
         self.assertEqual(d["providers"], {"openai": "chatgpt"})
         by = self.routes(d)
-        self.assertEqual(len(by), 9)
-        sol = {"provider": "chatgpt", "model_id": "gpt-5.6-sol"}
-        for name, route in by.items():
-            self.assertIsNotNone(route["delegation"]["model_route"], name)
-        # primaries that hold (chatgpt first in chain)
-        for name in ("the-critic", "the-reviewer", "the-mutation-tester", "the-sentinel"):
-            mr = by[name]["delegation"]["model_route"]
-            self.assertEqual({k: mr[k] for k in ("provider", "model_id")}, sol, name)
-            self.assertFalse(mr["fallback_used"], name)
-        # fallbacks: revenger primary is daybreak (chatgpt present but chain[0]
-        # also chatgpt -> daybreak WINS; grok/token-plan lanes drop to sol)
-        rev = by["the-revenger"]["delegation"]["model_route"]
-        self.assertEqual(rev["provider"], "chatgpt")
-        self.assertEqual(rev["model_id"], "gpt-daybreak-blue-latest")
-        self.assertFalse(rev["fallback_used"])
-        for name in ("the-labrat", "the-netsshark", "the-scout", "the-distiller"):
-            mr = by[name]["delegation"]["model_route"]
-            self.assertEqual({k: mr[k] for k in ("provider", "model_id")}, sol, name)
-            self.assertTrue(mr["fallback_used"], name)
+        self.assertEqual(len(by), 15)
+        # No lane chains through chatgpt anymore: ox lanes are single-element
+        # opencode-go; grok lanes fall back only to opencode-go. ChatGPT-only
+        # auth satisfies nothing -> loud null + warning (no silent drift).
+        for name, a in by.items():
+            self.assertIsNone(a["delegation"].get("model_route"), name)
+            self.assertIn("no-auth-provider", a["warnings"], name)
 
     def test_live_full_auth_primaries_hold(self):
         r = self.run_live(self.authfile(self.SECRETS))
@@ -200,10 +196,11 @@ class TestLiveRoutes(Base):
         d = json.loads(r.stdout)
         self.assertEqual(
             d["providers"],
-            {"openai": "chatgpt", "xai": "grok", "alibaba-token-plan": "token-plan"},
+            {"openai": "chatgpt", "xai": "grok", "alibaba-token-plan": "token-plan",
+             "opencode-go": "opencode-go"},
         )
         by = self.routes(d)
-        self.assertEqual(len(by), 9)
+        self.assertEqual(len(by), 15)
         for name, route in self.EXPECTED.items():
             mr = by[name]["delegation"]["model_route"]
             self.assertEqual(
@@ -212,11 +209,11 @@ class TestLiveRoutes(Base):
             self.assertFalse(mr["fallback_used"], name)
         self.assertEqual(
             by["the-revenger"]["delegation"]["route_chain"],
-            ["chatgpt/gpt-daybreak-blue-latest", "chatgpt/gpt-5.6-sol", "grok/grok-4.6"],
+            ["opencode-go/ox-alpha-free"],
         )
         self.assertEqual(
-            by["the-scout"]["delegation"]["route_chain"],
-            ["token-plan/qwen3.8-max", "chatgpt/gpt-5.6-sol"],
+            by["the-sentinel"]["delegation"]["route_chain"],
+            ["grok/grok-4.6", "opencode-go/ox-alpha-free"],
         )
         # host-native lanes stay null, carry no chain
         allby = {a["name"]: a for a in d["agents"]}
@@ -239,7 +236,7 @@ class TestLiveRoutes(Base):
                 d = json.loads(r.stdout)
                 self.assertEqual(d["providers"], {})
                 by = self.routes(d)
-                self.assertEqual(len(by), 9)
+                self.assertEqual(len(by), 15)
                 for name, a in by.items():
                     self.assertIsNone(a["delegation"]["model_route"], name)
                     self.assertIn("no-auth-provider", a["warnings"], name)

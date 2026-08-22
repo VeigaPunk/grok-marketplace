@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>XBGST Delegation Console</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c0c0b;
+      --surface: #151513;
+      --raised: #1c1c19;
+      --fg: #eceae4;
+      --muted: #9a9890;
+      --subtle: #6f6d66;
+      --accent: #c9d0d4;
+      --accent-fg: #0c0c0b;
+      --border: color-mix(in oklab, #eceae4 12%, transparent);
+      --border-strong: color-mix(in oklab, #eceae4 22%, transparent);
+      --ok: #8faf8a;
+      --warn: #c4a574;
+      --danger: #c47a72;
+      --font: "JetBrainsMonoNL NFM", "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      --shadow: 0 18px 50px color-mix(in oklab, #000 40%, transparent);
+    }
+
+    * { box-sizing: border-box; }
+    html, body, button, textarea, select, code, pre {
+      font-family: var(--font);
+      font-variant-ligatures: none;
+      font-feature-settings: "calt" 0, "liga" 0, "tnum" 1;
+    }
+    html { background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
+    body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--fg); line-height: 1.5; }
+    button, select, textarea { color: inherit; }
+    button { border: 0; cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .42; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    ::selection { background: color-mix(in oklab, var(--accent) 35%, transparent); }
+
+    .shell { width: min(100%, 70rem); margin: 0 auto; padding: 12px; }
+    .window {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .chrome {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--raised);
+    }
+    .chrome-left, .chrome-right, .row { display: flex; align-items: center; gap: 8px; }
+    .dots { display: flex; gap: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border-strong); }
+    .address {
+      min-width: 0;
+      color: var(--muted);
+      font-size: 11px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      padding: 2px 7px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      background: var(--surface);
+      font-size: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+    .badge.offline .live-dot { background: var(--subtle); }
+
+    .hero { padding: 24px 20px 18px; border-bottom: 1px solid var(--border); }
+    .eyebrow { color: var(--muted); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 7px 0 0; font-size: clamp(24px, 5vw, 38px); line-height: 1.08; font-weight: 500; letter-spacing: -.04em; }
+    .lede { max-width: 49rem; margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+
+    .body { display: grid; min-width: 0; }
+    .builder { min-width: 0; padding: 18px; }
+    .result { min-width: 0; padding: 18px; border-top: 1px solid var(--border); background: var(--raised); }
+    @media (min-width: 880px) {
+      .body { grid-template-columns: minmax(0, 7fr) minmax(18rem, 5fr); }
+      .builder { padding: 22px; }
+      .result { padding: 22px; border-top: 0; border-left: 1px solid var(--border); }
+    }
+
+    fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+    fieldset + fieldset, .form-grid, .task-block, .actions { margin-top: 18px; }
+    legend, .field-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .step { color: var(--subtle); }
+    .provider-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    @media (min-width: 600px) { .provider-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .provider {
+      min-width: 0;
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--raised);
+      text-align: left;
+    }
+    .provider:hover { border-color: var(--border-strong); }
+    .provider.on { border-color: transparent; background: var(--accent); color: var(--accent-fg); }
+    .provider-name { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .provider-meta { display: block; margin-top: 6px; color: var(--subtle); font-size: 10px; }
+    .provider.on .provider-meta { color: color-mix(in oklab, var(--accent-fg) 64%, transparent); }
+
+    .form-grid { display: grid; gap: 14px; }
+    @media (min-width: 600px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+    select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font-size: 12px;
+    }
+    select { min-height: 42px; padding: 0 36px 0 11px; }
+    textarea { min-height: 126px; resize: vertical; padding: 11px; line-height: 1.55; }
+    select:hover, textarea:hover { border-color: var(--border-strong); }
+    textarea::placeholder { color: var(--subtle); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      min-height: 34px;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--raised);
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .chip:hover { color: var(--fg); border-color: var(--border-strong); }
+    .chip.on { border-color: transparent; background: var(--accent); color: var(--accent-fg); }
+    .hint { margin-top: 7px; color: var(--subtle); font-size: 10px; }
+    .task-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; color: var(--subtle); font-size: 10px; }
+
+    .godspeed {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--raised);
+    }
+    .godspeed strong { display: block; font-size: 11px; font-weight: 500; }
+    .godspeed span { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+    .switch { position: relative; flex: none; width: 40px; height: 22px; }
+    .switch input { position: absolute; opacity: 0; }
+    .track { position: absolute; inset: 0; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); }
+    .thumb { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: transform .16s ease; }
+    .switch input:checked + .track { background: var(--accent); }
+    .switch input:checked + .track .thumb { background: var(--accent-fg); transform: translateX(18px); }
+
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn {
+      min-height: 44px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .btn:hover:not(:disabled) { filter: brightness(1.06); }
+    .btn.ghost { border: 1px solid var(--border); background: var(--raised); color: var(--fg); }
+    .btn.danger { background: var(--fg); color: var(--bg); }
+    .btn.small { min-height: 32px; padding: 5px 9px; font-size: 10px; }
+
+    .result-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .result-head h2 { margin: 0; font-size: 12px; font-weight: 500; }
+    .state {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .state.ok { color: var(--ok); }
+    .state.warn { color: var(--warn); }
+    .state.error { color: var(--danger); }
+    .terminal { margin-top: 10px; overflow: hidden; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+    .terminal-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 38px; padding: 4px 6px 4px 10px; border-bottom: 1px solid var(--border); color: var(--subtle); font-size: 10px; }
+    pre { min-height: 116px; max-height: 320px; margin: 0; overflow: auto; padding: 12px; color: var(--muted); font-size: 11px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+    .output { margin-top: 10px; }
+    .output pre { min-height: 96px; color: var(--fg); }
+    .runtime { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; margin-top: 14px; }
+    .metric { padding: 9px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); }
+    .metric b { display: block; overflow: hidden; color: var(--fg); font-size: 10px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    .metric span { display: block; margin-top: 3px; color: var(--subtle); font-size: 9px; text-transform: uppercase; }
+    .footnote { margin: 14px 0 0; color: var(--subtle); font-size: 9px; line-height: 1.55; }
+
+    @media (max-width: 420px) {
+      .shell { padding: 0; }
+      .window { border-width: 0; border-radius: 0; }
+      .chrome-right .badge:first-child { display: none; }
+      .hero, .builder, .result { padding-left: 14px; padding-right: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="window" aria-labelledby="title">
+      <header class="chrome">
+        <div class="chrome-left">
+          <div class="dots" aria-hidden="true"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+          <code class="address">xask://delegate</code>
+        </div>
+        <div class="chrome-right">
+          <span class="badge">preview first</span>
+          <span class="badge offline" id="bridge-badge"><i class="live-dot"></i><span>copy mode</span></span>
+        </div>
+      </header>
+
+      <div class="hero">
+        <div class="eyebrow">xask / directive.md / delegation console</div>
+        <h1 id="title">Choose the mind. Set the depth.</h1>
+        <p class="lede">One visual route into xask. Preview the literal argv, then make an explicit dispatch when the local MCP bridge is available.</p>
+      </div>
+
+      <div class="body">
+        <form class="builder" id="delegate-form">
+          <fieldset>
+            <legend><span><span class="step">01 /</span> Provider</span><span id="catalog-note">local fallback</span></legend>
+            <div class="provider-grid" id="providers" role="radiogroup" aria-label="Provider"></div>
+          </fieldset>
+
+          <div class="form-grid">
+            <label>
+              <span class="field-label"><span><span class="step">02 /</span> Model</span><span id="model-state">—</span></span>
+              <select id="model" aria-label="Model"></select>
+            </label>
+            <fieldset>
+              <legend><span><span class="step">03 /</span> Substrate</span></legend>
+              <div class="chips" id="substrates"></div>
+              <p class="hint">stock = direct CLI · sekhmet = L3 spark lane</p>
+            </fieldset>
+          </div>
+
+          <div class="form-grid">
+            <fieldset>
+              <legend><span><span class="step">04 /</span> Effort</span></legend>
+              <div class="chips" id="efforts"></div>
+            </fieldset>
+            <fieldset>
+              <legend><span><span class="step">05 /</span> Service tier</span></legend>
+              <div class="chips" id="tiers"></div>
+            </fieldset>
+          </div>
+
+          <div class="task-block">
+            <label class="field-label" for="task"><span><span class="step">06 /</span> Delegation</span><span>literal argv</span></label>
+            <textarea id="task" maxlength="32768" placeholder="Describe the bounded task, evidence needed, and completion condition…"></textarea>
+            <div class="task-meta"><span>No shell interpolation. Credentials remain in provider CLIs.</span><span id="task-count">0 / 32768</span></div>
+          </div>
+
+          <label class="godspeed">
+            <span><strong>Godspeed directive.md · locked</strong><span>Every route passes --gs and ends exactly once with | godspeed. WWKD remains a separate planning skill.</span></span>
+            <span class="switch"><input id="godspeed" type="checkbox" checked disabled aria-label="Godspeed is required"><span class="track"><span class="thumb"></span></span></span>
+          </label>
+
+          <div class="actions">
+            <button class="btn ghost" id="preview" type="submit">Preview argv</button>
+            <button class="btn danger" id="dispatch" type="button">Dispatch now</button>
+          </div>
+        </form>
+
+        <aside class="result" aria-live="polite">
+          <div class="result-head"><h2>Route output</h2><span class="state" id="result-state">draft</span></div>
+          <div class="terminal">
+            <div class="terminal-bar"><span>exact command</span><button class="btn ghost small" id="copy" type="button">Copy</button></div>
+            <pre id="command">Choose a route and write a task.</pre>
+          </div>
+          <div class="terminal output">
+            <div class="terminal-bar"><span>bridge response</span><span id="response-label">not run</span></div>
+            <pre id="response">Preview validates the route without executing it. Dispatch is a separate, explicit action.</pre>
+          </div>
+          <div class="runtime">
+            <div class="metric"><b id="metric-provider">—</b><span>provider</span></div>
+            <div class="metric"><b id="metric-model">—</b><span>model</span></div>
+            <div class="metric"><b id="metric-effort">—</b><span>effort</span></div>
+            <div class="metric"><b id="metric-lane">—</b><span>lane / tier</span></div>
+          </div>
+          <p class="footnote">Godspeed is the canonical directive.md plus the terminal prompt marker. WWKD is the separate Phase 0 planning posture. xask owns provider authentication and execution.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const FALLBACK_CATALOG = {
+        schema_version: 1,
+        providers: [
+          { id: "chatgpt", label: "OpenAI / ChatGPT", default_model_id: "gpt-5.6-sol", transports: ["stock", "sekhmet"], available: false },
+          { id: "grok", label: "xAI Grok", default_model_id: "grok-4.6", transports: ["stock"], available: false },
+          { id: "token-plan", label: "Alibaba Token Plan", default_model_id: "qwen3.8-max", transports: ["stock"], available: false },
+          { id: "local", label: "Local HVM", default_model_id: "gemma4:26b", transports: ["stock"], available: false }
+        ],
+        models: [
+          ["chatgpt", "gpt-5.6-sol", "GPT-5.6-Sol", ["low","medium","high","xhigh","max","ultra"], "low", ["default","fast"]],
+          ["chatgpt", "gpt-5.6-terra", "GPT-5.6-Terra", ["low","medium","high","xhigh","max","ultra"], "medium", ["default","fast"]],
+          ["chatgpt", "gpt-5.6-luna", "GPT-5.6-Luna", ["low","medium","high","xhigh","max"], "medium", ["default","fast"]],
+          ["chatgpt", "gpt-daybreak-blue-latest", "Daybreak Blue", ["low","medium","high","xhigh","max","ultra"], "low", ["default"]],
+          ["chatgpt", "gpt-5.5", "GPT-5.5", ["low","medium","high","xhigh"], "medium", ["default","fast"]],
+          ["chatgpt", "gpt-5.4", "GPT-5.4", ["low","medium","high","xhigh"], "medium", ["default","fast"]],
+          ["chatgpt", "gpt-5.4-mini", "GPT-5.4 Mini", ["low","medium","high","xhigh"], "medium", ["default"]],
+          ["chatgpt", "gpt-5.3-codex-spark", "GPT-5.3 Codex Spark", ["low","medium","high","xhigh"], "high", ["default"]],
+          ["grok", "grok-4.6", "Grok 4.6", ["low","medium","high","xhigh"], "high", ["default"]],
+          ["grok", "grok-4.5", "Grok 4.5", ["low","medium","high"], "high", ["default"]],
+          ["token-plan", "qwen3.8-max", "Qwen 3.8 Max", ["low","medium","xhigh"], "xhigh", ["default"]],
+          ["token-plan", "deepseek-v4-flash-0731", "DeepSeek V4 Flash", ["low","medium","xhigh"], "medium", ["default"]],
+          ["token-plan", "deepseek-v4-pro-0813", "DeepSeek V4 Pro", ["low","medium","xhigh"], "xhigh", ["default"]],
+          ["local", "gemma4:26b", "Gemma 4 26B / HVM", ["low","medium","high","xhigh","max","ultra"], "medium", ["default"]]
+        ].map(([provider, model_id, display_name, supported_efforts, default_effort, service_tiers]) => ({
+          provider, model_id, display_name, supported_efforts, default_effort, service_tiers,
+          visible: true, available: false, substrate_available: provider === "chatgpt" ? { stock: false, sekhmet: false } : { stock: false }
+        }))
+      };
+
+      const byId = (id) => document.getElementById(id);
+      const elements = {
+        providers: byId("providers"), model: byId("model"), efforts: byId("efforts"),
+        substrates: byId("substrates"), tiers: byId("tiers"), task: byId("task"),
+        taskCount: byId("task-count"), godspeed: byId("godspeed"), preview: byId("preview"),
+        dispatch: byId("dispatch"), copy: byId("copy"), command: byId("command"),
+        response: byId("response"), responseLabel: byId("response-label"),
+        resultState: byId("result-state"), bridgeBadge: byId("bridge-badge"),
+        catalogNote: byId("catalog-note"), modelState: byId("model-state"),
+        metricProvider: byId("metric-provider"), metricModel: byId("metric-model"),
+        metricEffort: byId("metric-effort"), metricLane: byId("metric-lane")
+      };
+
+      const state = {
+        catalog: FALLBACK_CATALOG,
+        liveCatalog: false,
+        provider: "chatgpt",
+        model: "gpt-5.6-sol",
+        effort: "low",
+        substrate: "stock",
+        tier: "default",
+        godspeed: true,
+        task: "",
+        command: "",
+        busy: false,
+        resultKind: "draft"
+      };
+
+      function bridge() { return window.openai && typeof window.openai.callTool === "function" ? window.openai : null; }
+      function providerEntry() { return state.catalog.providers.find((item) => item.id === state.provider); }
+      function modelsForProvider() { return state.catalog.models.filter((item) => item.provider === state.provider && item.visible !== false); }
+      function modelEntry() { return state.catalog.models.find((item) => item.provider === state.provider && item.model_id === state.model); }
+      function availableForDispatch() {
+        const provider = providerEntry();
+        const model = modelEntry();
+        return Boolean(bridge() && provider && model && provider.available !== false && model.available !== false);
+      }
+
+      function shellQuote(value) {
+        const text = String(value);
+        if (/^[A-Za-z0-9_./:@+-]+$/.test(text)) return text;
+        return "'" + text.replace(/'/g, "'\\''") + "'";
+      }
+
+      function canonicalGodspeedTask(value) {
+        const withoutTerminalMarkers = String(value).trimEnd().replace(/(?:\s*\|\s*godspeed)+\s*$/iu, "").trimEnd();
+        return `${withoutTerminalMarkers || "<task>"} | godspeed`;
+      }
+
+      function commandArgv(plan) {
+        const argv = ["xask"];
+        if (plan) argv.push("plan");
+        argv.push("--provider", state.provider, "--substrate", state.substrate, "--model-id", state.model,
+          "--effort", state.effort, "--service-tier", state.tier);
+        argv.push("--gs");
+        if (plan) argv.push("--json");
+        argv.push("--", canonicalGodspeedTask(state.task));
+        return argv;
+      }
+
+      function selectionPayload() {
+        return {
+          provider: state.provider,
+          model: state.model,
+          effort: state.effort,
+          substrate: state.substrate,
+          tier: state.tier,
+          task: canonicalGodspeedTask(state.task),
+          godspeed: true
+        };
+      }
+
+      function persist() {
+        const api = bridge();
+        if (!api || typeof api.setWidgetState !== "function") return;
+        void api.setWidgetState({
+          provider: state.provider, model: state.model, effort: state.effort,
+          substrate: state.substrate, tier: state.tier, godspeed: true
+        });
+      }
+
+      function setStatus(kind, label) {
+        state.resultKind = kind;
+        elements.resultState.className = "state" + (kind === "success" ? " ok" : kind === "error" ? " error" : kind === "busy" ? " warn" : "");
+        elements.resultState.textContent = label;
+      }
+
+      function ensureSelection() {
+        let provider = providerEntry();
+        if (!provider) {
+          provider = state.catalog.providers.find((item) => item.available !== false) || state.catalog.providers[0];
+          state.provider = provider ? provider.id : "";
+        }
+        const models = modelsForProvider();
+        let model = modelEntry();
+        if (!model) {
+          model = models.find((item) => item.model_id === provider?.default_model_id) || models[0];
+          state.model = model ? model.model_id : "";
+        }
+        const efforts = model?.supported_efforts || ["medium"];
+        if (!efforts.includes(state.effort)) state.effort = model?.default_effort || efforts[0];
+        const tiers = model?.service_tiers || ["default"];
+        if (!tiers.includes(state.tier)) state.tier = tiers[0];
+        const substrates = provider?.transports || ["stock"];
+        if (!substrates.includes(state.substrate)) state.substrate = substrates[0];
+      }
+
+      function makeChip(value, active, onClick, disabled) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "chip" + (value === active ? " on" : "");
+        button.textContent = value;
+        button.setAttribute("aria-pressed", String(value === active));
+        button.disabled = Boolean(disabled);
+        button.addEventListener("click", () => onClick(value));
+        return button;
+      }
+
+      function renderProviders() {
+        elements.providers.replaceChildren();
+        for (const provider of state.catalog.providers) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "provider" + (provider.id === state.provider ? " on" : "");
+          button.setAttribute("role", "radio");
+          button.setAttribute("aria-checked", String(provider.id === state.provider));
+          const name = document.createElement("span");
+          name.className = "provider-name";
+          name.textContent = provider.label || provider.id;
+          const meta = document.createElement("span");
+          meta.className = "provider-meta";
+          meta.textContent = provider.available === false ? "not detected" : "runtime ready";
+          button.append(name, meta);
+          button.addEventListener("click", () => {
+            state.provider = provider.id;
+            state.model = provider.default_model_id || "";
+            state.effort = "";
+            state.substrate = (provider.transports || ["stock"])[0];
+            state.tier = "default";
+            ensureSelection();
+            render();
+            persist();
+          });
+          elements.providers.append(button);
+        }
+      }
+
+      function renderModel() {
+        const models = modelsForProvider();
+        elements.model.replaceChildren();
+        for (const model of models) {
+          const option = document.createElement("option");
+          option.value = model.model_id;
+          option.textContent = `${model.display_name || model.model_id}${model.available === false ? " · unavailable" : ""}`;
+          option.selected = model.model_id === state.model;
+          elements.model.append(option);
+        }
+        const model = modelEntry();
+        elements.modelState.textContent = model?.available === false ? "offline" : "ready";
+      }
+
+      function renderChips() {
+        const provider = providerEntry();
+        const model = modelEntry();
+        elements.efforts.replaceChildren();
+        for (const effort of model?.supported_efforts || []) {
+          elements.efforts.append(makeChip(effort, state.effort, (value) => {
+            state.effort = value; render(); persist();
+          }));
+        }
+        elements.tiers.replaceChildren();
+        for (const tier of model?.service_tiers || ["default"]) {
+          elements.tiers.append(makeChip(tier, state.tier, (value) => {
+            state.tier = value; render(); persist();
+          }));
+        }
+        elements.substrates.replaceChildren();
+        for (const substrate of provider?.transports || ["stock"]) {
+          const unavailable = model?.substrate_available && model.substrate_available[substrate] === false;
+          elements.substrates.append(makeChip(substrate, state.substrate, (value) => {
+            state.substrate = value; render(); persist();
+          }, unavailable));
+        }
+      }
+
+      function renderCommand() {
+        state.command = commandArgv(false).map(shellQuote).join(" ");
+        elements.command.textContent = state.command;
+        elements.metricProvider.textContent = state.provider || "—";
+        elements.metricModel.textContent = state.model || "—";
+        elements.metricEffort.textContent = state.effort || "—";
+        elements.metricLane.textContent = `${state.substrate || "—"} / ${state.tier || "—"}`;
+      }
+
+      function render() {
+        ensureSelection();
+        renderProviders();
+        renderModel();
+        renderChips();
+        renderCommand();
+        const connected = Boolean(bridge());
+        elements.bridgeBadge.classList.toggle("offline", !connected);
+        elements.bridgeBadge.querySelector("span").textContent = connected ? "MCP bridge" : "copy mode";
+        elements.catalogNote.textContent = state.liveCatalog ? `${state.catalog.models.length} live models` : "local fallback";
+        elements.taskCount.textContent = `${state.task.length} / 32768`;
+        elements.preview.disabled = state.busy || !state.task.trim() || !state.model;
+        elements.dispatch.disabled = state.busy || !state.task.trim() || !availableForDispatch();
+      }
+
+      function unwrapToolResult(response) {
+        if (!response) return {};
+        if (response.isError) {
+          const message = Array.isArray(response.content) ? response.content.map((item) => item.text || "").join("\n") : "Tool call failed";
+          throw new Error(message || "Tool call failed");
+        }
+        return response.structuredContent || response.structured_content || response;
+      }
+
+      function applyInput(input) {
+        if (!input || typeof input !== "object") return;
+        for (const key of ["provider", "model", "effort", "substrate", "tier"]) {
+          if (typeof input[key] === "string") state[key] = input[key];
+        }
+        state.godspeed = true;
+        if (typeof input.task === "string") {
+          state.task = input.task.slice(0, 32768);
+          elements.task.value = state.task;
+        }
+      }
+
+      function applyOutput(output) {
+        if (!output || typeof output !== "object") return;
+        if (output.catalog && Array.isArray(output.catalog.providers) && Array.isArray(output.catalog.models)) {
+          state.catalog = output.catalog;
+          state.liveCatalog = true;
+        } else if (Array.isArray(output.providers) && Array.isArray(output.models)) {
+          state.catalog = output;
+          state.liveCatalog = true;
+        }
+        if (output.request) applyInput(output.request);
+        if (output.kind === "plan" && output.plan) {
+          if (typeof output.plan.command === "string") state.command = output.plan.command;
+          elements.command.textContent = state.command;
+          elements.response.textContent = "Validated. Nothing executed. Review the command, then choose Dispatch now if the route is correct.";
+          elements.responseLabel.textContent = "preview";
+          setStatus("success", "planned");
+        } else if (output.kind === "dispatch") {
+          const body = output.stdout || output.stderr || `xask exited with ${output.exitCode}`;
+          elements.response.textContent = body;
+          elements.responseLabel.textContent = output.exitCode === 0 ? "complete" : "failed";
+          setStatus(output.exitCode === 0 ? "success" : "error", output.exitCode === 0 ? "complete" : "failed");
+        }
+        render();
+      }
+
+      async function call(name, payload) {
+        const api = bridge();
+        if (!api) throw new Error("MCP bridge unavailable; copy the command instead.");
+        const response = await api.callTool(name, payload);
+        const output = unwrapToolResult(response);
+        applyOutput(output);
+        return output;
+      }
+
+      async function preview() {
+        if (!state.task.trim()) return;
+        const api = bridge();
+        if (!api) {
+          state.command = commandArgv(false).map(shellQuote).join(" ");
+          elements.command.textContent = state.command;
+          elements.response.textContent = "Copy-only preview. Connect the local MCP bridge to validate this route against xask.";
+          elements.responseLabel.textContent = "local";
+          setStatus("success", "copied route");
+          return;
+        }
+        state.busy = true;
+        setStatus("busy", "validating");
+        elements.responseLabel.textContent = "working";
+        elements.response.textContent = "Asking xask to validate the catalog selection and render argv…";
+        render();
+        try {
+          await call("xask_plan", selectionPayload());
+        } catch (error) {
+          elements.response.textContent = error instanceof Error ? error.message : "Preview failed";
+          elements.responseLabel.textContent = "failed";
+          setStatus("error", "failed");
+        } finally {
+          state.busy = false;
+          render();
+        }
+      }
+
+      async function dispatch() {
+        if (!availableForDispatch() || !state.task.trim()) return;
+        const accepted = window.confirm(`Dispatch ${state.model} through ${state.provider}?\n\nThis executes xask and may use a remote provider or change workspace files.`);
+        if (!accepted) return;
+        state.busy = true;
+        setStatus("busy", "dispatching");
+        elements.responseLabel.textContent = "working";
+        elements.response.textContent = "Delegation in progress. The call is bounded by the local MCP timeout and output limit…";
+        render();
+        try {
+          await call("xask_dispatch", selectionPayload());
+        } catch (error) {
+          elements.response.textContent = error instanceof Error ? error.message : "Dispatch failed";
+          elements.responseLabel.textContent = "failed";
+          setStatus("error", "failed");
+        } finally {
+          state.busy = false;
+          render();
+        }
+      }
+
+      async function copyCommand() {
+        const text = state.command || commandArgv(false).map(shellQuote).join(" ");
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.append(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          textarea.remove();
+        }
+        const before = elements.copy.textContent;
+        elements.copy.textContent = "Copied";
+        setTimeout(() => { elements.copy.textContent = before; }, 1200);
+      }
+
+      elements.model.addEventListener("change", () => {
+        state.model = elements.model.value;
+        state.effort = "";
+        state.tier = "default";
+        ensureSelection();
+        render();
+        persist();
+      });
+      elements.task.addEventListener("input", () => {
+        state.task = elements.task.value;
+        renderCommand();
+        elements.taskCount.textContent = `${state.task.length} / 32768`;
+        elements.preview.disabled = state.busy || !state.task.trim();
+        elements.dispatch.disabled = state.busy || !state.task.trim() || !availableForDispatch();
+      });
+      byId("delegate-form").addEventListener("submit", (event) => { event.preventDefault(); void preview(); });
+      elements.dispatch.addEventListener("click", () => { void dispatch(); });
+      elements.copy.addEventListener("click", () => { void copyCommand(); });
+
+      window.addEventListener("openai:set_globals", (event) => {
+        const globals = event.detail?.globals || event.detail || {};
+        if (globals.widgetState) applyInput(globals.widgetState);
+        if (globals.toolInput) applyInput(globals.toolInput);
+        if (globals.toolOutput) applyOutput(globals.toolOutput);
+        render();
+      });
+
+      async function bootstrap() {
+        const globals = window.openai || {};
+        if (globals.widgetState) applyInput(globals.widgetState);
+        if (globals.toolInput) applyInput(globals.toolInput);
+        if (globals.toolOutput) applyOutput(globals.toolOutput);
+        elements.godspeed.checked = state.godspeed;
+        render();
+        if (bridge() && !state.liveCatalog) {
+          try { await call("xask_catalog", {}); }
+          catch (error) {
+            elements.response.textContent = error instanceof Error ? error.message : "Could not load xask catalog";
+            elements.responseLabel.textContent = "fallback";
+          }
+        }
+      }
+
+      void bootstrap();
+    })();
+  </script>
+</body>
+</html>

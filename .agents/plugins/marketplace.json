@@ -1,0 +1,32 @@
+{
+  "name": "veigapunk-xbgst",
+  "interface": {
+    "displayName": "VeigaPunk xbgst"
+  },
+  "plugins": [
+    {
+      "name": "xbgst-codex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xbgst-codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "xbgst-delegation-ui",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xbgst-delegation-ui"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
