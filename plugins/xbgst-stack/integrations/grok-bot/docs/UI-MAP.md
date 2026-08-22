@@ -3,7 +3,7 @@
 Live Grok Bot chrome as seen on this host via CDP `127.0.0.1:9333`
 (`agent-browser --cdp 9333 snapshot -i`). App: `/opt/Grok Bot/sand`, window
 class `grok-bot`. **Not** the xbgst L1 judge. Fleet identity lives in each
-card's Description as `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge`.
+card's Description as `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge` plus the matching **myagents** body (`ds4cc-marketplace/marketplace/plugins/myagents/agents/`), not a one-liner. `The-designer` is an extra named card (gold pages + inbox); do not load `the-judge.agent.md` onto it.
 
 Refs (`eNN`) rotate every snapshot. Click by `@ref` from a **fresh** tree;
 accessible-name clicks fail.

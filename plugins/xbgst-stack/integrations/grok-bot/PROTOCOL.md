@@ -8,12 +8,17 @@ Grok Bot is an **inject + local-exec layer**. It is **not** the xbgst judge.
 |---|---|---|
 | L1 | Grok Build TUI (`/xbgst`) | name axes, Pareto, APPROVED, ship |
 | Forwarder | grok-bot agent `xbgst` | local-exec `grok -p "/xbgst …"` |
-| Fleet | grok-bot `the-planner`, `the-janitor`, `mutation-tester`, … | mailbox heartbeats, not Pareto |
+| Fleet | grok-bot specialists | run their role; not Pareto |
+| Designer | grok-bot `The-designer` | frontend; gold pages; inbox notes; never `QUALITY: PASS` |
 | Host | this integration | ping, argv, inject, doctor, restart |
 
 If a grok-bot agent description says it is the-judge / gdsd, **ignore that**. Forward only.
 
-Fleet cards (15 specialists + `xbgst` forwarder) persist `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge` in the Description field. Do **not** click `New` / `Create new Bot` (that factory only spawns empty `New Bot` stubs). Do **not** enable the Private plugin skill named `xbgst`. Window chrome `Close` is not the dialog Close.
+Specialist Descriptions are the **myagents** bodies from the xbgst repo (`ds4cc-marketplace/marketplace/plugins/myagents/agents/*.agent.md`), plus `FLEET_MARK: grok-bot <name> NOT the xbgst L1 judge`. Do **not** use the thin one-liner FLEET_MARK templates. `the-janitor` / `the-musketeer` have no myagents file — use xbgst-stack copies. Do **not** paste `the-judge.agent.md` onto `xbgst`, `orch`, or `The-designer`.
+
+`The-designer` gold: `/home/vgpnk/Projects/plazir-15-site`, `/home/vgpnk/Projects/burnerchrome`, `/home/vgpnk/Projects/kami-kage-fear-of-god` (Family B editorial; do not mash onto Family A). Mailbox: hangar `.xbgst/designer/`.
+
+Do **not** click `New` / `Create new Bot` except the one mint that is **immediately** named `The-designer`. Do **not** enable the Private plugin skill named `xbgst`. Window chrome `Close` is not the dialog Close.
 
 ## Host facts (this machine)
 

@@ -50,7 +50,7 @@ EOF
 
 Uses `hyprctl` `class:grok-bot` + **SHIFT+Insert** (this host's paste) + **CTRL+Return** (bare Return is a newline in the multiline composer). `--dry-run` prints the dispatchers. `--no-submit` pastes without sending. Does **not** start `grok -p` itself — grok-bot local-execs that.
 
-See `PROTOCOL.md` and `docs/UI-MAP.md`. Fleet cards are xbgst-stack specialist ports; they are **not** the judge. `FLEET_MARK` is in each Description. Do not click New (stub factory). Restart: `bin/xbgst-surface-restart.sh` (argv0-anchored pkill; keeps the Grok Build TUI).
+See `PROTOCOL.md` and `docs/UI-MAP.md`. Fleet specialist Descriptions are the **myagents** bodies from the xbgst repo (`ds4cc-marketplace/marketplace/plugins/myagents/agents/`), not the thin FLEET_MARK one-liners. `FLEET_MARK` still prefixes every card: grok-bot is **not** the judge. `The-designer` is the frontend card (plazir-15-site, burnerchrome, kami-kage-fear-of-god). Do not click New except the one mint that is immediately named. Restart: `bin/xbgst-surface-restart.sh` (argv0-anchored pkill; keeps the Grok Build TUI).
 
 ## Gates
 
