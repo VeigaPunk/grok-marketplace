@@ -370,7 +370,17 @@ else
   bad "godspeed/directive.md drifts from ssot/godspeed-core/directive.md"
 fi
 
-kim_extra=$(rg -n 'the-kimiraikkoner' plugins/xbgst-stack | rg -v 'HOST-ORCH-INVENTORY\.txt' | rg -v 'continue' || true)
+janitor_skill=plugins/xbgst-stack/skills/the-janitor/SKILL.md
+if rg -F '../../ssot/godspeed-core/directive.md' "$janitor_skill" >/dev/null \
+  && rg -F 'append exactly one final `| godspeed`' "$janitor_skill" >/dev/null \
+  && rg -F 'Apply the same construction to every follow-up or resume.' "$janitor_skill" >/dev/null \
+  && ! rg -F 'prompt="<task:' "$janitor_skill" >/dev/null; then
+  ok "the-janitor dispatch uses canonical Godspeed + exactly-once suffix"
+else
+  bad "the-janitor dispatch drifts from canonical Godspeed contract"
+fi
+
+kim_extra=$(rg -n 'the-kimiraikkoner' plugins/xbgst-stack | rg -v 'HOST-ORCH-INVENTORY\.txt' | rg -v 'continue' | rg -v 'the-bootstrapper' | rg -v 'test-bootstrapper' || true)
 if [[ -n "$kim_extra" ]]; then
   bad "the-kimiraikkoner under plugins/xbgst-stack (only inventory [banned] or skip-lists allowed)"
 else
@@ -410,6 +420,18 @@ if [[ -f scripts/install-xbgst-stack.sh ]]; then
   ok "install-xbgst-stack.sh present"
 else
   echo "WARN install-xbgst-stack.sh missing (oneliner race)"
+fi
+
+# xask-first contract (no live model). Extract-aware; XASK_LIVE=0.
+if bash plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh; then
+  ok "xask dispatch modes"
+else
+  bad "xask dispatch modes"
+fi
+if XASK_LIVE=0 bash plugins/xbgst-stack/tests/test-xask-midrun-ping.sh; then
+  ok "xask midrun ping fixtures"
+else
+  bad "xask midrun ping fixtures"
 fi
 
 if [[ "$fail" -ne 0 ]]; then

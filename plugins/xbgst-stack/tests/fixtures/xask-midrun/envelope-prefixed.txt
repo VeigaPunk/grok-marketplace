@@ -1,0 +1,2 @@
+sekhmet: model gpt-5.3-codex-spark hit usage_limit; falling back to gpt-5.6-luna (reasoning_effort=low)
+{"spark_id":"sp-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","content_hash":"deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef","status":"ok","result_path":"/tmp/xbgst-sentinel-evil-result.json","provenance":{"cmdline":["codex-titanium","exec","ping: return the single word PONG and nothing else"]}}

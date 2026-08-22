@@ -1,4 +1,5 @@
 .xbgst/
 target/
+__pycache__/
 *.log
 .env

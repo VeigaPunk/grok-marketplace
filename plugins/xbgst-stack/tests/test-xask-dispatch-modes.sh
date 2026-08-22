@@ -54,6 +54,10 @@ need "$SCOUT" "--service-tier fast"
 need "$SCOUT" "<raw_output>"
 need "$SCOUT" "BLOCKED"
 need "$SCOUT" "mode: xgs"
+need "$SCOUT" "result.json stdout"
+if grep -F 'literal substring of xask stdout' "$SCOUT" >/dev/null 2>&1; then
+  fail "$SCOUT must not quote sekhmet CLI envelope as raw-quote"
+fi
 if grep -E 'FIRST tool call MUST be Bash: xask-l3' "$SCOUT" >/dev/null 2>&1; then
   fail "$SCOUT must not name xask-l3 as FIRST"
 fi
@@ -63,11 +67,14 @@ need "$SHARED" "Never spawn type \`xask\`"
 need "$SHARED" "Never use \`xask-l3\`"
 need "$SHARED" "xbgst-mode"
 need "$SHARED" "service_tier=fast"
+need "$SHARED" "result.json"
+need "$SHARED" "CollectRecord"
 
 # 6) remaining consult roles carry xask + raw-quote; planner-class does not
 for a in reviewer labrat connector executor critic sentinel mutation-tester; do
   grep -F -q 'xask --' "$ROOT/agents/$a.md" || fail "agents/$a.md missing xask lane"
   grep -F -q '<raw_output>' "$ROOT/agents/$a.md" || fail "agents/$a.md missing raw-quote"
+  grep -F -q 'result.json stdout' "$ROOT/agents/$a.md" || fail "agents/$a.md missing result.json stdout extract"
 done
 for a in the-planner distiller scribe simplifier; do
   if grep -E 'FIRST tool call MUST be Bash: xask' "$ROOT/agents/$a.md" >/dev/null 2>&1; then

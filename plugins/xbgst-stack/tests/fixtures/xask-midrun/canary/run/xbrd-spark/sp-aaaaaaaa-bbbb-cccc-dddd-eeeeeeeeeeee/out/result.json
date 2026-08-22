@@ -1,0 +1,6 @@
+{
+  "status": "ok",
+  "stdout": "XCANARY\n",
+  "stderr": "ping: return the single word PONG and nothing else\n",
+  "exit": 0
+}

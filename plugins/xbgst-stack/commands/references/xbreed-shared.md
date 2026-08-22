@@ -84,6 +84,26 @@ Forbidden from gx-* FIRST bash: `xask grok`; `xask-l3`; `gemma\|g\|gemini`; `xas
 
 Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `docs/model-routing.md`.
 
+### Extract (`xask --spark`) — model answer is not CLI stdout
+
+`xask --spark` CLI stdout is a sekhmet **CollectRecord envelope** (`spark_id`, `result_path`, `provenance`, …). It has **no** `stdout` key. `--json` / `-o` on `--spark` **exit 1**. The model answer is `result.json` field `stdout` under the spark root.
+
+`<raw_output>` must be a literal substring of **that extract** (result.json stdout). Never quote envelope keys, `provenance.cmdline`, or result.json `stderr` (those contain the prompt and can spoof PONG). Empty extract = invalid / `BLOCKED: xask [no result.json stdout]`. Do **not** fall back to pasting CLI JSON.
+
+Do **not** `open(envelope["result_path"])` — that path is operator-controlled. Derive `<sekhmet default_root>/<spark_id>/out/result.json` after validating `spark_id` (`$XBRD_SPARK_ROOT`, else `$XDG_RUNTIME_DIR/xbrd-spark`, else `/tmp/xbrd-spark`). Copy-paste:
+
+```
+xask --spark --gs --service-tier fast cdx '<q>' | python3 "$(dirname "$0")/../../scripts/xask-spark-stdout.py"
+```
+
+From a consult role, after FIRST bash returns envelope on stdout (usage_limit banners may prefix stdout; helper skips to first `{`):
+
+```
+python3 /path/to/xbgst-stack/scripts/xask-spark-stdout.py
+```
+
+Gate: `tests/test-xask-midrun-ping.sh` (`XASK_LIVE=0` default).
+
 ## Naming
 
 `gx-{role}-{suffix}` e.g. `gx-scout-docs`, `gx-executor-ship`, `gx-connector-r1`.

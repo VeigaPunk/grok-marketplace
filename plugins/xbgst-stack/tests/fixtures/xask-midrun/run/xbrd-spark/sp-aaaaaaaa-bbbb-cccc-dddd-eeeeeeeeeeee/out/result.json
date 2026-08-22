@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "stdout": "PONG\n",
+  "stderr": "Reading additional input from stdin...\nOpenAI Codex\nping: return the single word PONG and nothing else\n",
+  "exit": 0,
+  "duration_ms": 1,
+  "usage_tokens": 0
+}

@@ -183,11 +183,21 @@ eval "$(fnm env --shell bash)"
 fnm exec --using <node-version-if-needed> -- bash -c '...'
 
 # Fallback pure bash isolation
+# Parent-expand operator bins BEFORE isolating HOME — PATH=/usr/bin:/bin hides ~/.local/bin/xask.
 export AGENT_ID=gx-xxx-$$
 export TMPDIR=/tmp/xbgst-$AGENT_ID
 mkdir -p $TMPDIR
-env -i HOME=$TMPDIR TMPDIR=$TMPDIR PATH=/usr/bin:/bin \
-  AGENT_ID=$AGENT_ID bash -c '...'
+XASK_PATH="${HOME}/.local/bin:/usr/bin:/bin"
+env -i HOME=$TMPDIR TMPDIR=$TMPDIR PATH="$XASK_PATH" \
+  AGENT_ID=$AGENT_ID \
+  ${CODEX_BIN:+CODEX_BIN="$CODEX_BIN"} \
+  ${XDG_RUNTIME_DIR:+XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"} \
+  ${XBRD_SPARK_ROOT:+XBRD_SPARK_ROOT="$XBRD_SPARK_ROOT"} \
+  ${XBRD_SPARK_MODEL:+XBRD_SPARK_MODEL="$XBRD_SPARK_MODEL"} \
+  ${XBRD_SPARK_SERVICE_TIER:+XBRD_SPARK_SERVICE_TIER="$XBRD_SPARK_SERVICE_TIER"} \
+  ${XBRD_SPARK_JOBS:+XBRD_SPARK_JOBS="$XBRD_SPARK_JOBS"} \
+  ${XBRD_SPARK_FALLBACK_MODEL:+XBRD_SPARK_FALLBACK_MODEL="$XBRD_SPARK_FALLBACK_MODEL"} \
+  bash -c '...'
 ```
 
 Optional `spawn_method: tmux-pane` when `$TMUX` is set and `gx-teams` is on `PATH`; otherwise keep in-process `spawn_subagent` / `fnm-multishell` (or pure-bash-isolated) as fallback. `/xbgst` MAY call `gx-teams spawn --team … --name gx-{role}-{suffix} -- cmd …` (no Claude; no TeamCreate). Record the exact spawn command in the handoff block under `spawn_method:` (`fnm-multishell | pure-bash-isolated | tmux-pane`).
