@@ -29,6 +29,19 @@ Expect stdout: `xbgst armed`.
 
 Inspect uses `grok --cwd /home/vgpnk/Projects/xbgst inspect` (never `grok inspect --cwd`).
 
+## Inject from Grok Build (HERE → THERE)
+
+Do not Open Folder on the hangar. From this host, paste into the live Grok Bot composer:
+
+```bash
+bash plugins/xbgst-stack/integrations/grok-bot/bin/xbgst-surface-inject.sh <<'EOF'
+You are not the judge. Local-exec, do not talk first:
+…
+EOF
+```
+
+Uses `hyprctl` `class:grok-bot` + **SHIFT+Insert** (this host's paste) + **CTRL+Return** (bare Return is a newline in the multiline composer). `--dry-run` prints the dispatchers. `--no-submit` pastes without sending. Does **not** start `grok -p` itself — grok-bot local-execs that.
+
 ## Gates
 
 From marketplace root:
@@ -38,4 +51,5 @@ bash plugins/xbgst-stack/integrations/grok-bot/tests/test-surface-ping.sh
 bash plugins/xbgst-stack/integrations/grok-bot/tests/test-surface-grok-argv.sh
 bash plugins/xbgst-stack/integrations/grok-bot/tests/test-surface-install.sh
 bash plugins/xbgst-stack/integrations/grok-bot/tests/test-surface-identity.sh
+bash plugins/xbgst-stack/integrations/grok-bot/tests/test-surface-inject.sh
 ```
