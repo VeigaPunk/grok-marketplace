@@ -9,6 +9,7 @@ Public **Grok Build** marketplace: **xbgst-stack** (orchestrator agents/skills/c
 | **Not included** | `heuer-planning` — lives on **ds4cc** marketplace, not here |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 | **Frontier** | [FRONTIER.md](FRONTIER.md) (next moves when green) |
+| **Surfaces** | [SURFACES.md](SURFACES.md) (host CLI/auth/layer snapshot; not HOST-ORCH names) |
 
 ## Install
 
@@ -69,6 +70,8 @@ grok plugin install grok-build-livepatch@veigapunk/grok-marketplace --trust
 | `commands/` | `/xbgst`, `/xbgst-livepatch`, aliases |
 | `livepatch/` | Manual patch + optional 6h systemd timer |
 | `scripts/install-host.sh` | Idempotent host wire-up |
+
+Repo-root [SURFACES.md](SURFACES.md) is the current host snapshot of binaries, auths, overlays, and execution layers. Use it when changing this README so aliases and layers stay distinct from grok-orch names.
 
 ## Local gates
 

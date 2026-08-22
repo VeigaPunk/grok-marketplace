@@ -2,7 +2,8 @@
 
 **Channel:** annotated tag `grok-stable` peels to shippable `main`.  
 **Policy:** local-first → APPROVED → commit → `git push -u origin main` (no fork/PR default).  
-**Not in this marketplace:** `heuer-planning` (ds4cc only).
+**Not in this marketplace:** `heuer-planning` (ds4cc only).  
+**Host snapshot:** [SURFACES.md](SURFACES.md) (plazir27 2026-08-22). CLIs / auths / layers. Not HOST-ORCH names. Refresh when those move.
 
 ## Last verified green (maintainers)
 

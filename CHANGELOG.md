@@ -4,6 +4,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## 1.1.24
 
+- Add [SURFACES.md](SURFACES.md): plazir27 host snapshot of CLIs, auths, overlays, and execution layers (2026-08-22). Distinct from `HOST-ORCH-INVENTORY.txt` (names fixture). Not a compat score.
 - Vendor this host’s grok-orch surface into `xbgst-stack`: skills `godspeed` + `wwkd`, `ssot/godspeed-core` trilogy, symlink overlay via `install-host.sh` (dir symlink if dest missing; per-file if dest is a real dir).
 - Primary consumer install is `scripts/install-xbgst-stack.sh` (curl|bash one-liner): marketplace add + `plugin install --trust` + that plugin’s `install-host`; merge-enable only; no livepatch FORCE apply; `--from-tree` for local overfit.
 - Phase 0 paths fall back to the plugin tree (no `~/Projects` required). `scout.md` YAML no longer uses a bare `tools: *` alias.
