@@ -7,4 +7,4 @@ argument-hint: <task>
 
 Same as **`/xbgst`** (xbgst-mode / xask-first). Load skill **xbgst** with `$ARGUMENTS`.
 
-Grok host: spawn named specialists only. No `~/.claude/*`. PATH `xask` first (`--spark --gs --service-tier fast`).
+Grok host: spawn named specialists only. No `~/.claude/*`. PATH `xask` first with flags that name the target CLI (`--gs cdx` stock; `--spark` opt-in).

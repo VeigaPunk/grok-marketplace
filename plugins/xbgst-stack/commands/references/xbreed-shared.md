@@ -50,39 +50,47 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 **Banned:** `general-purpose`, `explore`.
 
-## xbgst-mode xask consult (Codex router via sekhmet)
+## xbgst-mode xask consult (any CLI via flags)
 
-`/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask`, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Gemma/`g`/`gemini` SUBBED. Do not treat `xbreed team mailbox` as a live DM (it is a log).
+`/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask` **with flags that name the target CLI**, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
-ChatGPT default argv (titanium, not stock):
+`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Bare `xask cdx` is stock xbreed.
 
 ```
-xask --spark --gs --service-tier fast cdx '<q>'
+xask --gs [flags] <route> '<q>'
 ```
 
-Umwelt: grok is the **caller**. Consult callees are sekhmet L3 (codex-titanium) unless Token Plan is named. Do not `xask grok` as FIRST bash from a grok teammate (that is grok-consults-grok).
-
-FIRST Bash (copy-paste):
+FIRST Bash (copy-paste by flag):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| ChatGPT default (`cdx`) | `xask --spark --gs --service-tier fast cdx '<q>'` | sekhmet L3 → `codex-titanium` |
-| Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38` → `codex -p qwen38` (opt-in; xask unsets `CODEX_BIN`) |
+| ChatGPT default (`cdx`) | `xask --gs cdx '<q>'` | stock `xbreed ask codex` |
+| L3 spark | `xask --spark --gs --service-tier fast cdx '<q>'` | sekhmet L3 → `codex-titanium` |
+| Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38` (xask unsets `CODEX_BIN`) |
+| Token Plan DeepSeek | `xask --gs ds-flash '<q>'` / `ds-pro` | Token Plan wrappers |
+| Grok oneshot | `xask --gs grok '<q>'` | `grok --always-approve --no-subagents --verbatim -p` |
+| Kimi | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` |
+| Local Gemma | `xask --gs gemma '<q>'` | `xbreed ask gemma` |
+| Sol review | `xask --gpt55 --gs -e low cdx '<q>'` | stock gpt-5.6-sol |
 
-`ds-flash` / `ds-pro` exist on protocol xask when the user names that profile; they are **not** teammate FIRST-bash defaults. Grok-as-xask (`xask --gs grok`) is lead/script oneshot only — not this paste grid. `--substrate stock` / `--gpt55` remain opt-in stock xbreed; they are not gx-* FIRST defaults.
+`--substrate sekhmet` is the same spark opt-in as `--spark`. `--substrate stock` keeps ChatGPT on xbreed. Do not `xask grok` as FIRST bash from a grok teammate (grok-consults-grok); pick another route.
 
 | Role | xbgst-mode FIRST |
 |---|---|
-| `scout`, `labrat`, `executor`, `connector` | `xask --spark --gs --service-tier fast cdx` (**or** `qwen38` when the user named Token Plan) |
-| `reviewer`, `sentinel`, `critic`, `mutation-tester` | `xask --spark --gs --service-tier fast cdx` (**or** `qwen38` when the user named Token Plan) |
+| `scout`, `labrat`, `executor`, `connector` | `xask --gs` + flags for the named CLI (`cdx` default; `--spark` only when L3 is requested) |
+| `reviewer`, `sentinel`, `critic`, `mutation-tester` | same; `--gpt55 --gs -e low cdx` when reviewing |
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
 
-`xask --spark` is L3 `sekhmet run` (`gpt-5.3-codex-spark` primary, `gpt-5.6-luna` fallback, inherit `CODEX_BIN=codex-titanium`, `XBRD_SPARK_SERVICE_TIER=fast`). Bare `xask cdx` now auto-spark. gx-* never exec `codex-titanium` themselves.
+`xask --spark` is L3 `sekhmet run` (`gpt-5.3-codex-spark` primary, `gpt-5.6-luna` fallback, inherit `CODEX_BIN=codex-titanium`, `XBRD_SPARK_SERVICE_TIER=fast`). Bare `xask cdx` does **not** auto-spark. gx-* never exec `codex-titanium` themselves.
 
-Forbidden from gx-* FIRST bash: `xask grok`; `xask-l3`; `gemma\|g\|gemini`; `xask --spark grok\|qwen38\|ds-*`; direct `codex-titanium`; exporting `CODEX_BIN` on Token Plan/grok execs (xask must `env -u`).
+Forbidden from gx-* FIRST bash: `xask-l3`; `xask --spark grok\|qwen38\|ds-*\|kimi\|gemma`; direct `codex-titanium`; exporting `CODEX_BIN` on Token Plan/grok execs (xask must `env -u`).
 
 Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `docs/model-routing.md`.
+
+### Extract — spark vs stock
+
+Non-spark routes: quote PATH `xask` stdout (the model answer). `--json` / `-o` follow the target CLI.
 
 ### Extract (`xask --spark`) — model answer is not CLI stdout
 

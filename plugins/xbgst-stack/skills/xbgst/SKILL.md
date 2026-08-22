@@ -65,7 +65,7 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Judge is Grok.** All roles map to Grok. Never spawn type `xask`. Never Claude TeamCreate. Language follows the repo.
-- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` = the crossbreed path: specialists FIRST call PATH `xask` (sekhmet/`codex-titanium`, `service_tier=fast`) and remain the runners. Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Never `xask grok` as gx-* FIRST. Role→lane: `commands/references/xbreed-shared.md`.
+- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` = the crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (stock `xask --gs cdx` default; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
 
 ## Local-first git posture (locked — permanent)
 
@@ -148,7 +148,7 @@ PrimeAgent is optional host tooling, not a prerequisite or inventory item. Crede
 
 | Axis family | Agent | Model | Delegation | Tools |
 |---|---|---|---|---|
-| Research, prior art, outside-world | `scout` (grok + godspeed) | grok | xbgst-mode FIRST `xask --spark --gs --service-tier fast cdx`; then native web_search + browse + aaron | All |
+| Research, prior art, outside-world | `scout` (grok + godspeed) | grok | xbgst-mode FIRST PATH `xask --gs` + flags for the named CLI; then native web_search + browse + aaron | All |
 | Correctness, bugs, code review | `reviewer` (grok + godspeed) | grok | direct code read + bash test runs | All |
 | Empirical probes, dry-runs | `labrat` (grok-4.6-low + godspeed) | grok-4.6-low | single-shot bash / repo-native execution, fire-and-forget | All |
 | Code execution, implementation | `executor` (grok-4.6-low + godspeed) | grok-4.6-low | write_file / edit_file / bash (repo language) | All |

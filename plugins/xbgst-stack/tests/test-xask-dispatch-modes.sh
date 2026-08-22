@@ -49,8 +49,9 @@ need "$SKILL" "mode: xbgst | xgs"
 
 # 4) scout xask-first + 4-layer + xgs skip
 need "$SCOUT" "FIRST tool"
-need "$SCOUT" "xask --spark --gs"
-need "$SCOUT" "--service-tier fast"
+need "$SCOUT" "xask --gs"
+need "$SHARED" "--spark"
+need "$SHARED" "xask --gs cdx"
 need "$SCOUT" "<raw_output>"
 need "$SCOUT" "BLOCKED"
 need "$SCOUT" "mode: xgs"
