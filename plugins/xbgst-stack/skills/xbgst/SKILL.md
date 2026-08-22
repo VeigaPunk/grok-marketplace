@@ -266,7 +266,7 @@ When the prompt contains "godspeed" or skill is activated via xbgst:
 3. Dispatch up to 16 specialists per round (hardcap 16 concurrent agents) (parallel tool calls, each with godspeed injected). **Always include connector.**
 4. Run Pareto filter: evidence gate first (drop moves missing required `evidence:`); then accept remaining moves that improve ≥1 axis and regress none.
 5. Compile round summary.
-6. Exit only when Round N produced zero axis improvements vs Round N-1 or 4 rounds reached.
+6. Exit only when Round N produced zero axis improvements vs Round N-1 or 6 rounds reached.
 
 **Labrat swarm:** up to 16 labrats (grok-4.5-fast-low) in parallel. Fire-and-forget. Each has godspeed (directive only).
 
@@ -274,7 +274,7 @@ When the prompt contains "godspeed" or skill is activated via xbgst:
 
 **Round phases:** PROPOSE (parallel, must contain connector) → CROSS-CRITIQUE → PARETO FILTER (judge) → COMPILE (round summary) → **if milestone shippable: APPROVED + commit + push `main` (local-first)**. If any axis improved, dispatch next round immediately inside the same activation — do not pause, do not emit a round-boundary prompt, do not ask. The entire loop runs to completion in one response stream. Exit only with final DRAFT + AXES FINAL STATE.
 
-**Autonomous iteration:** One activation = full multi-round loop. The judge orchestrates every round internally until the frontier is reached (zero axis improvement vs previous round) or the hard 4-round cap. Emit only the final DRAFT + AXES FINAL STATE. Never emit "Round N ready", "continuing", "will run", or any intermediate prompt that waits for user input. No input from the user is necessary after the initial trigger. User interrupt is the sole external control.
+**Autonomous iteration:** One activation = full multi-round loop. The judge orchestrates every round internally until the frontier is reached (zero axis improvement vs previous round) or the hard 6-round cap. Emit only the final DRAFT + AXES FINAL STATE. Never emit "Round N ready", "continuing", "will run", or any intermediate prompt that waits for user input. No input from the user is necessary after the initial trigger. User interrupt is the sole external control.
 
 **Anti-premature-halt:** After each round, compare Round N survivors to Round N−1; dispatch N+1 if any axis improved; exit only on true zero-improvement or hard round cap. Round 2 always runs.
 
