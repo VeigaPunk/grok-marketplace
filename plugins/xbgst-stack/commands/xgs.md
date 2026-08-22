@@ -16,7 +16,7 @@ This is **not** an alias of `/xbgst`. `/xgs` is the native-only path. `/xbgst` i
 - Spawn named Grok specialists only. **Never** spawn type `xask`. Never `general-purpose` or `explore`.
 - **No Claude TeamCreate.**
 - Connector every PROPOSE round after Round 0.
-- L1 specialists ≤16 per wave. Godspeed injection: prepend byte-exact `ssot/godspeed-core/directive.md`; end exactly once with `| godspeed`.
+- Host-governed concurrency (certified at 64). Godspeed injection: prepend byte-exact `ssot/godspeed-core/directive.md`; end exactly once with `| godspeed`.
 - Handoff field: `mode: xgs`.
 
 `$ARGUMENTS` is the task.

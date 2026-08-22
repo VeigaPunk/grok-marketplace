@@ -4,6 +4,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- Host concurrency is 64. Dropped the 16/wave specialist cap. `[subagents] max_concurrent = 64` in livepatch `cli-config.toml`. Skill/commands no longer introduce a smaller package-level cap.
 - Split `/xgs` (native-only, no xask) from `/xbgst` (crossbreed). Named `gx-*` runners FIRST call PATH `xask --spark --gs --service-tier fast` (sekhmet / `codex-titanium`). `/xb` `/xbt` `/xbreed` follow xbgst-mode. Gate: `plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh`.
 
 ## 1.1.24

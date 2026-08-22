@@ -264,12 +264,12 @@ When the prompt contains "godspeed" or skill is activated via xbgst:
 
 1. Round 0: spawn planner (godspeed injected; planner loads skill **wwkd**).
 2. After plan: name axes (up to 8, each with direction + observable).
-3. Dispatch the useful specialists concurrently up to the host-governed ceiling (certified at 64), each with Godspeed injected. Local specialist high cap: **16 per wave** (fleet convention "Host specialists ≤16"); overflow demand routes to spark substrates at `-j 64`, launched in the SAME turn. Freeze the roster before the first spawn; never split a wave across turns; never trickle-dispatch 1–2 when more roster rows exist; a wave below 4 requires fewer than 4 evidence-bearing work items. Resilience: failed spawns are retried or abandoned immediately, never awaited indefinitely; on recurrent transport failure drop to staggered waves ≤8. **Always include connector.**
+3. Dispatch the useful specialists concurrently up to the host-governed ceiling (certified at 64), each with Godspeed injected. Do **not** introduce a smaller package-level cap (no 16/wave, no 4-slot default). Overflow demand routes to spark substrates at `-j 64`, launched in the SAME turn. Freeze the roster before the first spawn; never split a wave across turns; never trickle-dispatch 1–2 when more roster rows exist. Resilience: failed spawns are retried or abandoned immediately, never awaited indefinitely. **Always include connector.**
 4. Run Pareto filter: evidence gate first (drop moves missing required `evidence:`); then accept remaining moves that improve ≥1 axis and regress none.
 5. Compile round summary.
 6. Exit only when Round N produced zero axis improvements vs Round N-1 or 6 rounds reached.
 
-**Labrat swarm:** run useful labrats (grok-4.6-low) in wide parallel waves under the same wave mechanics — host-local specialist high cap 16/wave; substrate probe jobs keep the certified `-j 64` ceiling. Fire-and-forget. Each has Godspeed (directive only).
+**Labrat swarm:** run useful labrats (grok-4.6-low) in wide parallel waves under the same wave mechanics — host ceiling 64; substrate probe jobs keep `-j 64`. Fire-and-forget. Each has Godspeed (directive only).
 
 **DESPAWN handling:** Acknowledge and release the session slot.
 
