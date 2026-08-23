@@ -3,7 +3,22 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GT="$ROOT/gx-teams.sh"
-CANON="${GX_TEAMS_GODSPEED_DIRECTIVE:-$ROOT/../grok-marketplace/plugins/xbgst-stack/ssot/godspeed-core/directive.md}"
+if [[ -n "${GX_TEAMS_GODSPEED_DIRECTIVE:-}" ]]; then
+  CANON="$GX_TEAMS_GODSPEED_DIRECTIVE"
+else
+  CANON=""
+  for cand in \
+    "$ROOT/../../ssot/godspeed-core/directive.md" \
+    "$ROOT/../grok-marketplace/plugins/xbgst-stack/ssot/godspeed-core/directive.md" \
+    "${HOME}/.grok/ssot/godspeed-core/directive.md"
+  do
+    if [[ -f "$cand" ]]; then
+      CANON="$cand"
+      break
+    fi
+  done
+fi
+[[ -n "$CANON" ]] || { echo "gate-godspeed: canonical directive missing" >&2; exit 1; }
 EXPECTED_SHA='db88963cbdf5a0db22b460b284bf6f1d1f4abac9eaadb28bdb5e9bffe27be3bb'
 TMP_DIR=$(mktemp -d)
 cleanup() { rm -rf -- "$TMP_DIR"; }

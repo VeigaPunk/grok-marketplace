@@ -27,6 +27,7 @@ resolve_godspeed_directive() {
   [[ -n "${GX_TEAMS_GODSPEED_DIRECTIVE:-}" ]] \
     && candidates+=("$GX_TEAMS_GODSPEED_DIRECTIVE")
   candidates+=(
+    "$SCRIPT_ROOT/../../ssot/godspeed-core/directive.md"
     "$SCRIPT_ROOT/../grok-marketplace/plugins/xbgst-stack/ssot/godspeed-core/directive.md"
   )
   if [[ -n "${HOME:-}" ]]; then
