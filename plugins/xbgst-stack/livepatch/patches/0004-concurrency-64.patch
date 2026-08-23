@@ -1,0 +1,136 @@
+diff --git a/crates/codegen/xai-grok-shell/src/config/mod.rs b/crates/codegen/xai-grok-shell/src/config/mod.rs
+index b9990ec..156a6e4 100644
+--- a/crates/codegen/xai-grok-shell/src/config/mod.rs
++++ b/crates/codegen/xai-grok-shell/src/config/mod.rs
+@@ -298,11 +298,13 @@ impl SubagentsConfig {
+         config: Option<i64>,
+         remote: Option<u32>,
+     ) -> usize {
++        // Ignore remote: a 4-slot remote pin must not beat the host ceiling.
++        let _ = remote;
+         resolve_positive_count(
+             Self::ENV_MAX_CONCURRENT,
+             env,
+             config,
+-            remote,
++            None,
+             xai_grok_tools::implementations::grok_build::task::admission::DEFAULT_MAX_CONCURRENT,
+         )
+     }
+@@ -311,11 +313,12 @@ impl SubagentsConfig {
+         config: Option<i64>,
+         remote: Option<u32>,
+     ) -> usize {
++        let _ = remote;
+         resolve_positive_count(
+             Self::ENV_WORKFLOW_MAX_CONCURRENT,
+             env,
+             config,
+-            remote,
++            None,
+             crate::session::workflow::host_service::DEFAULT_WORKFLOW_MAX_CONCURRENT_AGENTS,
+         )
+     }
+diff --git a/crates/codegen/xai-grok-shell/src/config/tests.rs b/crates/codegen/xai-grok-shell/src/config/tests.rs
+index 9ab3b64..a19187e 100644
+--- a/crates/codegen/xai-grok-shell/src/config/tests.rs
++++ b/crates/codegen/xai-grok-shell/src/config/tests.rs
+@@ -1118,19 +1118,28 @@ fn subagents_config_parses_max_depth_from_toml() {
+     });
+ }
+ #[test]
+-fn subagent_limit_counts_resolve_env_over_toml_over_remote_over_default() {
++fn subagent_limit_counts_resolve_env_over_toml_over_default_ignoring_remote() {
+     use xai_grok_tools::implementations::grok_build::task::admission;
+     let resolve = SubagentsConfig::resolve_max_concurrent;
+     assert_eq!(resolve(Some("3"), Some(2), Some(4)), 3);
+     assert_eq!(resolve(None, Some(2), Some(4)), 2);
+-    assert_eq!(resolve(None, None, Some(5)), 5);
++    assert_eq!(
++        resolve(None, None, Some(4)),
++        admission::DEFAULT_MAX_CONCURRENT,
++        "remote 4-slot pin must not beat the compiled default"
++    );
+     assert_eq!(resolve(None, None, None), admission::DEFAULT_MAX_CONCURRENT);
++    assert_eq!(admission::DEFAULT_MAX_CONCURRENT, 64);
+     assert_eq!(resolve(Some("-2"), Some(2), None), 2);
+     assert_eq!(resolve(None, Some(0), Some(3)), 1);
+     assert_eq!(
+             SubagentsConfig::resolve_workflow_max_concurrent(None, None, None),
+             crate::session::workflow::host_service::DEFAULT_WORKFLOW_MAX_CONCURRENT_AGENTS
+         );
++    assert_eq!(
++            crate::session::workflow::host_service::DEFAULT_WORKFLOW_MAX_CONCURRENT_AGENTS,
++            64
++        );
+ }
+ #[test]
+ fn subagent_limit_behavior_resolves_env_over_toml_over_remote_over_queue() {
+diff --git a/crates/codegen/xai-grok-shell/src/session/workflow/host_service.rs b/crates/codegen/xai-grok-shell/src/session/workflow/host_service.rs
+index 22b0b0a..6952de3 100644
+--- a/crates/codegen/xai-grok-shell/src/session/workflow/host_service.rs
++++ b/crates/codegen/xai-grok-shell/src/session/workflow/host_service.rs
+@@ -20,10 +20,10 @@ use super::tracker::WorkflowTracker;
+ 
+ pub(crate) const WORKFLOW_MAX_AGENT_RUNS: u32 =
+     (xai_workflow::MAX_AGENT_BUDGET as u32) * (SCHEMA_CONTRACT_RETRIES + 1);
+-pub(crate) const DEFAULT_WORKFLOW_MAX_CONCURRENT_AGENTS: usize = 32;
++pub(crate) const DEFAULT_WORKFLOW_MAX_CONCURRENT_AGENTS: usize = 64;
+ 
+-/// The configured cap clamped to the machine's parallelism, so small hosts
+-/// run fewer agents at once.
++/// Honor the configured/default cap. Do not clamp to machine parallelism —
++/// that is how a 4-core host falls back to 4 slots.
+ pub(crate) fn workflow_max_concurrent_agents(configured: usize) -> usize {
+     workflow_max_concurrent_agents_from(
+         configured,
+@@ -33,19 +33,8 @@ pub(crate) fn workflow_max_concurrent_agents(configured: usize) -> usize {
+     )
+ }
+ 
+-fn workflow_max_concurrent_agents_from(configured: usize, parallelism: usize) -> usize {
+-    let clamp = parallelism.max(2);
+-    let requested = configured.max(1);
+-    // Logged for the default too: a small host silently running fewer than
+-    // the default agents per run would otherwise be invisible to operators.
+-    if requested > clamp {
+-        tracing::info!(
+-            requested,
+-            clamped_to = clamp,
+-            "workflow agent concurrency clamped to machine parallelism"
+-        );
+-    }
+-    requested.min(clamp)
++fn workflow_max_concurrent_agents_from(configured: usize, _parallelism: usize) -> usize {
++    configured.max(1)
+ }
+ pub(crate) const WORKFLOW_MAX_SCRIPT_TELEMETRY_EVENTS: u32 = 64;
+ pub(crate) const WORKFLOW_MAX_SCRATCH_FILES: usize = 64;
+@@ -1005,11 +994,11 @@ mod tests {
+     }
+ 
+     #[test]
+-    fn concurrent_agents_clamps_to_parallelism() {
++    fn concurrent_agents_honor_configured_cap_without_cpu_clamp() {
+         let from = workflow_max_concurrent_agents_from;
+         assert_eq!(from(8, 64), 8);
+-        assert_eq!(from(64, 8), 8);
+-        assert_eq!(from(64, 1), 2);
++        assert_eq!(from(64, 8), 64);
++        assert_eq!(from(64, 1), 64);
+         assert_eq!(from(0, 64), 1);
+     }
+ 
+diff --git a/crates/codegen/xai-grok-tools/src/implementations/grok_build/task/admission.rs b/crates/codegen/xai-grok-tools/src/implementations/grok_build/task/admission.rs
+index 6e43f26..496614a 100644
+--- a/crates/codegen/xai-grok-tools/src/implementations/grok_build/task/admission.rs
++++ b/crates/codegen/xai-grok-tools/src/implementations/grok_build/task/admission.rs
+@@ -3,7 +3,7 @@
+ use super::types::SubagentRequest;
+ use crate::util::env::parse_positive_env;
+ 
+-pub const DEFAULT_MAX_CONCURRENT: usize = 32;
++pub const DEFAULT_MAX_CONCURRENT: usize = 64;
+ 
+ /// What happens to a spawn that arrives at the concurrent limit.
+ #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]

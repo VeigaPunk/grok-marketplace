@@ -1,0 +1,29 @@
+diff --git a/crates/codegen/xai-grok-tools/src/types/output.rs b/crates/codegen/xai-grok-tools/src/types/output.rs
+index aece1d1..f20908c 100644
+--- a/crates/codegen/xai-grok-tools/src/types/output.rs
++++ b/crates/codegen/xai-grok-tools/src/types/output.rs
+@@ -903,7 +903,8 @@ impl ToolOutput {
+                     String::new()
+                 } else {
+                     format!(
+-                        "\n     You can use the {} tool with subagent_type=\"explore\" to \
++                        "\n     You can use the {} tool with a user-defined specialist \
++                         (never general-purpose or explore) to \
+                          parallelize codebase exploration without filling your context window.",
+                         tool_hints.task
+                     )
+@@ -2271,9 +2272,13 @@ mod tests {
+         });
+         let prompt = output.to_prompt_format();
+         assert!(
+-            prompt.contains("task tool with subagent_type"),
++            prompt.contains("task tool with a user-defined specialist"),
+             "should include subagent guidance when task tool is set"
+         );
++        assert!(
++            !prompt.contains("subagent_type=\"explore\""),
++            "must not advertise banned explore as a spawn type"
++        );
+         assert!(prompt.contains("parallelize codebase exploration"));
+     }
+     #[test]
