@@ -107,6 +107,12 @@ else
   ok "install-host marketplace-first (no Projects CANON preference)"
 fi
 
+if rg -n '/home/vgpnk/' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  bad "install-host must not hardcode host hangar paths"
+else
+  ok "install-host has no host hangar path"
+fi
+
 if [[ -f plugins/xbgst-stack/integrations/gx-teams/gx-teams.sh && -f plugins/xbgst-stack/integrations/gx-teams/mailbox/Cargo.toml ]]; then
   ok "gx-teams mailbox vendored under integrations/"
 else

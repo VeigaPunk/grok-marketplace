@@ -19,7 +19,7 @@ STACK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LP="$STACK_ROOT/livepatch"
 GROK_HOME="${GROK_HOME:-$HOME/.grok}"
 LOCAL_BIN="${XBGST_LOCAL_BIN:-$HOME/.local/bin}"
-HANGAR_GX_TEAMS="${XBGST_HANGAR_GX_TEAMS:-/home/vgpnk/Projects/xbgst/gx-teams}"
+HANGAR_GX_TEAMS="${XBGST_HANGAR_GX_TEAMS:-}"
 
 usage() {
   cat <<'EOF'
@@ -206,7 +206,8 @@ if [[ "$missing" -eq 1 ]]; then
   exit 1
 fi
 
-# PATH overlay: gx-teams + xbgst-mailbox. Vendor first; hangar until M07.
+# PATH overlay: gx-teams + xbgst-mailbox from plugin integrations.
+# Optional hangar only if XBGST_HANGAR_GX_TEAMS is set.
 GX_TEAMS_SRC="$STACK_ROOT/integrations/gx-teams"
 if [[ ! -x "$GX_TEAMS_SRC/gx-teams.sh" && -n "$HANGAR_GX_TEAMS" && -x "$HANGAR_GX_TEAMS/gx-teams.sh" ]]; then
   GX_TEAMS_SRC="$HANGAR_GX_TEAMS"
