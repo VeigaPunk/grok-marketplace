@@ -1,159 +1,114 @@
-# grok-build-livepatch
+# grok-titanium
 
-**grok-titanium** — hard-ban Grok Build's `general-purpose` and `explore` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005**. PATH: `grok-titanium`.
+Stock Grok Build still ships **`general-purpose`** and **`explore`** as the advertised builtins, then lets a **remote 4-slot pin** beat your host. That is not a team. That is a waiting room.
 
-xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not accept external PRs**. This repo is the practical path:
+**grok-titanium** is the livepatched CLI: named specialists, GP/explore **banned in the binary**, host ceiling **64**, workflows off, foreign Cursor/Claude/Codex settings clones off. PATH: `grok-titanium`.
 
-1. Track a minimal patch that removes those built-ins from the advertised roster and **rejects them at spawn validation**.
-2. Every **6 hours**, check whether upstream moved; re-apply the patch; run unit smoke; optionally rebuild the binary.
-3. Ship as a **public installable** (git clone + timer, or GitHub Actions watch).
+This is how Claude Code used to work **when it worked**. Then they walked into the clout-fable spiral of death and became sudo-masochists. The good orch was sitting there as free real estate. We took it. Now it is on a silver platter.
 
-## What the patch does
+## The way vs stock
 
-| Change | Effect |
-|--------|--------|
-| `BUILTIN_SUBAGENTS` → only `plan` | Model no longer sees `general-purpose` / `explore` |
-| `subagent_variants()` → only `Plan` | Discovery matches |
-| `default_subagent_type()` → `plan` | Omitted type is no longer GP |
-| `is_banned_subagent_type()` + gate (case-insensitive) | Spawn of banned names hard-fails even if shadowed |
-| Full-capability alias `agent` | First-party goal/scheduler/workflow keep full tools without GP |
-| Unit tests for ban + casefold | Smoke |
+Constants from `xai-org/grok-build` @ **`19d42e3`** (Grok Build 1.0.6). Do not recite folklore.
 
-Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
+| | Stock Grok Build | grok-titanium (patches **0001–0005**) |
+|---|---|---|
+| Advertised builtins | `general-purpose`, `explore`, `plan` (`BUILTIN_SUBAGENTS` len **3**) | `plan` only |
+| Omitted `subagent_type` | `default_subagent_type()` = **`general-purpose`** | **`plan`** |
+| Spawn GP / explore | advertised and spawnable | **hard-banned** (`is_banned_subagent_type`, case-insensitive), even if shadowed |
+| Task ads | `subagent_type="explore"` | user-defined specialist; never GP/explore |
+| Concurrent cap | compiled default **32** (`DEFAULT_MAX_CONCURRENT`). A **remote pin of 4** can beat it. | compiled **64**; remote pin ignored; no nproc clamp |
+| Workflows | default ON (nproc-clamps fan-out) | `resolve_workflows()` always false |
+| Foreign CLI clones | Cursor / Claude / Codex compat default ON | all cells false; native `.grok` / `.agents` stay |
+| First-party full tools | spawn `general-purpose` | resolvable alias `agent` (not Task-advertised, not banned) |
+
+The 4-slot number people feel is the **remote pin**, not the compiled 32. Titanium does not let remote win.
+
+## Free real estate (how it worked when it worked)
+
+Claude Code, in the era that actually moved, did **not** default the universe to a nameless explore gnome. You named a teammate. You gave it a job. You ran many of them. Connector every round. Godspeed: name the axes, iterate cheap in parallel, keep moves that improve any axis and harm none. The mailbox was a **log**. Live talk was a session, not a JSON array you `mkdir` into existence.
+
+That orch got cloned as **xbrd / xbgst**. Then the product people arrived with the clout fable — a spiral of death of:
+
+- generic `explore` / `general-purpose` as the *identity* of work
+- permission theater (sudo-masochists clicking Approve until the frontier dies)
+- a tiny concurrent cap so the model cannot embarrass the demo
+- workflows and foreign-compat scanners eating the turn before a specialist exists
+
+Stock Grok Build copied **that** death spiral (GP+explore advertised, omitted type = GP, remote 4). It did not copy the working era.
+
+Espionage, if you need the word: we lifted the **working** dispatch, not the fable. Named `gx-*` specialists. Binary ban so the model cannot “helpfully” spawn explore. Host 64. Always-approve if you want speed. **fnm always** so sixteen bash lanes do not PATH-stomp. JSONL mailbox is still a log; live DM is ACP. That is xbgst-stack `integrations/gx-teams`, **not** a grok-build crate, **not** patch 0006.
+
+Now it is a silver platter: five patches, this README, `PATH=grok-titanium`. Steal it back.
+
+## Upstream honesty
+
+`xai-org/grok-build` `CONTRIBUTING.md`:
+
+> This repository does **not** accept external pull requests or unsolicited patches.
+
+Zero PRs on that tree. Do not fork it as a stunt. **This repo is the public path.** Apache-2.0 upstream source; this packaging is MIT OR Apache-2.0.
 
 ## Patch series (applied in order)
 
 | Patch | Effect |
-|-------|--------|
-| 0001-ban-generic-subagents.patch | GP/explore hard-ban at spawn |
-| 0002-kill-workflows.patch | resolve_workflows() always false |
-| 0003-kill-foreign-cli-compat.patch | resolve_compat_config() all cells false |
-| 0004-concurrency-64.patch | DEFAULT_MAX_CONCURRENT=64; ignore remote 4-slot |
-| 0005-no-explore-plan-ads.patch | EnterPlanMode no explore ads |
+|---|---|
+| `0001-ban-generic-subagents.patch` | GP/explore hard-ban at spawn |
+| `0002-kill-workflows.patch` | `resolve_workflows()` always false |
+| `0003-kill-foreign-cli-compat.patch` | `resolve_compat_config()` all cells false |
+| `0004-concurrency-64.patch` | compiled 64; ignore remote 4-slot; no nproc clamp |
+| `0005-no-explore-plan-ads.patch` | do not advertise banned explore/GP as spawn types |
 
-No 0006. JSONL mailbox (`xbgst-mailbox`) is an OS-layer log shipped via xbgst-stack `integrations/gx-teams`, not a grok-build crate.
+No 0006. Native `.grok` / `.agents` discovery is unaffected.
 
-## Public site (Titanium / ds4cc Pages)
+The CLI ban is enforcement. `/xbgst` names specialists. A prompt that says “please don’t use explore” is not a ban.
 
-Primary Grok Builder install + config lives on the **ds4cc marketplace** GitHub Pages (same site as Codex Titanium builds):
+## Grok Bot is not this
 
-**https://veigapunk.github.io/ds4cc-marketplace/** · config: [grok-cli-config.toml](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml)
+**Grok Bot** (Electron `/opt/Grok Bot/sand`, class `grok-bot`) is not the judge and not this CLI. It is a chat toy that keeps proving it.
 
-Optional mirror under this repo `docs/` (if Pages enabled): `https://veigapunk.github.io/grok-build-livepatch/`
+Point at the shit it produced (in-tree, not vibes):
 
-## Recommended CLI config (website / host)
+- `integrations/grok-bot/docs/UI-MAP.md` — a field manual because three controls are named **Close** and one of them **quits the app**.
+- `button "New"` is a **stub factory** (`SAND_DEFAULT_AGENT_NAME = "New Bot"`). Click it, mint another empty card. That is not a fleet.
+- `integrations/grok-bot/FALLBACK.md` is the honest product: if local-exec cannot spawn `grok`, **paste** `grok --cwd … -p "/xbgst <task>"`. The bot is a paste buffer with a logo.
+- `bin/xbgst-surface-inject.sh` focuses `class:grok-bot` and fires **SHIFT+Insert** then **CTRL+Return** because the composer will not take a grown-up stdin.
 
-Public template: **[docs/cli-config.toml](docs/cli-config.toml)** (also on the Pages site) — marketplace sources, `xbgst-stack`, models, UI `permission_mode`, and subagent toggles aligned with the hard-ban.
+People get **really surprised** when they see something **moving mice on its own**. Yes. That is business. Computer-use, “Grok Bot's Computer,” inject helpers, the gasp. The Cursor partnership has to pay itself. The *work* still happens in **this** binary, with named specialists, not in a bot that cannot tell window-Close from dialog-Close.
 
-```bash
-# merge into your host config (do not commit secrets)
-cp docs/cli-config.toml ~/.grok/config.toml   # or merge by hand
-# then install stack + link livepatched binary
-grok plugin marketplace add VeigaPunk/grok-marketplace
-grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
-bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
-# optional timer: repeat install-host.sh with --install-timer
-./scripts/install-timer.sh --link-bin
-./scripts/install-timer.sh --status   # expect active_cli=livepatch
-```
+Use Grok Build. Use grok-titanium. Do not promote grok-bot to L1.
 
-## Quick install (local, every 6h)
+## Install
 
 ```bash
 git clone https://github.com/VeigaPunk/grok-build-livepatch.git
 cd grok-build-livepatch
-chmod +x scripts/*.sh
-./scripts/check-and-patch.sh --help   # usage only; no network
-./scripts/install-timer.sh --help
-./scripts/gates.sh                   # bash -n + --help (+ install-timer --status)
-./scripts/gates.sh --with-patch      # also clean-tree git apply --check (network)
-./scripts/check-and-patch.sh          # first run (clone/fetch + cargo — network-heavy)
-./scripts/install-timer.sh            # systemd --user timer @ 6h (binds ExecStart to this ROOT)
-./scripts/sync-stack-livepatch.sh    # sync copies; leaves timers untouched by default
-./scripts/sync-stack-livepatch.sh --install-timer # optional timer rebind
+./scripts/gates.sh
+./scripts/check-and-patch.sh   # apply onto public git @ 1.0.6 (19d42e3)
+./scripts/install-timer.sh --link-bin   # ~/.grok/bin/grok + grok-titanium
 ```
 
-Re-run `./scripts/install-timer.sh` after upgrades. It stamps `~/.local/state/grok-build-livepatch/preferred-install-root` and resolves ROOT as: `GROK_LIVEPATCH_ROOT` → stamp (if still valid) → this checkout. Use `./scripts/install-timer.sh --status` to verify the unit `ExecStart`. Plugin/marketplace copies of this script must be updated to honor the stamp, or they can rebind the timer; prefer installing from this public repo.
+Timer is **opt-in**. `--link-bin` is the PATH. Do not treat `check-and-patch` as “track downloads 1.0.8.” The known-good apply target is **1.0.6 (`19d42e3`)**.
 
-There is **no dry-run** that skips network on the zero-arg path; only `--help`/`-h` exits before clone/build.
-
-**Active CLI:** the systemd unit defaults `GROK_LIVEPATCH_REPLACE_BIN=1`, so each
-successful build (and the version-match light path) points `~/.grok/bin/grok` at
-`~/.local/opt/grok-build-livepatch/grok`. Opt out by setting
-`Environment=GROK_LIVEPATCH_REPLACE_BIN=0` on the user unit.
+Host overlay (named specialists, fnm-always, mailbox crate):
 
 ```bash
-./scripts/install-timer.sh --status     # active_cli=livepatch|stock-or-other
-./scripts/install-timer.sh --link-bin   # manual symlink if needed
+grok plugin marketplace add VeigaPunk/grok-marketplace
+grok plugin install xbgst-stack@veigapunk/grok-marketplace --trust
+bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 ```
 
-State + logs: `~/.local/state/grok-build-livepatch/` (`last-result` may be `ok`, `ok-reassert`, `noop`, `already-applied`, `needs-rebase`, or `fail`).
+`xbgst-stack` **1.1.25**. Config template: [docs/cli-config.toml](docs/cli-config.toml). Pages: [ds4cc-marketplace grok config](https://veigapunk.github.io/ds4cc-marketplace/grok-cli-config.toml).
 
-**Already-applied:** reverse-`git apply --check` success is pure noop. A bare forward `git apply --check` on an already-patched tree is expected to fail and is **not** the ship gate — use a clean upstream clone for integrity checks.
+## Related
 
-**Version-match light path:** when `last-patched-version` equals the current upstream tag, the timer re-asserts the patch + unit smoke on a clean tip and **skips** a full release rebuild if the install binary already exists (still re-links the CLI when `REPLACE_BIN=1`). Full rebuild only on version advance, missing binary, or `FORCE=1`.
-
-## Musketeer / Grok scheduler (6h prompt)
-
-If you prefer Grok-native scheduling (or [the-musketeer](https://github.com/search?q=the-musketeer) web bridge) instead of systemd:
-
-```text
-Every 6 hours: run the grok-build-livepatch watcher.
-
-cd ~/Projects/grok-build-livepatch && ./scripts/check-and-patch.sh
-Report: last-result, whether patch applied, whether cargo test banned_subagent passed.
-If exit 2 (needs-rebase), open/refresh the livepatch-break issue and draft a rebased patch.
-Do not spawn general-purpose or explore subagents while doing this.
-```
-
-In Grok Build TUI:
-
-```text
-/loop 6h cd ~/Projects/grok-build-livepatch && ./scripts/check-and-patch.sh; tail -20 ~/.local/state/grok-build-livepatch/watch.log
-```
-
-## GitHub Actions
-
-`.github/workflows/watch-release.yml` runs on a **6h cron**, applies the patch to a fresh clone of `xai-org/grok-build`, runs `cargo test -p xai-tool-types banned_subagent`, and opens a `livepatch-break` issue if the patch no longer applies.
-
-## Publish this repo (maintainers)
-
-If `gh` is not logged in but SSH works (`ssh -T git@github.com` → `Hi VeigaPunk!`), create the public repo with a PAT then push over SSH. Exact steps: **[docs/PUBLISH.md](docs/PUBLISH.md)**. Helper: `GH_TOKEN=… ./scripts/publish.sh`.
-
-## Marketplace-friendly layout
-
-```
-marketplace/   # plugin.json + install note; agents/ may be empty (no bundled agents)
-patches/       # 0001-ban-generic-subagents.patch
-scripts/       # check-and-patch.sh, install-timer.sh
-systemd/       # user timer units
-```
-
-`marketplace/` is **metadata + install note only** — it does not ship specialist agents. `marketplace/agents/` can be empty. The livepatch itself is the parent repo (`scripts/`, `patches/`, timer). Plugin discovery:
-
-```bash
-# optional: register local marketplace path / install plugin metadata
-grok plugin marketplace add ./marketplace
-# or
-grok plugin install ./marketplace --trust
-```
-
-## Relation to xbgst
-
-xbgst / xbrd godspeed walks should spawn **specialists** (`the-planner`, `scout`, `executor`, …), not Grok's generic built-ins. This livepatch enforces that at the **CLI validation layer**, not via a skill prompt.
-
-Host timer + CLI link details: **[docs/HOST.md](docs/HOST.md)**.
-
-## Related stack
-
-| Piece | Role | Link |
-|-------|------|------|
-| **grok-build-livepatch** (this repo) | CLI hard-ban GP/explore; 6h timer; optional Pages mirror | [VeigaPunk/grok-build-livepatch](https://github.com/VeigaPunk/grok-build-livepatch) · [mirror](https://veigapunk.github.io/grok-build-livepatch/) |
-| **grok-marketplace** | Public Grok `xbgst-stack` + nested livepatch (**1.1.22**) | [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) |
-| **ds4cc-marketplace** | Multi-CLI marketplace + **primary** Grok Builder install UX | [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) · [site](https://veigapunk.github.io/ds4cc-marketplace/) |
-| **xbrd-spark / sekhmet** | L3 swarm substrate (≤64 jobs); plugin `sekhmet` on ds4cc | [VeigaPunk/xbrd-spark](https://github.com/VeigaPunk/xbrd-spark) |
-| **xbgst-site** | Public xbgst hub | [site](https://veigapunk.github.io/xbgst-site/) · [VeigaPunk/xbgst-site](https://github.com/VeigaPunk/xbgst-site) |
+| Piece | Role |
+|---|---|
+| this repo | patches + grok-titanium PATH |
+| [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) `plugins/xbgst-stack` | orch, livepatch copy, gx-teams mailbox, fnm-always |
+| gx-teams `xbgst-mailbox` | JSONL **log**; live DM is ACP |
 
 ## License
 
-Patches against Apache-2.0 `xai-org/grok-build`. This packaging is **MIT OR Apache-2.0** (see [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE)).
+MIT OR Apache-2.0
+
+*this is the way*
