@@ -1,6 +1,6 @@
 # grok-build-livepatch
 
-**Hard-ban Grok Build's `general-purpose` and `explore` subagents in the CLI itself** — and keep that ban alive across upstream releases.
+**grok-titanium** — hard-ban Grok Build's `general-purpose` and `explore` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005**. PATH: `grok-titanium`.
 
 xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not accept external PRs**. This repo is the practical path:
 
@@ -20,6 +20,18 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 | Unit tests for ban + casefold | Smoke |
 
 Upstream constants for GP/explore prompts remain for legacy rendering only; they are **not** advertised and **cannot spawn**.
+
+## Patch series (applied in order)
+
+| Patch | Effect |
+|-------|--------|
+| 0001-ban-generic-subagents.patch | GP/explore hard-ban at spawn |
+| 0002-kill-workflows.patch | resolve_workflows() always false |
+| 0003-kill-foreign-cli-compat.patch | resolve_compat_config() all cells false |
+| 0004-concurrency-64.patch | DEFAULT_MAX_CONCURRENT=64; ignore remote 4-slot |
+| 0005-no-explore-plan-ads.patch | EnterPlanMode no explore ads |
+
+No 0006. JSONL mailbox (`xbgst-mailbox`) is an OS-layer log shipped via xbgst-stack `integrations/gx-teams`, not a grok-build crate.
 
 ## Public site (Titanium / ds4cc Pages)
 

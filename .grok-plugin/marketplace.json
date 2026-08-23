@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "xbgst-stack",
-      "version": "1.1.24",
-      "description": "Full Grok xbgst orch (agents, skills, wwkd, godspeed, ssot) + manual livepatch; optional timer via --install-timer. No heuer-planning (ds4cc).",
+      "version": "1.1.25",
+      "description": "Full Grok xbgst orch + grok-titanium livepatch + gx-teams mailbox; fnm-always; optional timer via --install-timer. No heuer-planning (ds4cc).",
       "category": "orchestration",
       "source": {
         "type": "local",
@@ -24,7 +24,7 @@
     },
     {
       "name": "grok-build-livepatch",
-      "version": "1.1.24",
+      "version": "1.1.25",
       "description": "Manual livepatch (also inside xbgst-stack); timer install is opt-in.",
       "category": "development",
       "source": {

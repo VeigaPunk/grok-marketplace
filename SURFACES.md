@@ -28,7 +28,7 @@ Status (runtime, orthogonal): `live-supported` | `optional` | `present-not-suppo
 
 Provenance: `ours` | `host-dirt` | `upstream`.
 
-Judge calls at snapshot time: livepatch = declared-unapplied; dirt stays present-not-supported unless a named xbgst contract exists; PrimeAgent stays out of HOST-ORCH.
+Judge calls: **grok-titanium** is on PATH (`~/.local/bin/grok-titanium` → livepatch ELF, series 0001–0005, ads-kill yes). Dirt stays present-not-supported unless a named xbgst contract exists; PrimeAgent stays out of HOST-ORCH.
 
 ---
 
@@ -36,7 +36,7 @@ Judge calls at snapshot time: livepatch = declared-unapplied; dirt stays present
 
 | Layer | Mechanism | Who | Live on this host |
 |---|---|---|---|
-| **L1-grok** | in-process `spawn_subagent` named `gx-*` | default judge | grok **1.0.5** stock ELF; plugin `xbgst-stack`; this session |
+| **L1-grok** | in-process `spawn_subagent` named `gx-*` | default judge | PATH `grok` ≡ `grok-titanium` livepatch ELF **1.0.6** (0001–0005); plugin `xbgst-stack`; `agent` still stock 1.0.8 |
 | **L1-opencode** | OpenCode `orch` + `the-*` | OpenCode sessions | 17 agents; `general`/`explore` disabled; `opencode` 1.18.21 |
 | **L1-codex** | stock Codex subagents + overlays | Codex/ChatGPT sessions | omarchy `codex` → `@openai/codex` **0.149.0**; `AGENTS.md` Godspeed-prefixed; `xbgst-codex` plugin in marketplace, **not verified installed under `~/.codex`** |
 | **L2-xask** | FIRST bash consult via protocol `xask` | optional user-ON | PATH `xask` ≡ ds4cc `scripts/xask` md5 `169732b8…` |
@@ -45,7 +45,7 @@ Judge calls at snapshot time: livepatch = declared-unapplied; dirt stays present
 | **L2-dsh** | pinned `@deepseek-ai/dsh@0.1.0-rc.8` | optional visual worker | cache under `~/.cache/xbgst-dsh/`; backend disabled by default |
 | **L2-select** | `xbrd-selector` | optional ranked choice | plugin docs only; **binary PATH-MISS** |
 | **L3-sekhmet** | `sekhmet`/`xbrd-spark` swarm ≤64 + `CODEX_BIN=codex-titanium` | explicit escalation | sekhmet **0.1.1**; titanium `0.146.0-alpha.10.1+titanium.1`; env file pins spark+luna+fast+j=64 |
-| **OS-gx-teams** | tmux panes + JSONL mailbox | Grok OS teammates (`grok -p`) | repo script; **PATH-MISS** |
+| **OS-gx-teams** | tmux panes + JSONL mailbox (`xbgst-mailbox`) | Grok OS teammates (`grok -p`) | vendored in xbgst-stack `integrations/gx-teams`; PATH `gx-teams` + `xbgst-mailbox` via install-host |
 | **DESK-grok-bot** | Electron `/opt/Grok Bot/sand` → skill local-exec `grok -p /xbgst` | trigger, **not** judge | `/usr/bin/grok-bot`; skill `xbgst-surface` |
 | **CDP family** | fnm + `agent-browser` + `musketeer-chrome` on loopback **9222** | web-UI adapters | binaries present; **9222 down this session** |
 
@@ -57,7 +57,7 @@ L1 xbgst remains sole scheduler, Pareto, `APPROVED`, integrator, shipper.
 
 | Class | Names | Evidence | Not |
 |---|---|---|---|
-| identity-ELF | `grok` ≡ `agent` | same realpath `~/.grok/downloads/grok-linux-x86_64` md5 `f2deeaa38682deca85ce4d002ad7a087` | two L1 hosts |
+| identity-ELF | `grok` ≡ `grok-titanium` | same realpath `~/.local/opt/grok-build-livepatch/grok` md5 `0c3ee309301af768930ec84325436a0b` | not `agent` (stock `grok-1.0.8-linux-x86_64`) |
 | identity-ELF (two cargo bins) | `sekhmet` ≡ `xbrd-spark` | this host **same md5** `b326f0bb70c69e8a6d7dd33312a8ca03`; one crate, two `[[bin]]` (not a grok-style symlink) | two L3 products |
 | npm-bin identity | `bailian` ≡ `bl` | same `bailian.mjs` md5 `88f2b8f484…` | Token Plan wrappers |
 | identity-ELF | `ds4cc-chrome` ≡ `musketeer-chrome` | same realpath/md5 `36154fd08be1…` | two CDP launchers |
@@ -66,7 +66,7 @@ L1 xbgst remains sole scheduler, Pareto, `APPROVED`, integrator, shipper.
 | slash (not CLIs) | `/xbgst` `/xb` `/xgs` `/xbt` `/xbreed` `/xbreed-team` `/xbgst-livepatch` `/xbgst-primeagent` | `~/.grok/commands/*.md` | PATH `xbreed` is a **different** object (Rust ELF 8.16.137) |
 | not-alias | `xask` ≠ `xask-l3` | md5 `169732b8…` vs `89f1b3ae…`; protocol vs sekhmet shim | |
 | not-alias | stock `codex` ≠ `codex-titanium` | omarchy bash `@openai/codex` 0.149.0 vs ELF titanium 0.146.0-alpha.10.1+titanium.1 | never symlink titanium as `codex` |
-| not-alias | `grok` ≠ `grok-bot` ≠ `grok-web` ≠ `grok-titanium`(MISS) | ELF vs Electron vs musketeer CDP CLI | |
+| not-alias | `grok`/`grok-titanium` ≠ `grok-bot` ≠ `grok-web` ≠ `agent` | livepatch ELF vs Electron vs musketeer CDP vs stock downloads | |
 | kimi-shaped names (four) | PATH `kimi` · xask model `kimi-k3`/`kimi-code` · CDP `kimiraikkoner` · banned skill `the-kimiraikkoner` vs enabled plugin `the-kimiraikoner` | different files/spellings | do not collapse |
 
 ---
@@ -79,12 +79,12 @@ These have a named contract **and** a live binary/overlay on this host.
 
 | Surface | Version / path | What we changed | Kind tags | Status |
 |---|---|---|---|---|
-| **Grok Build** | 1.0.5 · `~/.grok/downloads/grok-linux-x86_64` | **Huge overlay:** `xbgst-stack` 1.1.24 agents (16, GP/explore are *stub files*), skills, slash commands, ssot trilogy, `install-host.sh`. Config: plugins, marketplaces, `permission_mode=always-approve`, default `grok-4.6` / `xhigh`. | overlay=ours · running ELF=untouched/upstream | **live-supported** as L1 judge. Spawn hard-ban of GP/explore is **declared-unapplied** (stock ELF still lists those types). Overlay stubs + doctrine are what this session uses. |
+| **Grok Build / grok-titanium** | 1.0.6 (19d42e3) · `~/.local/opt/grok-build-livepatch/grok` | **Huge overlay:** `xbgst-stack` 1.1.25 agents, skills, slash commands, ssot, `install-host.sh` + gx-teams mailbox. Livepatch 0001–0005 (GP/explore ban, workflows kill, compat kill, concurrency-64, no explore ads). PATH `grok-titanium`. | overlay=ours · running ELF=livepatched | **live-supported** as L1 judge. Spawn hard-ban of GP/explore is **in the ELF**. |
 | **OpenCode** | 1.18.21 via omarchy npx `opencode-ai` | 17 agents (`orch` + 16 `the-*`), commands `xbgst`/`xbrd`/`sekhmet`, plugin `fnm-nudge.js`, `default_agent=orch`, `general`/`explore` **disabled in config**. | overlay=ours · PATH wrapper=host-dirt · ELF=untouched | **live-supported** L1′. Going well. No ELF patch. Auth at `~/.local/share/opencode/auth.json` (not `~/.config/opencode/auth.json`). |
 | **Codex (stock)** | omarchy wrapper → `@openai/codex` 0.149.0 | `~/.codex/config.toml` (never/danger-full-access, multi_agent_v2 **64**, Token Plan provider, Godspeed `AGENTS.md`). Used for E2 revenger + `xbreed ask codex`. | profile=ours · wrapper=host-dirt · ELF=untouched | **live-supported as foreign stock**. Not L3. |
 | **Codex Titanium** | ELF `~/.local/bin/codex-titanium` · `codex-cli 0.146.0-alpha.10.1+titanium.1` | Forked host binary. L3 only. | fork/ELF=ours | **live-supported L3 only**. Never Daybreak, never L2, never `xbreed ask`. |
 
-Grok “compat extremely high” = overlay volume + this session’s named specialists. It does **not** mean the running grok ELF is livepatched.
+Grok “compat extremely high” = overlay volume + this session’s named specialists. The running grok ELF **is** grok-titanium (livepatch 0001–0005) when `~/.grok/bin/grok` → `~/.local/opt/grok-build-livepatch/grok`.
 
 Codex “heavily modified per substrate” = **four surfaces**, not one CLI: stock 0.149 · titanium ELF · Token Plan wrappers/profiles · xask `cdx` token.
 
@@ -116,7 +116,7 @@ Vault item name only: `DashScope Token Plan Team (intl sk-sp)` in `AgentAutomati
 | Surface | Path | Status |
 |---|---|---|
 | grok-bot | `/usr/bin/grok-bot` → `/opt/Grok Bot/sand` | **live as trigger** (PATH + `xbgst-surface` contract). Surface tests **not re-run** this pass. Not the judge. |
-| gx-teams | `gx-teams/gx-teams.sh` | **optional** OS harness; PATH-MISS; gates exist in-tree |
+| gx-teams | `gx-teams` + `xbgst-mailbox` | OS harness; JSONL log via crate; fnm-always panes |
 
 ---
 
@@ -180,7 +180,7 @@ Default: present-not-supported unless a named xbgst contract exists. Scout mappe
 | name | status | contract |
 |---|---|---|
 | prime-agent | optional L2 | optional; never HOST-ORCH |
-| gx-teams | optional | repo script; PATH-MISS |
+| gx-teams | live OS harness | PATH `gx-teams` + `xbgst-mailbox`; fnm-always |
 | grok-bot | live trigger; tests unverified this pass | PATH `/usr/bin/grok-bot`; census beats scout PATH-MISS |
 | dsh | declared-unapplied | pin rc.8; backend disabled by default |
 | kimi | xask moonshot transport | PATH `kimi` 0.38.0; not an L1 host |
@@ -190,7 +190,7 @@ Default: present-not-supported unless a named xbgst contract exists. Scout mappe
 | xbgst-gdsd-fknpft | stub | do not revive |
 | xbrd-selector | optional / PATH-MISS | L2-select docs only |
 | xbgst-l3-orch | cargo-only | PATH-MISS |
-| grok-titanium | declared-unapplied | livepatch `--link-bin` name |
+| grok-titanium | live | `~/.local/bin/grok-titanium` → livepatch ELF |
 | aaron | optional | scout tool-of-record; CLI not on PATH |
 | vercel / exa | present-not-supported | grok plugins; exa MCP auth failed |
 | heuer-planning | present-not-supported | HOST-ORCH banned; ds4cc only |
@@ -201,14 +201,13 @@ Default: present-not-supported unless a named xbgst contract exists. Scout mappe
 
 | Name | Reality |
 |---|---|
-| grok livepatch ELF | patches exist (marketplace `0001`; standalone `0001+0002+0003`). Running grok is **stock downloads**. No `~/.local/opt/grok-build-livepatch`. No timer. Bundled GP/explore still advertised. |
-| `grok-titanium` | HOST.md name; **PATH-MISS** |
+| grok livepatch ELF | `~/.local/opt/grok-build-livepatch/grok` present. Standalone series **0001–0005** (ads-kill yes). PATH `grok` and `grok-titanium` are this ELF. Timer optional/uninstalled. |
 | livepatch timer | systemd user unit **not-found** |
 | `xbgst-codex` on Codex host | marketplace plugin v1.1.24 exists; `~/.codex` has Godspeed `AGENTS.md` + Token Plan, **no** verified xbgst skills install |
 | `xbgst-l3-orch` | `~/.cargo/bin/xbgst-l3-orch` exists; **PATH-MISS** |
 | `xbrd-selector` | ds4cc plugin docs; **binary PATH-MISS** |
 | `plazirhangar` | in-tree script; PATH-MISS |
-| `gx-teams` | in-tree; PATH-MISS |
+| `gx-teams` | PATH overlay from xbgst-stack `integrations/gx-teams` |
 | `kimi-code` as argv | PATH-MISS; live CLI is `kimi` 0.38.0 (same npm package) |
 | `xbgst-gdsd-fknpft` | compile-dead stub; do not revive |
 | DSH | pinned rc.8; **not** a default L2 |
@@ -242,9 +241,9 @@ L3 setters (do not collapse to one number): crate const `DEFAULT_SERVICE_TIER=de
 ## Evidence index
 
 - Plan (hangar): `.xbgst/plan-surface-inventory.md`
-- Census TSV (hangar): `.xbgst/inventory/census.tsv` (M01 `grok,agent` same md5 **PASS**)
+- Census TSV (hangar): `.xbgst/inventory/census.tsv` (M01 `grok,agent` same md5 is **stale**; live `grok` ≡ `grok-titanium`, `agent` is stock 1.0.8)
 - Routing SSoT: `plugins/xbgst-stack/docs/model-routing.md`
 - L3 env vs crate: hangar `SSoT_TABLE.md` + `~/.xbgst/env.l3-sekhmet.sh`
-- Reviewer: livepatch_applied **FAIL**; grok≡agent **PASS**; xask≠xask-l3 **PASS**; orch fixture **FAIL**; OpenCode GP/explore disable **PASS**; codex≠titanium **PASS**
+- Reviewer: livepatch_applied **PASS** (0001–0005, ads-kill yes); grok≡grok-titanium **PASS**; grok≡agent **FAIL**; xask≠xask-l3 **PASS**; orch fixture **FAIL**; OpenCode GP/explore disable **PASS**; codex≠titanium **PASS**
 - Critic: kill 0–4 as a host score; kinds on layer rows
 - Connector: keep names / layers / aliases unmerged; four Codex-shaped names; four Kimi-shaped names

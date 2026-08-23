@@ -7,6 +7,12 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 - Host concurrency is 64. Dropped the 16/wave specialist cap. `[subagents] max_concurrent = 64` in livepatch `cli-config.toml`. Skill/commands no longer introduce a smaller package-level cap.
 - Split `/xgs` (native-only, no xask) from `/xbgst` (crossbreed). Named `gx-*` runners FIRST call PATH `xask --spark --gs --service-tier fast` (sekhmet / `codex-titanium`). `/xb` `/xbt` `/xbreed` follow xbgst-mode. Gate: `plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh`.
 
+## 1.1.25
+
+- Product name **grok-titanium**: livepatched Grok Build PATH `grok-titanium`. Livepatch series 0001–0005.
+- Vendor `gx-teams` + `xbgst-mailbox` into `xbgst-stack/integrations/gx-teams`. `install-host.sh` fail-closes without fnm, PATH-links mailbox/gx-teams, `--link-bin` when ELF exists (no timer).
+- Spawn protocol is fnm multishells **always** (`BLOCKED: fnm missing`). JSONL mailbox is a log; live DM stays ACP. Do not GC `fnm_multishells`.
+
 ## 1.1.24
 
 - Add [SURFACES.md](SURFACES.md): plazir27 host snapshot of CLIs, auths, overlays, and execution layers (2026-08-22). Distinct from `HOST-ORCH-INVENTORY.txt` (names fixture). Not a compat score.

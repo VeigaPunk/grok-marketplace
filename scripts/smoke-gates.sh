@@ -107,6 +107,51 @@ else
   ok "install-host marketplace-first (no Projects CANON preference)"
 fi
 
+if [[ -f plugins/xbgst-stack/integrations/gx-teams/gx-teams.sh && -f plugins/xbgst-stack/integrations/gx-teams/mailbox/Cargo.toml ]]; then
+  ok "gx-teams mailbox vendored under integrations/"
+else
+  bad "gx-teams mailbox missing from xbgst-stack/integrations/gx-teams"
+fi
+
+if rg -n 'command -v fnm' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1 \
+  && rg -n 'BLOCKED: fnm missing|fnm missing' plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
+  ok "install-host fail-closes without fnm"
+else
+  bad "install-host must fail-closed if fnm is missing"
+fi
+
+SKILL=plugins/xbgst-stack/skills/xbgst/SKILL.md
+if python3 - <<'PY'
+from pathlib import Path
+p=Path("plugins/xbgst-stack/skills/xbgst/SKILL.md").read_text()
+assert "fnm" in p.lower()
+for needle in ["If fnm unavailable, fall back", "Fallback pure bash isolation", "pure-bash-isolated"]:
+    if needle in p:
+        raise SystemExit(f"FAIL leftover default: {needle}")
+assert "spawn_method: fnm-multishell" in p
+sp=p.split("## Spawn protocol")[1].split("## WWKD")[0] if "## Spawn protocol" in p else ""
+assert "env -i" not in sp
+print("FNM_ALWAYS_OK")
+PY
+then
+  ok "xbgst SKILL fnm-always (no env -i spawn default)"
+else
+  bad "xbgst SKILL still documents env -i spawn fallback"
+fi
+
+if python3 - <<'PY'
+from pathlib import Path
+p=Path("SURFACES.md").read_text()
+assert "grok-titanium" in p
+assert "HOST.md name; **PATH-MISS**" not in p
+print("SURFACES_TITANIUM_OK")
+PY
+then
+  ok "SURFACES grok-titanium is not PATH-MISS"
+else
+  bad "SURFACES still claims grok-titanium PATH-MISS"
+fi
+
 if [[ -f scripts/overlays/install-host.xbgst-stack.sh ]]; then
   if diff -q scripts/overlays/install-host.xbgst-stack.sh plugins/xbgst-stack/scripts/install-host.sh >/dev/null 2>&1; then
     ok "install-host matches marketplace overlay"

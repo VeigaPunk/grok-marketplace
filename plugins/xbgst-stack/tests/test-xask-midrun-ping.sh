@@ -97,12 +97,21 @@ if env -i HOME="$tmp" TMPDIR="$tmp" PATH="/usr/bin:/bin" bash -c 'command -v xas
   fail "PATH=/usr/bin:/bin must hide xask (contract still true)"
 fi
 rm -rf "$tmp"
-# env -i must omit empty XBRD_SPARK_ROOT (sekhmet clap --root rejects "")
+# spawn protocol is fnm-always. env -i above is harness PATH-scrub only.
+# sekhmet clap --root rejects empty XBRD_SPARK_ROOT — gx-teams unsets it unless --spark.
 SKILL="$ROOT/skills/xbgst/SKILL.md"
-grep -F -q '${XBRD_SPARK_ROOT:+XBRD_SPARK_ROOT="$XBRD_SPARK_ROOT"}' "$SKILL" \
-  || fail "skill fallback must omit empty XBRD_SPARK_ROOT"
-if grep -F 'XBRD_SPARK_ROOT="${XBRD_SPARK_ROOT:-}"' "$SKILL" >/dev/null; then
-  fail "skill fallback must not export empty XBRD_SPARK_ROOT"
+grep -q 'Spawn protocol (fnm multishells always)' "$SKILL" \
+  || fail "skill must name fnm-always spawn protocol"
+if grep -E 'pure-bash-isolated|Fallback pure bash isolation|If fnm unavailable, fall back' "$SKILL" >/dev/null; then
+  fail "skill must not document env -i spawn fallback"
+fi
+GX="$ROOT/integrations/gx-teams/gx-teams.sh"
+if [[ -f "$GX" ]]; then
+  grep -q 'unset XBRD_SPARK_ROOT' "$GX" \
+    || fail "gx-teams must unset XBRD_SPARK_ROOT when pane is not spark"
+  if grep -F 'XBRD_SPARK_ROOT="${XBRD_SPARK_ROOT:-}"' "$GX" >/dev/null; then
+    fail "gx-teams must not export empty XBRD_SPARK_ROOT"
+  fi
 fi
 
 if [[ "${XASK_LIVE:-0}" == "1" ]]; then

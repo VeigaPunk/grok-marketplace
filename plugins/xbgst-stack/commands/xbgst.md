@@ -24,6 +24,7 @@ You are on **Grok Build**. This command is the Grok host **crossbreed** path of 
 - **Local-first:** after each judged milestone APPROVED → commit project files → `git push -u origin main` (SSH). No fork→PR default. No force-push of `main`.
 - **Language:** match the repo. No Rust lock.
 - **Connector** mandatory every PROPOSE round after Round 0.
+- **Spawn:** ALWAYS fnm multishells (`fnm-multishell`). If fnm missing: `BLOCKED: fnm missing`. Optional `tmux-pane` when `$TMUX` and PATH `gx-teams`.
 - Godspeed injection on every initial or follow-up teammate dispatch: prepend byte-exact `ssot/godspeed-core/directive.md` (quintessential subagent form), normalize repeated terminal markers, and end the full prompt exactly once with literal `| godspeed`.
 - Handoff field: `mode: xbgst`.
 

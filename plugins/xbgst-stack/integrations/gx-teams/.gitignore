@@ -1,0 +1,4 @@
+*.tmp
+.gx-teams/
+scripts/__pycache__/
+mailbox/target/

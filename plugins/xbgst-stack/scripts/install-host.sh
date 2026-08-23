@@ -2,6 +2,10 @@
 # Wire xbgst-stack + livepatch on this host (idempotent).
 # MARKETPLACE OVERLAY — do not replace with standalone Projects-canonical logic.
 #
+# fnm is required (fail-closed). Timer is opt-in (--install-timer).
+# Livepatch ELF present → install-timer.sh --link-bin (grok-titanium), no timer.
+# PATH: gx-teams + xbgst-mailbox (integrations/, hangar fallback until M07).
+#
 # Timer root (marketplace-first):
 #   1) GROK_LIVEPATCH_ROOT if set
 #   2) KEEP_STAMP=1 → honor preferred-install-root stamp
@@ -14,6 +18,8 @@ INSTALL_TIMER=0
 STACK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LP="$STACK_ROOT/livepatch"
 GROK_HOME="${GROK_HOME:-$HOME/.grok}"
+LOCAL_BIN="${XBGST_LOCAL_BIN:-$HOME/.local/bin}"
+HANGAR_GX_TEAMS="${XBGST_HANGAR_GX_TEAMS:-/home/vgpnk/Projects/xbgst/gx-teams}"
 
 usage() {
   cat <<'EOF'
@@ -22,6 +28,10 @@ Usage: install-host.sh [--help|-h] [--install-timer|--rebind-timer] [--no-timer]
   --install-timer  run install-timer.sh (opt-in)
   --rebind-timer   same as --install-timer
   --no-timer       compatibility no-op (manual mode, default)
+
+Fails closed if fnm is not on PATH. Default does not install a systemd timer.
+When ~/.local/opt/grok-build-livepatch/grok exists, runs install-timer.sh --link-bin
+(grok-titanium PATH) without enabling the timer.
 EOF
 }
 
@@ -36,6 +46,11 @@ for arg in "$@"; do
 done
 
 echo "→ xbgst-stack root: $STACK_ROOT"
+
+if ! command -v fnm >/dev/null 2>&1; then
+  echo "✗ fnm missing (install-host fail-closed)" >&2
+  exit 1
+fi
 
 # Slash-boundary ours-test (not prefix glob). Also treat any
 # */installed-plugins/xbgst-stack-* path as ours so plugin updates retarget.
@@ -191,6 +206,49 @@ if [[ "$missing" -eq 1 ]]; then
   exit 1
 fi
 
+# PATH overlay: gx-teams + xbgst-mailbox. Vendor first; hangar until M07.
+GX_TEAMS_SRC="$STACK_ROOT/integrations/gx-teams"
+if [[ ! -x "$GX_TEAMS_SRC/gx-teams.sh" && -n "$HANGAR_GX_TEAMS" && -x "$HANGAR_GX_TEAMS/gx-teams.sh" ]]; then
+  GX_TEAMS_SRC="$HANGAR_GX_TEAMS"
+fi
+mkdir -p "$LOCAL_BIN"
+link_path_bin() {
+  local dest=$1
+  local src=$2
+  if [[ -e "$dest" && ! -L "$dest" ]]; then
+    echo "⚠ skip $dest (exists, not a symlink)" >&2
+    return 1
+  fi
+  ln -sfn "$src" "$dest"
+  echo "✓ $(basename "$dest") → $dest"
+}
+if [[ -x "$GX_TEAMS_SRC/gx-teams.sh" ]]; then
+  link_path_bin "$LOCAL_BIN/gx-teams" "$GX_TEAMS_SRC/gx-teams.sh" || true
+else
+  echo "⚠ gx-teams.sh missing under $GX_TEAMS_SRC" >&2
+fi
+MAILBOX_DIR="$GX_TEAMS_SRC/mailbox"
+VENDORED_MAILBOX="$STACK_ROOT/integrations/gx-teams/mailbox/Cargo.toml"
+if [[ -f "$MAILBOX_DIR/Cargo.toml" ]]; then
+  if command -v cargo >/dev/null 2>&1; then
+    if [[ -f "$VENDORED_MAILBOX" || ! -x "$MAILBOX_DIR/target/release/xbgst-mailbox" ]]; then
+      cargo build --release --manifest-path "$MAILBOX_DIR/Cargo.toml"
+    fi
+  elif [[ -f "$VENDORED_MAILBOX" ]]; then
+    echo "✗ cargo missing; vendored mailbox Cargo.toml requires cargo --release" >&2
+    exit 1
+  fi
+fi
+MAILBOX_BIN=""
+if [[ -x "$MAILBOX_DIR/target/release/xbgst-mailbox" ]]; then
+  MAILBOX_BIN="$MAILBOX_DIR/target/release/xbgst-mailbox"
+elif [[ -x "$MAILBOX_DIR/target/debug/xbgst-mailbox" ]]; then
+  MAILBOX_BIN="$MAILBOX_DIR/target/debug/xbgst-mailbox"
+fi
+if [[ -n "$MAILBOX_BIN" ]]; then
+  link_path_bin "$LOCAL_BIN/xbgst-mailbox" "$MAILBOX_BIN" || true
+fi
+
 if [[ -d "$LP/scripts" ]]; then
   if [[ "$INSTALL_TIMER" -eq 1 ]]; then
     chmod +x "$LP/scripts/"*.sh
@@ -214,6 +272,12 @@ if [[ -d "$LP/scripts" ]]; then
     echo "  link:  bash $LP/scripts/install-timer.sh --link-bin"
   else
     echo "→ timer changes skipped (manual mode default). use --install-timer to opt in"
+  fi
+  LIVE_BIN="${GROK_LIVEPATCH_INSTALL:-$HOME/.local/opt/grok-build-livepatch}/grok"
+  if [[ -x "$LP/scripts/install-timer.sh" && -x "$LIVE_BIN" ]]; then
+    chmod +x "$LP/scripts/install-timer.sh"
+    echo "→ livepatch ELF present; --link-bin grok-titanium (no timer)"
+    bash "$LP/scripts/install-timer.sh" --link-bin
   fi
 else
   echo "⚠ livepatch/ missing under stack"

@@ -20,7 +20,7 @@ You are xbgst — the Grok-native godspeed orchestrator (clone of xbrd-gdsp-fknp
   - `executor` → grok-4.6-low
   - `labrat` → grok-4.6-low
   - All other roles → grok (default high)
-- **Spawn granularity:** Prefer `fnm multishells` (or equivalent isolated shell sessions) for each agent spawn so that bash environments are isolated per teammate. If fnm unavailable, fall back to pure bash with `env -i` + dedicated TMPDIR + unique PID namespace markers. Record spawn method in handoff.
+- **Spawn granularity:** ALWAYS `fnm multishells` for each agent spawn so bash environments are isolated per teammate. If fnm is missing: `BLOCKED: fnm missing`. Do not `env -i`. Record spawn method in handoff (`fnm-multishell | tmux-pane`).
 - **Concurrency:** honor the host ceiling and never replace it with a smaller package-level cap. This distribution is certified at 64 concurrent agents. tools={*} (every agent receives the full tool surface). Scout Bash tool of record: `aaron` (CLI; not MCP/agent/skill).
 
 ## Godspeed injection (MANDATORY for every dispatched agent)
@@ -141,7 +141,7 @@ PrimeAgent is optional host tooling, not a prerequisite or inventory item. Crede
 - **Judge / xbgst** runs on **Grok** at high effort.
 - **distiller, scribe, executor, labrat** → **grok-4.6-low**
 - **All other teammates** → **Grok** (high) with godspeed injected.
-- Spawn isolation via fnm multishells (preferred) or pure bash `env -i HOME=... TMPDIR=... PATH=...` per agent.
+- Spawn isolation via fnm multishells only. If fnm is missing: `BLOCKED: fnm missing`.
 - **Exception E2** (`the-revenger` only): outbound `cdx-revenger-*` via stock `codex` (never `codex-titanium`). See dispatch table footnote. Not a multi-provider rewrite.
 
 ## Sub-role dispatch table (Grok-mapped)
@@ -170,37 +170,19 @@ Prepend grok prefix: `gx-{role}-{suffix}`
 
 Examples: `gx-scout-docs`, `gx-reviewer-auth`, `gx-executor-tests`, `gx-planner-phase0`, `gx-connector-rN`
 
-## Spawn protocol (fnm multishells preferred)
+## Spawn protocol (fnm multishells always)
 
-For each agent:
+For each agent: if `command -v fnm` fails, stop with `BLOCKED: fnm missing`.
 
 ```
-# Preferred (if fnm present)
 fnm env --use-on-cd --shell bash | source
 # or
 eval "$(fnm env --shell bash)"
 # then isolated
 fnm exec --using <node-version-if-needed> -- bash -c '...'
-
-# Fallback pure bash isolation
-# Parent-expand operator bins BEFORE isolating HOME — PATH=/usr/bin:/bin hides ~/.local/bin/xask.
-export AGENT_ID=gx-xxx-$$
-export TMPDIR=/tmp/xbgst-$AGENT_ID
-mkdir -p $TMPDIR
-XASK_PATH="${HOME}/.local/bin:/usr/bin:/bin"
-env -i HOME=$TMPDIR TMPDIR=$TMPDIR PATH="$XASK_PATH" \
-  AGENT_ID=$AGENT_ID \
-  ${CODEX_BIN:+CODEX_BIN="$CODEX_BIN"} \
-  ${XDG_RUNTIME_DIR:+XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"} \
-  ${XBRD_SPARK_ROOT:+XBRD_SPARK_ROOT="$XBRD_SPARK_ROOT"} \
-  ${XBRD_SPARK_MODEL:+XBRD_SPARK_MODEL="$XBRD_SPARK_MODEL"} \
-  ${XBRD_SPARK_SERVICE_TIER:+XBRD_SPARK_SERVICE_TIER="$XBRD_SPARK_SERVICE_TIER"} \
-  ${XBRD_SPARK_JOBS:+XBRD_SPARK_JOBS="$XBRD_SPARK_JOBS"} \
-  ${XBRD_SPARK_FALLBACK_MODEL:+XBRD_SPARK_FALLBACK_MODEL="$XBRD_SPARK_FALLBACK_MODEL"} \
-  bash -c '...'
 ```
 
-Optional `spawn_method: tmux-pane` when `$TMUX` is set and `gx-teams` is on `PATH`; otherwise keep in-process `spawn_subagent` / `fnm-multishell` (or pure-bash-isolated) as fallback. `/xbgst` MAY call `gx-teams spawn --team … --name gx-{role}-{suffix} -- cmd …` (no Claude; no TeamCreate). Record the exact spawn command in the handoff block under `spawn_method:` (`fnm-multishell | pure-bash-isolated | tmux-pane`).
+Optional `spawn_method: tmux-pane` when `$TMUX` is set and `gx-teams` is on `PATH`. Otherwise spawn via `fnm-multishell`. `/xbgst` MAY call `gx-teams spawn --team … --name gx-{role}-{suffix} -- cmd …` (no Claude; no TeamCreate). Record the exact spawn command in the handoff block under `spawn_method:` (`fnm-multishell | tmux-pane`).
 
 ## WWKD posture (loaded by planner on Round 0)
 
@@ -304,7 +286,7 @@ unknowns: [<gaps>]
 prior_brief: <distiller summary, max 200 tokens>
 token_budget: <estimate>
 depth: <current> / max <limit>
-spawn_method: fnm-multishell | pure-bash-isolated | tmux-pane
+spawn_method: fnm-multishell | tmux-pane
 model: <grok | grok-4.6-low>
 language: match-repo
 mode: xbgst | xgs

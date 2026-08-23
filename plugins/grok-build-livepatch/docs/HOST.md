@@ -1,21 +1,20 @@
-# Host install (manual patch; optional timer)
+# Host install (manual patching default; timer optional)
 
 Canonical packaging lives in this public repo. xbgst-stack may vendor a
 `livepatch/` copy; prefer this checkout when both exist.
 
-## Manual patch (recommended default)
+## One-shot (recommended)
 
 ```bash
 cd ~/Projects/grok-build-livepatch   # or git clone …
 chmod +x scripts/*.sh
 ./scripts/gates.sh                  # offline health
 ./scripts/check-and-patch.sh        # first build (network + cargo)
-# optional automation:
-./scripts/install-timer.sh          # opt-in 6h timer → this ROOT
+./scripts/install-timer.sh          # optional: 6h timer → this ROOT; REPLACE_BIN=1 on unit
 ./scripts/install-timer.sh --status # ExecStart, ban_in_binary, active_cli
 # after upgrades, keep marketplace/plugin copies aligned:
-./scripts/sync-stack-livepatch.sh   # sync only; no timer changes
-# append --install-timer only when timer rebind is desired
+./scripts/sync-stack-livepatch.sh   # sync scripts + rewrite install-host (manual by default)
+./scripts/sync-stack-livepatch.sh --install-timer  # optional explicit timer rebind
 ```
 
 ## Root resolution (`install-timer.sh`)
@@ -37,9 +36,11 @@ cd ~/Projects/grok-build-livepatch && ./scripts/install-timer.sh
 
 ## xbgst-stack `install-host.sh`
 
-Wires agents, skills, and commands without changing timers. Pass
-`--install-timer` (or `--rebind-timer`) to opt into a marketplace-first timer
-bind. `--no-timer` remains accepted as a compatibility no-op.
+Marketplace-first. Installs host files without configuring a timer by default.
+Pass `--install-timer` to opt in; timer ROOT binds to the stack `livepatch/`
+via `GROK_LIVEPATCH_ROOT=$LP`. Fail-closes if `fnm` is missing. PATH-links
+`gx-teams` and `xbgst-mailbox`. `--link-bin` grok-titanium when the livepatch
+ELF exists (no cargo rebuild).
 
 ## Active CLI
 
@@ -52,9 +53,11 @@ Opt out: set `REPLACE_BIN=0` on the user unit.
 ./scripts/gates.sh                      # fails if install binary lacks ban string
 ```
 
-`--link-bin` also installs the **Grok Titanium** host name (Codex Titanium twin):
+`--link-bin` installs the **grok-titanium** product name (Codex Titanium twin):
 
-- `~/.local/opt/grok-titanium/grok` → livepatched binary
-- `~/.local/bin/grok-titanium` → that opt link
+- `~/.local/opt/grok-titanium/grok` → livepatched binary (series 0001–0005)
+- `~/.local/bin/grok-titanium` → that opt link (PATH)
 
-Resolve: `GROK_BIN` → `grok-titanium` → `grok`. Same ban; first livepatch iteration is the host binary.
+Resolve: `GROK_BIN` → `grok-titanium` → `grok`. Same ban; first livepatch iteration is the host binary. The PATH name is `grok-titanium`, not a HOST.md-only alias.
+
+`install-host.sh` (marketplace `xbgst-stack`) fail-closes without `fnm`, PATH-links `gx-teams` + `xbgst-mailbox` from `integrations/gx-teams`, and runs `--link-bin` when the livepatch ELF exists. Spawn isolation is fnm multishells always. Do not GC `fnm_multishells`. JSONL mailbox is a log; live DM is ACP.
