@@ -34,9 +34,9 @@ That orch got cloned as **xbrd / xbgst**. Then the product people arrived with t
 - a tiny concurrent cap so the model cannot embarrass the demo
 - workflows and foreign-compat scanners eating the turn before a specialist exists
 
-Stock Grok Build copied **that** death spiral (GP+explore advertised, omitted type = GP, remote 4). It did not copy the working era.
+Stock Grok Build **ships that same posture** (GP+explore advertised, omitted type = GP, remote 4). It did not ship the working era.
 
-Espionage, if you need the word: we lifted the **working** dispatch, not the fable. Named `gx-*` specialists. Binary ban so the model cannot “helpfully” spawn explore. Host 64. Always-approve if you want speed. **fnm always** so sixteen bash lanes do not PATH-stomp. JSONL mailbox is still a log; live DM is ACP. That is xbgst-stack `integrations/gx-teams`, **not** a grok-build crate, **not** patch 0006.
+Free real estate, if you need the word: we lifted the **working** dispatch, not the fable. Named `gx-*` specialists. Binary ban so the model cannot “helpfully” spawn explore. Host 64. Always-approve if you want speed. **fnm always** so sixteen bash lanes do not PATH-stomp. JSONL mailbox is still a log; live DM is ACP. That is xbgst-stack [`integrations/gx-teams`](https://github.com/VeigaPunk/grok-marketplace/tree/main/plugins/xbgst-stack/integrations/gx-teams), **not** a grok-build crate, **not** patch 0006.
 
 Now it is a silver platter: five patches, this README, `PATH=grok-titanium`. Steal it back.
 
@@ -46,7 +46,7 @@ Now it is a silver platter: five patches, this README, `PATH=grok-titanium`. Ste
 
 > This repository does **not** accept external pull requests or unsolicited patches.
 
-Zero PRs on that tree. Do not fork it as a stunt. **This repo is the public path.** Apache-2.0 upstream source; this packaging is MIT OR Apache-2.0.
+External PRs are not an upstream path. Do not fork it as a stunt. **This repo is the public path.** Apache-2.0 upstream source; this packaging is MIT OR Apache-2.0.
 
 ## Patch series (applied in order)
 
@@ -66,14 +66,14 @@ The CLI ban is enforcement. `/xbgst` names specialists. A prompt that says “pl
 
 **Grok Bot** (Electron `/opt/Grok Bot/sand`, class `grok-bot`) is not the judge and not this CLI. It is a chat toy that keeps proving it.
 
-Point at the shit it produced (in-tree, not vibes):
+Point at the shit it produced (in **grok-marketplace**, not this repo — relative paths here 404):
 
-- `integrations/grok-bot/docs/UI-MAP.md` — a field manual because three controls are named **Close** and one of them **quits the app**.
+- [`docs/UI-MAP.md`](https://github.com/VeigaPunk/grok-marketplace/blob/main/plugins/xbgst-stack/integrations/grok-bot/docs/UI-MAP.md) — a field manual because **two, often three** controls are named **Close** and the window one **quits the app**.
 - `button "New"` is a **stub factory** (`SAND_DEFAULT_AGENT_NAME = "New Bot"`). Click it, mint another empty card. That is not a fleet.
-- `integrations/grok-bot/FALLBACK.md` is the honest product: if local-exec cannot spawn `grok`, **paste** `grok --cwd … -p "/xbgst <task>"`. The bot is a paste buffer with a logo.
-- `bin/xbgst-surface-inject.sh` focuses `class:grok-bot` and fires **SHIFT+Insert** then **CTRL+Return** because the composer will not take a grown-up stdin.
+- [`FALLBACK.md`](https://github.com/VeigaPunk/grok-marketplace/blob/main/plugins/xbgst-stack/integrations/grok-bot/FALLBACK.md) is the honest product: if local-exec cannot spawn `grok`, **paste** `grok --cwd … -p "/xbgst <task>"`. The bot is a paste buffer with a logo.
+- [`xbgst-surface-inject.sh`](https://github.com/VeigaPunk/grok-marketplace/blob/main/plugins/xbgst-stack/integrations/grok-bot/bin/xbgst-surface-inject.sh) focuses `class:grok-bot` and fires **SHIFT+Insert** then **CTRL+Return**. Default path is **paste**, not a mouse. Optional `--click X,Y` is the pointer. Computer-use / “Grok Bot's Computer” is that Electron toy, **not** grok-titanium.
 
-People get **really surprised** when they see something **moving mice on its own**. Yes. That is business. Computer-use, “Grok Bot's Computer,” inject helpers, the gasp. The Cursor partnership has to pay itself. The *work* still happens in **this** binary, with named specialists, not in a bot that cannot tell window-Close from dialog-Close.
+People get **really surprised** when they see something **moving mice on its own**. Yes. That gasp is the demo economy (computer-use, inject `--click`, box-desktop buttons) — the kind of theater a Cursor-class partnership has to pay for. The *work* still happens in **this** binary, with named specialists, not in a bot that cannot tell window-Close from dialog-Close.
 
 Use Grok Build. Use grok-titanium. Do not promote grok-bot to L1.
 
