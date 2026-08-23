@@ -54,20 +54,20 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 `/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask` **with flags that name the target CLI**, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
-`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Bare `xask cdx` is stock xbreed.
+`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Bare `xask cdx` is stock xbreed. **Always pin fast servicing** (`--service-tier fast` on ChatGPT/spark; Token Plan wrappers get `-c service_tier=fast`). Daybreak / `gpt-5.4-mini` stay `default`. Some Token Plan models omit unsupported `priority` on the wire after Codex remaps `fast` — argv still pins.
 
 ```
-xask --gs [flags] <route> '<q>'
+xask --gs --service-tier fast [flags] <route> '<q>'
 ```
 
 FIRST Bash (copy-paste by flag):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| ChatGPT default (`cdx`) | `xask --gs cdx '<q>'` | stock `xbreed ask codex` |
+| ChatGPT default (`cdx`) | `xask --gs --service-tier fast cdx '<q>'` | stock `xbreed ask codex` |
 | L3 spark | `xask --spark --gs --service-tier fast cdx '<q>'` | sekhmet L3 → `codex-titanium` |
-| Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38` (xask unsets `CODEX_BIN`) |
-| Token Plan DeepSeek | `xask --gs ds-flash '<q>'` / `ds-pro` | Token Plan wrappers |
+| Token Plan qwen3.8-max | `xask --gs --service-tier fast qwen38 '<q>'` | `codex-qwen38` + `-c service_tier=fast` |
+| Token Plan DeepSeek | `xask --gs --service-tier fast ds-pro '<q>'` / `ds-flash` | Token Plan wrappers + `-c service_tier=fast` |
 | Grok oneshot | `xask --gs grok '<q>'` | `grok --always-approve --no-subagents --verbatim -p` |
 | Kimi | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` |
 | Local Gemma | `xask --gs gemma '<q>'` | `xbreed ask gemma` |
