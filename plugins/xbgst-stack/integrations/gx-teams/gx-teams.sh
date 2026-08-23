@@ -276,8 +276,10 @@ cmd_spawn() {
   qmr=$(printf '%q' "$mail_root")
   qhomebin=$(printf '%q' "${HOME}/.local/bin")
   # fnm multishells ALWAYS. Never env -i. Never GC fnm_multishells.
+  # Keep fnm env PATH (shim/bin first). Only prepend ~/.local/bin so xask
+  # survives. Do not inject /usr/bin ahead of the shim.
   inner="eval \"\$(fnm env --shell bash)\" || { echo 'gx-teams: BLOCKED: fnm env failed' >&2; exit 1; }"
-  inner+="; export PATH=\"\${FNM_MULTISHELL_PATH:+\$FNM_MULTISHELL_PATH:}${qhomebin}:/usr/bin:/bin\${PATH:+:\$PATH}\""
+  inner+="; export PATH=${qhomebin}:\"\$PATH\""
   inner+="; export TMPDIR=${qtd} XBGST_MAIL_ROOT=${qmr}"
   if [[ -n "$spark_root" ]]; then
     inner+=" XBRD_SPARK_ROOT=$(printf '%q' "$spark_root")"
