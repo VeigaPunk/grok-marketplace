@@ -216,7 +216,24 @@ mkdir -p "$LOCAL_BIN"
 link_path_bin() {
   local dest=$1
   local src=$2
-  if [[ -e "$dest" && ! -L "$dest" ]]; then
+  local cur want
+  want=$(readlink -f "$src" 2>/dev/null || true)
+  if [[ -L "$dest" ]]; then
+    cur=$(readlink -f "$dest" 2>/dev/null || true)
+    if [[ -n "$cur" && -n "$want" && "$cur" == "$want" ]]; then
+      ln -sfn "$src" "$dest"
+      echo "✓ $(basename "$dest") → $dest"
+      return 0
+    fi
+    if [[ -n "$cur" && "$cur" == "$STACK_ROOT"/* ]]; then
+      ln -sfn "$src" "$dest"
+      echo "✓ $(basename "$dest") → $dest"
+      return 0
+    fi
+    echo "⚠ skip $dest (exists, not our symlink into stack)" >&2
+    return 1
+  fi
+  if [[ -e "$dest" ]]; then
     echo "⚠ skip $dest (exists, not a symlink)" >&2
     return 1
   fi

@@ -374,9 +374,32 @@ cmd_nuke() {
       */) die "refusing trailing slash tmpdir" ;;
     esac
     [[ "$td" == "$prefix"* ]] || continue
+    case "$td" in
+      *..*) die "refusing tmpdir with .." ;;
+    esac
     [[ -L "$td" ]] && continue
     [[ -d "$td" ]] || continue
-    rm -rf -- "$td"
+    local resolved
+    resolved=$(realpath -- "$td") || die "tmpdir realpath failed: $td"
+    [[ "$resolved" == "$prefix"* ]] || die "tmpdir escapes prefix: $td -> $resolved"
+    case "$resolved" in
+      *fnm_multishells*) die "refusing fnm_multishells tmpdir" ;;
+    esac
+    if [[ -n "${FNM_DIR:-}" ]]; then
+      local fnm
+      fnm=$(realpath -- "$FNM_DIR" 2>/dev/null || true)
+      if [[ -n "$fnm" && ( "$resolved" == "$fnm" || "$resolved" == "$fnm"/* ) ]]; then
+        die "refusing FNM_DIR tmpdir"
+      fi
+    fi
+    if [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
+      local xdg
+      xdg=$(realpath -- "$XDG_RUNTIME_DIR" 2>/dev/null || true)
+      if [[ -n "$xdg" && ( "$resolved" == "$xdg" || "$resolved" == "$xdg"/* ) ]]; then
+        die "refusing XDG_RUNTIME_DIR tmpdir"
+      fi
+    fi
+    rm -rf -- "$resolved"
   done
   if [[ -e "$STATE_ROOT/$team" ]]; then
     mkdir -p "$STATE_ROOT"

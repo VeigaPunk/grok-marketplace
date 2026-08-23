@@ -16,7 +16,11 @@ assert str(scratch).startswith("/tmp") or "XBGST_MAIL_ROOT" in os.environ
 print("scratch_ok", scratch)
 PY
 
-cleanup() { "$GT" nuke --team mboxgate >/dev/null 2>&1 || true; }
+cleanup() {
+  "$GT" nuke --team mboxgate >/dev/null 2>&1 || true
+  "$GT" nuke --team nukepoison >/dev/null 2>&1 || true
+  rm -rf -- "${GX_TEAMS_STATE:-$HOME/.gx-teams}/nukepoison"
+}
 trap cleanup EXIT
 if tmux has-session -t '=gx-teams-mboxgate' 2>/dev/null; then "$GT" nuke --team mboxgate; fi
 "$GT" spawn --team mboxgate --name gx-labrat-mbox -- cmd true
@@ -70,4 +74,30 @@ decoy=$(mktemp -d -- "/tmp/xbgst-gx-mboxgate-sentinel-XXXXXX")
 "$GT" nuke --team mboxgate
 test -d "$decoy"
 rmdir -- "$decoy"
+
+# Poisoned pane tmpdir with .. must fail closed and not rm outside prefix.
+poison_cleanup() { "$GT" nuke --team nukepoison >/dev/null 2>&1 || true; }
+poison_cleanup
+"$GT" spawn --team nukepoison --name gx-labrat-poison -- cmd true
+canary=$(mktemp -d /tmp/xbgst-nuke-canary-XXXXXX)
+cfg_poison="${GX_TEAMS_STATE:-$HOME/.gx-teams}/nukepoison/config.json"
+python3 - "$cfg_poison" "$canary" <<'PY'
+import json, sys
+cfg = json.load(open(sys.argv[1]))
+canary = sys.argv[2]
+# Prefix matches /tmp/xbgst-gx-nukepoison- then ..-escape to the canary.
+escape = "/tmp/xbgst-gx-nukepoison-x/../.." + canary
+name = next(iter(cfg["panes"]))
+cfg["panes"][name]["tmpdir"] = escape
+json.dump(cfg, open(sys.argv[1], "w"))
+print(escape)
+PY
+set +e
+"$GT" nuke --team nukepoison >/dev/null 2>&1
+poison_rc=$?
+set -e
+test -d "$canary"
+rmdir -- "$canary"
+[[ "$poison_rc" -ne 0 ]]
+poison_cleanup
 echo GATE_MBOX_OK

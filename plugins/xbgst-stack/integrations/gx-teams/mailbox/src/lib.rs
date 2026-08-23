@@ -80,13 +80,25 @@ pub fn parse_last_line(path: &Path) -> io::Result<MailRecord> {
 }
 
 fn is_fnm_protected(root: &Path) -> bool {
-    let s = root.to_string_lossy();
+    let canon = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
+    let s = canon.to_string_lossy();
     if s.contains("fnm_multishells") {
         return true;
     }
-    if let Ok(dir) = std::env::var("FNM_DIR") {
-        let dir = PathBuf::from(dir);
-        if root == dir.as_path() || root.starts_with(&dir) {
+    let fnm_dir = std::env::var("FNM_DIR")
+        .map(PathBuf::from)
+        .ok()
+        .or_else(|| dirs_home().map(|h| h.join(".local/share/fnm")));
+    if let Some(dir) = fnm_dir {
+        let dir = dir.canonicalize().unwrap_or(dir);
+        if canon == dir || canon.starts_with(&dir) {
+            return true;
+        }
+    }
+    if let Ok(xdg) = std::env::var("XDG_RUNTIME_DIR") {
+        let xdg = PathBuf::from(xdg);
+        let xdg = xdg.canonicalize().unwrap_or(xdg);
+        if canon == xdg || canon.starts_with(&xdg) {
             return true;
         }
     }
@@ -330,5 +342,15 @@ mod tests {
         let err = gc_scratch(&dir, Duration::from_secs(1)).unwrap_err();
         assert_eq!(err.kind(), io::ErrorKind::PermissionDenied);
         let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn gc_scratch_refuses_fnm_dir_default() {
+        let home = dirs_home().expect("HOME");
+        let fnm = home.join(".local/share/fnm");
+        if fnm.is_dir() {
+            let err = gc_scratch(&fnm, Duration::from_secs(1)).unwrap_err();
+            assert_eq!(err.kind(), io::ErrorKind::PermissionDenied);
+        }
     }
 }
