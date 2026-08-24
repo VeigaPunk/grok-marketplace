@@ -1,7 +1,7 @@
 {
   "name": "grok-build-livepatch",
-  "version": "1.1.27",
-  "description": "grok-titanium livepatch with opt-in timer (bundled in xbgst-stack 1.1.27+).",
+  "version": "1.1.28",
+  "description": "grok-titanium livepatch with opt-in timer (bundled in xbgst-stack 1.1.28+).",
   "author": {
     "name": "VeigaPunk",
     "url": "https://github.com/VeigaPunk"

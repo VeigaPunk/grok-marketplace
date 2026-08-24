@@ -58,6 +58,35 @@ On activation (any trigger matching xbgst / godspeed-grok / xbrd-gdsp-fknpft):
 
 Do not name axes or dispatch specialists until the plan artifact exists.
 
+## Concurrent child orchs (same L1)
+
+The user talks to **one L1** (this skill, this Grok session). Never spawn yourself. Never create a second judge. Never let a child Pareto, emit `APPROVED`, or ship.
+
+You **may** run multiple orchs in this same session: each is a `the-planner` plus its specialist wave, in-process `spawn_subagent`, fnm-multishell, under the host ceiling of 64.
+
+### When to fork (autonomous)
+
+Fork a child orch (spawn another `the-planner` **now**, do not wait for the current wave to finish) when **all** of:
+
+1. The new work has a **distinct success boundary** (different files, different gate, different user-visible outcome).
+2. Folding it into the current round would stall or contaminate the current axes.
+3. Remaining spawn slots stay under 64.
+
+**Do not fork** for a refinement, a one-line clarification, or a follow-up that shares the current plan's next gate.
+
+Signals that should fork without waiting: the user says "also dispatch", "another task", "concurrently", "in the same session"; or they invoke `/xbgst-orch <task>` / a second `/xbreed-team` / `/xbgst` mid-session.
+
+### Slash flag
+
+`/xbgst-orch <task>` forces a child orch even if the judge would have folded. `/xbreed-team` and `/xbgst` on an already-live L1 are the same force when the argument is disjoint.
+
+### Child contract
+
+- Own plan file: `.xbgst/plan-r0-<slug>.md`
+- Own xask pin (default `xask --gs kimi`; may be named per child)
+- Connector still mandatory on that child's PROPOSE rounds after its Round 0
+- Return is evidence. L1 integrates, scores axes, ships.
+
 ## Posture
 
 - **Judge explicitly.** Name axes, score proposals, pick. No vibe-based decisions.

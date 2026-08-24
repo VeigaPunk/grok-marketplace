@@ -4,6 +4,11 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.28
+
+- Concurrent child orchs on the same L1: skill **xbgst** may spawn additional `the-planner` waves when a task is disjoint; `/xbgst-orch` is the explicit fork flag. Children return evidence; only L1 ships. Never a second judge.
+- kimi `-p` CoT/chrome extract: `xask-kimi-stdout.py` overfits the DIRECT_P_OK capture (drop version, thinking bullets, resume footer).
+
 ## 1.1.27
 
 - `/xbreed-team` is the SSoT slash that loads skill **xbgst**. `/xbgst` is a slash clone of that file. Unshipped duplicate aliases `/xb` `/xbt` `/xbreed`. `/xgs` stays the native-only sibling.
