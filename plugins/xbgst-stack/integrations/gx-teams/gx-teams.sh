@@ -122,6 +122,21 @@ inject_godspeed_into_grok_prompt() {
   done
 }
 
+# OS grok panes only. Missing helper is pass-through (in-process gx-* keep TUI OAuth).
+maybe_wrap_grok_oauth_route() {
+  local -n argv_ref="$1"
+  local i
+  (( ${#argv_ref[@]} > 0 )) || return 0
+  command -v grok-oauth-route >/dev/null 2>&1 || return 0
+  [[ "${argv_ref[0]##*/}" == grok-oauth-route ]] && return 0
+  for ((i = 0; i < ${#argv_ref[@]}; i++)); do
+    if [[ "${argv_ref[i]##*/}" == grok ]]; then
+      argv_ref=("grok-oauth-route" "wrap" "--" "${argv_ref[@]}")
+      return 0
+    fi
+  done
+}
+
 # Allowlist: no :, ., /, space, .. — tmux grammar + path safety.
 validate_id() {
   local kind="$1" val="$2"
@@ -271,6 +286,7 @@ cmd_spawn() {
   local user_cmd inner
   local -a command_argv=("$@")
   inject_godspeed_into_grok_prompt command_argv
+  maybe_wrap_grok_oauth_route command_argv
   user_cmd=$(printf '%q ' "${command_argv[@]}")
   user_cmd=${user_cmd% }
 

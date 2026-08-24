@@ -10,7 +10,7 @@
 | Binary | Who may invoke it | Who must not |
 |---|---|---|
 | `xask` (PATH protocol) | **xbgst-mode** FIRST Bash inside named `gx-*` (sekhmet/`codex-titanium`/`service_tier=fast`; consult table). `/xgs` must not. | spawn argv type `xask`; judge-as-xask; Gemma/`g`/`gemini`; gx-* FIRST `xask grok`; gx-* exec of `codex-titanium` |
-| `xask --gs grok` (lead oneshot) | host/script oneshot only (`grok --always-approve --no-subagents --verbatim -p`) | gx-* FIRST bash; L2 teammate consult; titanium |
+| `xask --gs grok` (lead oneshot) | host/script oneshot only (`grok --always-approve --no-subagents --verbatim -p`) via `grok-oauth-route wrap` (OAuth primary; plazir27 API only after SuperGrok Heavy weekly exhaust; auto-restore at `resets_at`) | gx-* FIRST bash; L2 teammate consult; titanium |
 | `xask … cdx` (alias of `codex`) | L2 consult → `xbreed ask codex` → stock ChatGPT Codex | Token Plan `-p`; `codex-titanium`; sekhmet |
 | `xask --gs qwen38\|ds-pro` | hangar gx-* default cheap FIRST (Token Plan) → wrappers `codex-qwen38` / `codex-ds-pro` → `codex -p <profile>` (xask unsets `CODEX_BIN`; no `--service-tier fast`) | L3 spark; default Codex; `--service-tier fast`; ds-flash hangar FIRST |
 | `xask --gs ds-flash` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-ds-flash` → `codex -p ds-flash` (xask unsets `CODEX_BIN`; no `--service-tier fast`); `ds-flash` is named/opt-in not hangar FIRST | hangar gx-* FIRST; L3 spark; default Codex; `--service-tier fast` |

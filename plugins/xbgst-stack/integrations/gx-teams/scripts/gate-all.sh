@@ -26,6 +26,7 @@ assert_operators
 nuke_leftovers
 
 bash scripts/gate-godspeed.sh
+bash scripts/gate-oauth-route.sh
 bash scripts/gate.sh
 bash scripts/gate-m03.sh
 bash scripts/gate-m04.sh
