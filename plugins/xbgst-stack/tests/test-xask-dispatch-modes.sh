@@ -62,6 +62,7 @@ need "$ROOT/agents/connector.md" "xask --provider cursor --model-id kimi-k3-max 
 need "$ROOT/agents/the-planner.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/the-planner.md" "WWKD mapping"
 need "$ROOT/agents/the-planner.md" "Load skill \`wwkd\`"
+need "$ROOT/agents/the-planner.md" '"No prior context." wwkd'
 if grep -E 'FIRST tool call MUST be Bash:.*plan question' "$ROOT/agents/the-planner.md" >/dev/null 2>&1; then
   fail "agents/the-planner.md must not send a plan question to Kimi; xask is the WWKD mapping"
 fi

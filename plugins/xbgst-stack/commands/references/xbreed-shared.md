@@ -81,7 +81,7 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Role | xbgst-mode FIRST |
 |---|---|
-| `scout`, `connector`, `the-planner` | `xask --provider cursor --model-id kimi-k3-max --gs`. Planner: that consult **is** the WWKD mapping (plan artifact), not a question. Never `--spark` on this pin. Never default `cdx`. Never Claude. Never `auto`. |
+| `scout`, `connector`, `the-planner` | `xask --provider cursor --model-id kimi-k3-max --gs`. Planner: `xask --provider cursor --model-id kimi-k3-max --gs -- "<WWKD mapping>" "No prior context." wwkd` — positional `wwkd` loads the skill; the consult **is** the mapping, not a question. Never `--spark` on this pin. Never default `cdx`. Never Claude. Never `auto`. |
 | `labrat`, `executor`, `reviewer`, `critic`, `sentinel`, `mutation-tester` | `xask --gs ds-pro`. `--spark` only when L3 is requested. `--gpt55 --gs -e low cdx` only when the review target is OpenAI |
 | `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |

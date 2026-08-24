@@ -4,6 +4,8 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- the-planner Cursor xask loads skill `wwkd` as the third positional (`… -- "<WWKD mapping>" "No prior context." wwkd`). Direct CLI lanes inline that SKILL.md.
+
 ## 1.1.32
 
 - Scout/connector/the-planner hangar FIRST consult is Cursor Ultra gravy: `xask --provider cursor --model-id kimi-k3-max --gs`. `qwen38` is named Token Plan, not FIRST. Implement/review FIRST stays `xask --gs ds-pro`.
