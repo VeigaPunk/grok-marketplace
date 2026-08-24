@@ -4,6 +4,10 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.30
+
+- gx-teams does not wrap `grok -p` that starts with `/` (or when `GX_TEAMS_SKIP_GODSPEED=1`). `/xbgst-clone` stays a real L1 (`/xbreed-team` loads skill **xbgst**) instead of a godspeed teammate oneshot.
+
 ## 1.1.29
 
 - Prototype **orch-clone**: `/xbgst-clone` detaches a real L1 in another tmux window via `gx-teams` + `grok --cwd` (`env -C` pane PWD, unique `--leader-socket`; grok has no `--no-leader`). Autonomous: other cwd → clone; same cwd disjoint → `/xbgst-orch`. Never team `0`/`1`. Gate: `tests/test-xbgst-clone-l1.sh`.

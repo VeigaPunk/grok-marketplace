@@ -81,9 +81,18 @@ compose_godspeed_prompt() {
   printf '%s\n%s\n%s' "$directive" "$body" "$GODSPEED_SUFFIX"
 }
 
+skip_godspeed_prompt() {
+  local prompt="$1"
+  # L1 clones dispatch slash loaders. Wrapping /xbreed-team with directive.md
+  # makes grok treat the blob as a teammate oneshot instead of loading skill xbgst.
+  [[ "${GX_TEAMS_SKIP_GODSPEED:-}" == 1 ]] && return 0
+  [[ "$prompt" == /* ]] && return 0
+  return 1
+}
+
 inject_godspeed_into_grok_prompt() {
   local -n argv_ref="$1"
-  local i token grok_seen=0
+  local i token grok_seen=0 next
   for ((i = 0; i < ${#argv_ref[@]}; i++)); do
     token="${argv_ref[$i]}"
     if [[ "${token##*/}" == grok ]]; then
@@ -94,11 +103,20 @@ inject_godspeed_into_grok_prompt() {
     case "$token" in
       -p|--prompt)
         (( i + 1 < ${#argv_ref[@]} )) || die "$token requires a prompt"
-        argv_ref[$((i + 1))]=$(compose_godspeed_prompt "${argv_ref[$((i + 1))]}")
+        next="${argv_ref[$((i + 1))]}"
+        if skip_godspeed_prompt "$next"; then
+          ((i++))
+          continue
+        fi
+        argv_ref[$((i + 1))]=$(compose_godspeed_prompt "$next")
         ((i++))
         ;;
       --prompt=*)
-        argv_ref[$i]="--prompt=$(compose_godspeed_prompt "${token#--prompt=}")"
+        next="${token#--prompt=}"
+        if skip_godspeed_prompt "$next"; then
+          continue
+        fi
+        argv_ref[$i]="--prompt=$(compose_godspeed_prompt "$next")"
         ;;
     esac
   done

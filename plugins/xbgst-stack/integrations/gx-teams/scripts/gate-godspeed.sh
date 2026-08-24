@@ -85,6 +85,18 @@ PY
 }
 inject_local "$resolved"
 
+# Slash L1 loaders must stay unwrapped so grok actually loads /xbreed-team.
+argv=(/usr/bin/grok -p '/xbreed-team ping-clone')
+inject_godspeed_into_grok_prompt argv
+[[ "${argv[-1]}" == "/xbreed-team ping-clone" ]]
+
+# Explicit skip (clone --ping canary) even when the prompt is not a slash.
+GX_TEAMS_SKIP_GODSPEED=1
+argv=(/usr/bin/grok -p 'Reply with exactly: CLONE_L1_OK')
+inject_godspeed_into_grok_prompt argv
+[[ "${argv[-1]}" == "Reply with exactly: CLONE_L1_OK" ]]
+unset GX_TEAMS_SKIP_GODSPEED
+
 python3 - "$ROOT/scripts/acp-live-dm.py" "$resolved" <<'PY'
 import importlib.util
 import pathlib

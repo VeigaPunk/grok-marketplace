@@ -18,6 +18,6 @@ STACK=$(readlink -f ~/.grok/installed-plugins/xbgst-stack-*/scripts/xbgst-clone-
 bash "$STACK" --cwd <dir> -- <task>
 ```
 
-`--dry-run` prints argv. `--ping` overfits `CLONE_L1_OK` without a full orch. Never `--team 0` or `1`. Grok has no `--no-leader`; the script passes `--leader-socket` plus `env -C` so pane PWD matches `--cwd`.
+`--dry-run` prints argv. `--ping` overfits `CLONE_L1_OK` without a full orch. Never `--team 0` or `1`. Grok has no `--no-leader`; the script passes `--leader-socket` plus `env -C` so pane PWD matches `--cwd`. `GX_TEAMS_SKIP_GODSPEED=1` plus gx-teams slash skip keep `-p /xbreed-team …` unwrapped so that pane is a real L1, not a godspeed teammate oneshot.
 
 Autonomous: L1 should clone (not fold, not `/xbgst-orch`) when the named scope is an existing directory whose realpath is not this cwd. Explicit `/xbgst-clone` on this cwd is allowed for the A/B (second real L1 in another pane).

@@ -18,6 +18,7 @@ printf '%s\n' "$out" | grep -q -- "--no-leader" && fail "grok has no --no-leader
 printf '%s\n' "$out" | grep -q "env -C" || fail "dry env -C for pane PWD"
 printf '%s\n' "$out" | grep -q "gx-teams spawn --team clone" || fail "dry gx-teams spawn"
 printf '%s\n' "$out" | grep -q "name=gx-l1-" || fail "dry default name gx-l1-<basename>"
+printf '%s\n' "$out" | grep -q "skip_godspeed=1" || fail "dry skip gx-teams godspeed wrap on L1 -p"
 
 if bash "$SH" --dry-run --team 0 --cwd "$ROOT" -- x 2>/dev/null; then
   fail "team 0 must refuse"

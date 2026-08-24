@@ -99,13 +99,15 @@ if [[ "$ABS" == "$HERE" ]]; then
 fi
 
 if [[ "$DRY" -eq 1 ]]; then
-  printf 'DRY cwd=%s here=%s team=%s name=%s sock=%s\n' "$ABS" "$HERE" "$TEAM" "$NAME" "$SOCK"
+  printf 'DRY cwd=%s here=%s team=%s name=%s sock=%s skip_godspeed=1\n' "$ABS" "$HERE" "$TEAM" "$NAME" "$SOCK"
   printf 'DRY gx-teams spawn --team %s --name %s -- cmd' "$TEAM" "$NAME"
   printf ' %q' "${CMD[@]}"
   printf '\n'
   exit 0
 fi
 
-echo "CLONE_L1_SPAWNING team=$TEAM name=$NAME cwd=$ABS sock=$SOCK" >&2
+# Do not let gx-teams wrap -p with directive.md: /xbreed-team must load skill xbgst.
+export GX_TEAMS_SKIP_GODSPEED=1
+echo "CLONE_L1_SPAWNING team=$TEAM name=$NAME cwd=$ABS sock=$SOCK skip_godspeed=1" >&2
 out=$("$GX" spawn --team "$TEAM" --name "$NAME" -- cmd "${CMD[@]}")
 printf 'CLONE_L1_SPAWNED %s cwd=%s\n' "$out" "$ABS"
