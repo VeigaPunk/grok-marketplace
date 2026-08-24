@@ -66,7 +66,7 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST** (`scout`, `connector`, `the-planner`) | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --output-format text --model kimi-k3-max`. Fast inference is Ultra metering, **not** `--service-tier fast` (pin advertises default only). Never `--spark` on this pin. Never Claude. Never `auto`. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
+| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST** (`scout`, `connector`, `the-planner`) | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max`. `--mode ask` is read-only consult. `--trust` skips Workspace Trust Required. Never `--yolo`/`-f`. Never `--spark` on this pin. Never Claude. Never `auto`. Full-agent L2 is `xbgst-cursor-agent-surface` (`-p --trust`, no ask). Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
 | Token Plan DeepSeek — **hangar FIRST** (`labrat`, `executor`, `reviewer`, `critic`, `sentinel`, `mutation-tester`) | `xask --gs ds-pro '<q>'` | Token Plan wrappers; **no** `--service-tier fast`; `ds-flash` is named/opt-in not hangar FIRST |
 | Token Plan qwen3.8-max — **named route** | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast`; named/opt-in not hangar FIRST |
 | Kimi (OAuth, native CLI) — **named route** | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Pay-as-you-go is `--model-id moonshotai/…`. |
