@@ -83,7 +83,7 @@ Signals that should fork without waiting: the user says "also dispatch", "anothe
 ### Child contract
 
 - Own plan file: `.xbgst/plan-r0-<slug>.md`
-- Own xask pin (role table: scout/connector FIRST `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST `xask --gs ds-pro`; named `xask --gs kimi` / `xask --gs qwen38`; may be named per child)
+- Own xask pin (role table: scout/connector/the-planner FIRST `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST `xask --gs ds-pro`; named `xask --gs kimi` / `xask --gs qwen38`; may be named per child)
 - Connector still mandatory on that child's PROPOSE rounds after its Round 0
 - Return is evidence. L1 integrates, scores axes, ships.
 
@@ -114,7 +114,7 @@ Prototype: the end user compares **multi-orch + clone** vs **clone-only**. Itera
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Judge is Grok.** All roles map to Grok. Never spawn type `xask`. Never Claude TeamCreate. Language follows the repo.
-- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` (SSoT slash) and `/xbreed-team` (slash clone) load this skill. Crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (scout/connector FIRST: `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST: `xask --gs ds-pro`; named routes `xask --gs kimi` and `xask --gs qwen38`; `cdx` is OpenAI-only; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
+- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` (SSoT slash) and `/xbreed-team` (slash clone) load this skill. Crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (scout/connector/the-planner FIRST: `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST: `xask --gs ds-pro`; named routes `xask --gs kimi` and `xask --gs qwen38`; `cdx` is OpenAI-only; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
 
 ## Local-first git posture (locked — permanent)
 
@@ -206,7 +206,7 @@ PrimeAgent is optional host tooling, not a prerequisite or inventory item. Crede
 | Deletion, YAGNI | `simplifier` (grok + godspeed) | grok | direct analysis + test-after-delete | All |
 | Reverse engineering, intent reconstruction | `the-revenger` (cdx + godspeed) | cdx | observe-map-reproduce loop | All |
 | Security auditing, adversarial analysis | `sentinel` (grok + godspeed) | grok | attacker-minded scan + exploit path proof | All |
-| Planning, Phase 0, WWKD sequencing | `the-planner` (grok + godspeed · Layer-0 wwkd) | grok | spawn FIRST at Round 0 / Phase 0 — mandatory | All |
+| Planning, Phase 0, WWKD sequencing | `the-planner` (grok + godspeed · Layer-0 wwkd) | grok | spawn FIRST at Round 0 / Phase 0 — mandatory; xbgst-mode FIRST PATH `xask --provider cursor --model-id kimi-k3-max --gs` | All |
 | Adversarial design, approach review | `critic` (grok + godspeed) | grok | attack assumptions, ACH-style | All |
 | Test validation, mutation testing | `mutation-tester` (grok + godspeed) | grok | mutate-run-revert in isolated dirs (no git worktrees) | All |
 | Documentation, audit trail | `scribe` (grok-4.6-low + godspeed) | grok-4.6-low | spawn after SYNTHESIS_READY, concurrent with Pareto; filter-exempt | All |

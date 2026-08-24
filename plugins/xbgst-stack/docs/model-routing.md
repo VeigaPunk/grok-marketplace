@@ -15,7 +15,7 @@
 | `xask --gs ds-pro` | hangar gx-* default cheap FIRST (Token Plan implement/review) → wrapper `codex-ds-pro` → `codex -p ds-pro` (xask unsets `CODEX_BIN`; no `--service-tier fast`) | L3 spark; default Codex; `--service-tier fast`; ds-flash hangar FIRST |
 | `xask --gs qwen38` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-qwen38` → `codex -p qwen38` (xask unsets `CODEX_BIN`; no `--service-tier fast`); `qwen38` is named/opt-in not hangar FIRST | hangar gx-* FIRST; L3 spark; `--service-tier fast` |
 | `xask --gs ds-flash` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-ds-flash` → `codex -p ds-flash` (xask unsets `CODEX_BIN`; no `--service-tier fast`); `ds-flash` is named/opt-in not hangar FIRST | hangar gx-* FIRST; L3 spark; default Codex; `--service-tier fast` |
-| `xask --provider cursor --model-id kimi-k3-max` | hangar gx-* FIRST for scout/connector → `cursor-agent -p --output-format text --model kimi-k3-max` | other gx-* FIRST; L3 spark; `--service-tier fast`; Claude; `auto` |
+| `xask --provider cursor --model-id kimi-k3-max` | hangar gx-* FIRST for scout/connector/the-planner → `cursor-agent -p --output-format text --model kimi-k3-max` | other gx-* FIRST; L3 spark; `--service-tier fast`; Claude; `auto` |
 | `xbreed` (ask CLI; stock ChatGPT `codex`) | invoked by protocol `xask` for `codex`/`cdx` | honor `CODEX_BIN`; `codex-titanium`; Token Plan `-p`; L3 workers |
 | `codex` (stock `@openai/codex`) | Daybreak Blue; Exception E2 `cdx-revenger-*`; `xbreed ask codex`; Token Plan only via `-p` / wrappers | sekhmet L3 workers (use `codex-titanium`) |
 | `xask-l3` (sekhmet shim; bare `sekhmet run`, Titanium default) | **sekhmet L3 only** | gx-* FIRST tool; E2; L1 judge; protocol `xask` lane |

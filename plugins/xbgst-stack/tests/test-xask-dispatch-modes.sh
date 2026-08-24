@@ -56,9 +56,10 @@ need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
 need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"
 need "$ROOT/commands/xbgst-orch.md" "xask --provider cursor --model-id kimi-k3-max"
-# E-split hangar FIRST: scout/connector = cursor gravy; implement/review = ds-pro
+# E-split hangar FIRST: scout/connector/the-planner = cursor gravy; implement/review = ds-pro
 need "$SCOUT" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/connector.md" "xask --provider cursor --model-id kimi-k3-max --gs"
+need "$ROOT/agents/the-planner.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 for a in labrat executor reviewer critic sentinel mutation-tester; do
   need "$ROOT/agents/$a.md" "xask --gs ds-pro"
 done
@@ -66,7 +67,7 @@ if grep -E 'FIRST tool call MUST be Bash: `xask --gs cdx' "$ROOT/agents/reviewer
   fail "$ROOT/agents/reviewer.md must not FIRST cdx (cdx remaps to kimi-k3)"
 fi
 # consult FIRST is not native kimi OAuth; qwen38 is named Token Plan not FIRST
-for a in scout connector labrat executor reviewer critic sentinel mutation-tester; do
+for a in scout connector the-planner labrat executor reviewer critic sentinel mutation-tester; do
   if grep -E 'FIRST tool call MUST be Bash: `xask --gs kimi' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
     fail "agents/$a.md FIRST must not be xask --gs kimi (named slash route only)"
   fi
@@ -76,7 +77,7 @@ for a in scout connector labrat executor reviewer critic sentinel mutation-teste
 done
 for a in labrat executor reviewer critic sentinel mutation-tester; do
   if grep -E 'FIRST tool call MUST be Bash: `xask --provider cursor' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
-    fail "agents/$a.md FIRST must not be xask --provider cursor (scout/connector gravy only)"
+    fail "agents/$a.md FIRST must not be xask --provider cursor (scout/connector/planner gravy only)"
   fi
 done
 # hangar FIRST is cursor gravy + ds-pro; ds-flash/qwen38 named/opt-in not hangar FIRST
@@ -105,13 +106,13 @@ need "$SHARED" "service_tier=fast"
 need "$SHARED" "result.json"
 need "$SHARED" "CollectRecord"
 
-# 6) remaining consult roles carry xask + raw-quote; planner-class does not
-for a in reviewer labrat connector executor critic sentinel mutation-tester; do
+# 6) remaining consult roles carry xask + raw-quote; planner now consults cursor gravy
+for a in reviewer labrat connector executor critic sentinel mutation-tester the-planner; do
   grep -F -q 'xask --' "$ROOT/agents/$a.md" || fail "agents/$a.md missing xask lane"
   grep -F -q '<raw_output>' "$ROOT/agents/$a.md" || fail "agents/$a.md missing raw-quote"
   grep -F -q 'result.json stdout' "$ROOT/agents/$a.md" || fail "agents/$a.md missing result.json stdout extract"
 done
-for a in the-planner distiller scribe simplifier; do
+for a in distiller scribe simplifier; do
   if grep -E 'FIRST tool call MUST be Bash: xask' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
     fail "agents/$a.md gained an xask gate"
   fi

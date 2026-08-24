@@ -11,4 +11,4 @@ This is not a second L1. Do **not** spawn type xbgst. Do **not** run Pareto / `A
 
 Use when the user flags a disjoint task, or when L1 already decided to fork. Same substrate: in-process `spawn_subagent`, fnm-multishell. Host ceiling 64.
 
-Load skill **xbgst** concurrent-child-orch rules. PATH `xask` first with the lane this child names (scout/connector FIRST: Cursor Ultra gravy `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST: `xask --gs ds-pro`; named routes `xask --gs kimi` and `xask --gs qwen38` are not hangar default). Never spawn type `xask`. Never `general-purpose` or `explore`.
+Load skill **xbgst** concurrent-child-orch rules. PATH `xask` first with the lane this child names (scout/connector/the-planner FIRST: Cursor Ultra gravy `xask --provider cursor --model-id kimi-k3-max --gs`; implement/review FIRST: `xask --gs ds-pro`; named routes `xask --gs kimi` and `xask --gs qwen38` are not hangar default). Never spawn type `xask`. Never `general-purpose` or `explore`.
