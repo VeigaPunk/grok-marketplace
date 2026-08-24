@@ -89,9 +89,11 @@ Forbidden from gx-* FIRST bash: `xask-l3`; `xask --spark grok\|qwen38\|ds-*\|kim
 
 Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `docs/model-routing.md`.
 
-### Extract — spark vs stock
+### Extract — spark vs stock vs kimi chrome
 
 Non-spark routes: quote PATH `xask` stdout (the model answer). `--json` / `-o` follow the target CLI.
+
+**kimi print-mode:** CLI dumps version, thinking CoT bullets (`• The user asks…`), and `To resume this session: kimi -r …` onto the ingested stream. PATH `xask` runs `scripts/xask-kimi-stdout.py` (ds4cc sibling of `xask`) so stdout is the last non-CoT bullet. Chrome stays on stderr. Gate: `tests/test_xask_kimi_stdout.py` (overfit DIRECT_P_OK; no live model). Do not grep the answer token out of CoT — that spoofs PONG. Empty extract must not invent the answer.
 
 ### Extract (`xask --spark`) — model answer is not CLI stdout
 
