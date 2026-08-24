@@ -4,7 +4,7 @@
 
 **Not used on Grok:** Claude TeamCreate, `advisor()`, sonnet/opus model pins, `~/.claude/*` paths. **Never spawn type `xask`.** PATH `xask` is the consult CLI; spawn stays `gx-*`.
 
-**Modes:** `/xgs` = native-only (no xask). `/xbreed-team` (SSoT) and `/xbgst` (slash clone) load skill **xbgst** — xbgst-mode (PATH `xask` first; flags name the target CLI; stock `xask --gs kimi`; `cdx` is OpenAI-only; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
+**Modes:** `/xgs` = native-only (no xask). `/xbgst` (SSoT) and `/xbreed-team` (slash clone) load skill **xbgst** — xbgst-mode (PATH `xask` first; flags name the target CLI; stock `xask --gs kimi`; `cdx` is OpenAI-only; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
 
 ## Godspeed injection (every teammate)
 
@@ -49,6 +49,8 @@ This invariant covers native `gx-*` teammates, Round 0 planner, recursive sub-le
 L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator, and shipper. PrimeAgent and its OpenAI OAuth are optional user tooling, never host-orch inventory/install requirements. Absence falls back to the named native `gx-*` path.
 
 **Banned:** `general-purpose`, `explore`.
+
+**OS teammates:** `specialist` tool (gx-teams) + `SendMessage` tool (JSONL log). `spawn_subagent` is in-process only.
 
 ## xbgst-mode xask consult (any CLI via flags)
 

@@ -118,6 +118,7 @@ Every milestone must define at least one runnable gate and expected pass criteri
 
 evidence: none — planning artifact
 
+`SendMessage` is the CLI tool (JSONL log), not speech.
 SendMessage plan artifact to the-judge (advisory — plan delivery is advisory by default). If judge does not respond within one dispatch cycle, executors may proceed with `[planner-gate: advisory, risks-open]` marker. Also SendMessage to each assigned executor. TaskUpdate completed. Idle.
 
 ## Grok host

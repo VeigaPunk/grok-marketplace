@@ -9,7 +9,7 @@ fail() { echo "FAIL: $*" >&2; exit 1; }
 
 out=$(bash "$SH" --dry-run --cwd "$ROOT" -- ping-clone)
 printf '%s\n' "$out" | grep -q "DRY cwd=" || fail "dry cwd"
-printf '%s\n' "$out" | grep -q "/xbreed-team" || fail "dry prompt is /xbreed-team"
+printf '%s\n' "$out" | grep -q -- "-p /xbgst" || fail "dry prompt is /xbgst"
 printf '%s\n' "$out" | grep -q "ping-clone" || fail "dry task ping-clone"
 printf '%s\n' "$out" | grep -q -- "--cwd" || fail "dry grok --cwd"
 printf '%s\n' "$out" | grep -q -- "--always-approve" || fail "dry always-approve"
@@ -29,7 +29,7 @@ fi
 
 out=$(bash "$SH" --dry-run --ping --cwd "$ROOT")
 printf '%s\n' "$out" | grep -q "CLONE_L1_OK" || fail "ping prompt"
-printf '%s\n' "$out" | grep -q "/xbreed-team" && fail "ping must not /xbreed-team"
+printf '%s\n' "$out" | grep -q -- "-p /xbgst" && fail "ping must not /xbgst"
 printf '%s\n' "$out" | grep -q -- "--no-subagents" || fail "ping no-subagents"
 
 a=$(bash "$SH" --dry-run --cwd "$ROOT" -- a)

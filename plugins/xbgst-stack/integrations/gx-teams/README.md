@@ -38,7 +38,7 @@ bash scripts/gate-m02.sh   # expect GATE_M02_OK
 | Session | `gx-teams-<team>`, created with `new-session -d -s` (**never** `-t`, that is a session group) |
 | Target | exact `-t =gx-teams-<team>` (tmux prefix-matches without `=`) |
 | Pane handle | `#{pane_id}` (`%N`). **Never** `:0.0` |
-| Identity | env `GX_TEAM`, `GX_TEAMMATE_NAME`, `GX_TEAMMATE_ID=name@team`, `GX_PARENT_SESSION=<tmux session name>` — **not** pane title / `%N` |
+| Identity | env `GX_TEAM`, `GX_TEAMMATE_NAME`, `GX_TEAMMATE_ID=name@team`, `GX_PARENT_SESSION=<tmux session name>` — **not** pane title / `%N`. `GX_TEAMMATE_NAME` always wins over `dm --from` (CLI `--from` is harness-only when env unset; else `lead`) |
 | Hardcap | 16 panes / session |
 | Cleanup | `nuke --team` only; **never** `kill-server` |
 | Deny | `claude`, `TeamCreate`, `--team 0\|1` |

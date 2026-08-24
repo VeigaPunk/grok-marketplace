@@ -89,7 +89,7 @@ Signals that should fork without waiting: the user says "also dispatch", "anothe
 
 ## Orch-clone (detached L1, prototype)
 
-When the target **scope is another cwd/repo**, do not fold it into this pane and do not use `/xbgst-orch`. **Detach a clone of this L1** in another tmux window via `gx-teams` + `grok --cwd <dir> -p /xbreed-team <task>` (`scripts/xbgst-clone-l1.sh`). Session is `gx-teams-<team>` (default team `clone`), never operator `0`/`1`. Each clone gets its own `--leader-socket` (grok has no `--no-leader`) and pane PWD via `env -C`.
+When the target **scope is another cwd/repo**, do not fold it into this pane and do not use `/xbgst-orch`. **Detach a clone of this L1** in another tmux window via `gx-teams` + `grok --cwd <dir> -p /xbgst <task>` (`scripts/xbgst-clone-l1.sh`). Session is `gx-teams-<team>` (default team `clone`), never operator `0`/`1`. Each clone gets its own `--leader-socket` (grok has no `--no-leader`) and pane PWD via `env -C`.
 
 That pane **is** a Grok L1: it may name axes, Pareto, `APPROVED`, and ship **there**. This pane stays the parent L1 and **does not wait**. Never nuke operator tmux sessions `0`/`1`. Each spawn gets a unique gx-teams `--name` and `--leader-socket` so two clones (including explicit same-cwd A/B) do not share a leader endpoint.
 
@@ -114,7 +114,7 @@ Prototype: the end user compares **multi-orch + clone** vs **clone-only**. Itera
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Judge is Grok.** All roles map to Grok. Never spawn type `xask`. Never Claude TeamCreate. Language follows the repo.
-- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbreed-team` (SSoT slash) and `/xbgst` (slash clone) load this skill. Crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (stock `xask --gs kimi` default; `cdx` is OpenAI-only; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
+- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` (SSoT slash) and `/xbreed-team` (slash clone) load this skill. Crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (stock `xask --gs kimi` default; `cdx` is OpenAI-only; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
 
 ## Local-first git posture (locked — permanent)
 
@@ -232,6 +232,8 @@ fnm exec --using <node-version-if-needed> -- bash -c '...'
 ```
 
 Optional `spawn_method: tmux-pane` when `$TMUX` is set and `gx-teams` is on `PATH`. Otherwise spawn via `fnm-multishell`. `/xbgst` MAY call `gx-teams spawn --team … --name gx-{role}-{suffix} -- cmd …` (no Claude; no TeamCreate). Record the exact spawn command in the handoff block under `spawn_method:` (`fnm-multishell | tmux-pane`).
+
+OS teammates use the `specialist` tool (gx-teams) + the `SendMessage` tool (JSONL is a log). `spawn_subagent` is in-process only.
 
 ## WWKD posture (loaded by planner on Round 0)
 
