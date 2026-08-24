@@ -4,6 +4,11 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.27
+
+- `/xbreed-team` is the SSoT slash that loads skill **xbgst**. `/xbgst` is a slash clone of that file. Unshipped duplicate aliases `/xb` `/xbt` `/xbreed`. `/xgs` stays the native-only sibling.
+- Default FIRST consult is `xask --gs kimi` (native Kimi Code OAuth). `cdx` is OpenAI-only.
+
 ## 1.1.26
 
 - gx-teams PATH: fnm shim stays ahead of `/usr/bin`; skip foreign PATH bins; drop the hangar default from `install-host`; point vendored gx-teams at the plugin Godspeed directive.

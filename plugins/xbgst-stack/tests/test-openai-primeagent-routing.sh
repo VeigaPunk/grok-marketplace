@@ -24,9 +24,6 @@ need "$SKILL" 'route_id`, `parent`, `task`, `scope`, `allowed_actions`, `return`
 need "$SKILL" 'L1 alone schedules routes'
 need "$SKILL" 'Keep PrimeAgent out of `HOST-ORCH-INVENTORY.txt` and the required host installer list.'
 
-need "$COMMAND" 'attachable **L2-loop**'
-need "$COMMAND" '`xbrd-selector` only as the separate L2-select lane'
-need "$COMMAND" 'sekhmet is always-on for /xbgst parallel fan-out; PrimeAgent never proxies L3'
 need "$SHARED" 'Substrate route table (L1 decides)'
 need "$SHARED" 'Absence falls back to the named native `gx-*` path.'
 

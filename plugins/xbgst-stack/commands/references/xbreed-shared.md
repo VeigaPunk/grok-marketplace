@@ -4,7 +4,7 @@
 
 **Not used on Grok:** Claude TeamCreate, `advisor()`, sonnet/opus model pins, `~/.claude/*` paths. **Never spawn type `xask`.** PATH `xask` is the consult CLI; spawn stays `gx-*`.
 
-**Modes:** `/xgs` = native-only (no xask). `/xbgst` = xbgst-mode (PATH `xask` first; flags name the target CLI; stock `xask --gs cdx`; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
+**Modes:** `/xgs` = native-only (no xask). `/xbreed-team` (SSoT) and `/xbgst` (slash clone) load skill **xbgst** — xbgst-mode (PATH `xask` first; flags name the target CLI; stock `xask --gs kimi`; `cdx` is OpenAI-only; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
 
 ## Godspeed injection (every teammate)
 
@@ -54,7 +54,7 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 `/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask` **with flags that name the target CLI**, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
-`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Bare `xask cdx` is stock xbreed. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, and `gpt-5.4-mini` stay `default`; `--service-tier fast` on those ids fails closed.
+`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Default FIRST consult is `xask --gs kimi` (native Kimi Code OAuth). `cdx` is OpenAI-only. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, and `gpt-5.4-mini` stay `default`; `--service-tier fast` on those ids fails closed.
 
 ```
 xask --gs [flags] <route> '<q>'
@@ -64,21 +64,22 @@ FIRST Bash (copy-paste by flag):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| ChatGPT default (`cdx`) | `xask --gs --service-tier fast cdx '<q>'` | stock `xbreed ask codex` (sol advertises fast) |
+| Kimi (OAuth, native CLI) — **default FIRST** | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Pay-as-you-go is `--model-id moonshotai/…`. |
+| ChatGPT / OpenAI only (`cdx`) | `xask --gs --service-tier fast cdx '<q>'` | stock `xbreed ask codex` (sol advertises fast). Not the default FIRST consult. |
 | L3 spark | `xask --spark --gs --service-tier fast cdx '<q>'` | sekhmet L3 → `codex-titanium` (spark advertises fast) |
 | Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast` |
 | Token Plan DeepSeek | `xask --gs ds-pro '<q>'` / `ds-flash` | Token Plan wrappers; **no** `--service-tier fast` |
 | Grok oneshot | `xask --gs grok '<q>'` | `grok --always-approve --no-subagents --verbatim -p` |
-| Kimi (OAuth, native CLI) | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Bare `xask --gs cdx` remaps here while `XASK_CODEX_FALLBACK=kimi-k3`. Pay-as-you-go is `--model-id moonshotai/…`. |
+
 | Local Gemma | `xask --gs gemma '<q>'` | `xbreed ask gemma` |
-| Sol review | `xask --gpt55 --gs -e low cdx '<q>'` | stock gpt-5.6-sol |
+| Sol review (OpenAI) | `xask --gpt55 --gs -e low cdx '<q>'` | stock gpt-5.6-sol |
 
 `--substrate sekhmet` is the same spark opt-in as `--spark`. `--substrate stock` keeps ChatGPT on xbreed. Do not `xask grok` as FIRST bash from a grok teammate (grok-consults-grok); pick another route.
 
 | Role | xbgst-mode FIRST |
 |---|---|
-| `scout`, `labrat`, `executor`, `connector` | `xask --gs` + flags for the named CLI (`cdx` default; `--spark` only when L3 is requested) |
-| `reviewer`, `sentinel`, `critic`, `mutation-tester` | same; `--gpt55 --gs -e low cdx` when reviewing |
+| `scout`, `labrat`, `executor`, `connector` | `xask --gs kimi` (OAuth K3). `--spark` only when L3 is requested. Never default `cdx`. |
+| `reviewer`, `sentinel`, `critic`, `mutation-tester` | `xask --gs kimi`; `--gpt55 --gs -e low cdx` only when the review target is OpenAI |
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
 

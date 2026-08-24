@@ -63,7 +63,7 @@ L1 xbgst remains sole scheduler, Pareto, `APPROVED`, integrator, shipper.
 | identity-ELF | `ds4cc-chrome` ≡ `musketeer-chrome` | same realpath/md5 `36154fd08be1…` | two CDP launchers |
 | wrapper-exec | `kimiraikoner` → `kimiraikkoner` | tiny bash execs sibling; **different md5** | skill `the-kimiraikkoner` / plugin `the-kimiraikoner` |
 | xask tokens | `cdx`=`codex`; `g`=`gemma`=`gemini` **SUBBED** HVM; `kimi`=`kimi-k3` | protocol header + `xask models --json` | `kimi-code` is a **package**, PATH name is `kimi` |
-| slash (not CLIs) | `/xbgst` `/xb` `/xgs` `/xbt` `/xbreed` `/xbreed-team` `/xbgst-livepatch` `/xbgst-primeagent` | `~/.grok/commands/*.md` | PATH `xbreed` is a **different** object (Rust ELF 8.16.137) |
+| slash (not CLIs) | `/xbreed-team` (SSoT) `/xbgst` (clone) `/xgs` `/xbgst-livepatch` `/xbgst-primeagent` | `~/.grok/commands/*.md` | PATH `xbreed` is a **different** object (Rust ELF 8.16.137). Unshipped: `/xb` `/xbt` `/xbreed`. |
 | not-alias | `xask` ≠ `xask-l3` | md5 `169732b8…` vs `89f1b3ae…`; protocol vs sekhmet shim | |
 | not-alias | stock `codex` ≠ `codex-titanium` | omarchy bash `@openai/codex` 0.149.0 vs ELF titanium 0.146.0-alpha.10.1+titanium.1 | never symlink titanium as `codex` |
 | not-alias | `grok`/`grok-titanium` ≠ `grok-bot` ≠ `grok-web` ≠ `agent` | livepatch ELF vs Electron vs musketeer CDP vs stock downloads | |

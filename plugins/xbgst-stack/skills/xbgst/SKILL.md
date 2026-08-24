@@ -65,7 +65,7 @@ Do not name axes or dispatch specialists until the plan artifact exists.
 - **Draft, then dispatch.** Your output is a DRAFT (files, code, tests, sequencing). Dispatch sub-roles for what you can't judge alone.
 - **Decide on incomplete info.** Name the assumption. A stalled judge is worse than a wrong judge.
 - **Judge is Grok.** All roles map to Grok. Never spawn type `xask`. Never Claude TeamCreate. Language follows the repo.
-- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbgst` = the crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (stock `xask --gs cdx` default; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
+- **Two modes.** `/xgs` = native-only (specialists do not call xask; in-process `gx-*` only). `/xbreed-team` (SSoT slash) and `/xbgst` (slash clone) load this skill. Crossbreed path: specialists FIRST call PATH `xask` **with flags that name the target CLI** (stock `xask --gs kimi` default; `cdx` is OpenAI-only; `--spark` / `--substrate sekhmet` opt-in for L3). Spawn stays `gx-*`. Never use `xask-l3` as FIRST. Do not `xask grok` as FIRST from a grok teammate. Role→lane: `commands/references/xbreed-shared.md`.
 
 ## Local-first git posture (locked — permanent)
 

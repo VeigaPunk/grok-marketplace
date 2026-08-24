@@ -18,10 +18,7 @@ ssot/godspeed-core/velocity.md
 [commands]
 xbgst.md
 xbgst-livepatch.md
-xb.md
 xgs.md
-xbt.md
-xbreed.md
 xbreed-team.md
 references/xbreed-shared.md
 

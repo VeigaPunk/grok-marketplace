@@ -84,12 +84,20 @@ for a in the-planner distiller scribe simplifier; do
   fi
 done
 
-# 7) aliases follow xbgst-mode
-for f in xb.md xbt.md xbreed.md xbreed-team.md; do
-  grep -Eiq 'xbgst-mode|crossbreed|xask-first|Same as \*\*`/xbgst`\*\*' "$ROOT/commands/$f" \
+# 7) shipped slashes: xbreed-team is SSoT; xbgst is its clone; xb/xbt/xbreed unshipped
+for f in xbreed-team.md xbgst.md; do
+  grep -Eiq 'xbgst-mode|crossbreed|xask-first|Load skill \*\*xbgst\*\*' "$ROOT/commands/$f" \
     || fail "commands/$f is not xbgst-mode"
   if grep -Eiq 'optional/off unless' "$ROOT/commands/$f"; then
     fail "commands/$f still says optional/off"
+  fi
+  need "$ROOT/commands/$f" "xask --gs kimi"
+done
+need "$ROOT/commands/xbgst.md" "Slash clone of"
+need "$ROOT/commands/xbreed-team.md" "SSoT slash"
+for gone in xb.md xbt.md xbreed.md; do
+  if [[ -e "$ROOT/commands/$gone" ]]; then
+    fail "commands/$gone must not ship"
   fi
 done
 
