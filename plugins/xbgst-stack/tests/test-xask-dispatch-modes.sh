@@ -60,6 +60,14 @@ need "$ROOT/commands/xbgst-orch.md" "xask --provider cursor --model-id kimi-k3-m
 need "$SCOUT" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/connector.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/the-planner.md" "xask --provider cursor --model-id kimi-k3-max --gs"
+need "$ROOT/agents/the-planner.md" "WWKD mapping"
+need "$ROOT/agents/the-planner.md" "Load skill \`wwkd\`"
+if grep -E 'FIRST tool call MUST be Bash:.*plan question' "$ROOT/agents/the-planner.md" >/dev/null 2>&1; then
+  fail "agents/the-planner.md must not send a plan question to Kimi; xask is the WWKD mapping"
+fi
+if ! grep -F 'This consult is the mapping. Do not ask a question.' "$ROOT/agents/the-planner.md" >/dev/null 2>&1; then
+  fail "agents/the-planner.md missing WWKD mapping payload"
+fi
 for a in labrat executor reviewer critic sentinel mutation-tester; do
   need "$ROOT/agents/$a.md" "xask --gs ds-pro"
 done
