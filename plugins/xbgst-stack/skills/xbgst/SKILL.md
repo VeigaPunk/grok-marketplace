@@ -74,11 +74,11 @@ Fork a child orch (spawn another `the-planner` **now**, do not wait for the curr
 
 **Do not fork** for a refinement, a one-line clarification, or a follow-up that shares the current plan's next gate.
 
-Signals that should fork without waiting: the user says "also dispatch", "another task", "concurrently", "in the same session"; or they invoke `/xbgst-orch <task>` / a second `/xbreed-team` / `/xbgst` mid-session.
+Signals that should fork without waiting: the user says "also dispatch", "another task", "concurrently", "in the same session"; or they invoke `/xbgst-orch <task>`.
 
 ### Slash flag
 
-`/xbgst-orch <task>` forces a child orch even if the judge would have folded. `/xbreed-team` and `/xbgst` on an already-live L1 are the same force when the argument is disjoint.
+`/xbgst-orch <task>` is the **only** explicit fork verb. Mid-session `/xbreed-team` or `/xbgst` stay this L1 (load skill xbgst on the current judge). Do not treat those loaders as a second force — that re-widens the slash surface after `/xb` `/xbt` `/xbreed` were unshipped.
 
 ### Child contract
 
