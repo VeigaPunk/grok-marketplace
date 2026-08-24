@@ -4,6 +4,9 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.31
+
+- Hangar gx-* cheap FIRST consult is Token Plan: `scout`/`connector` → `xask --gs qwen38`; `labrat`/`executor`/`reviewer`/`critic`/`sentinel`/`mutation-tester` → `xask --gs ds-pro`. `xask --gs kimi` stays a named route, not hangar default. Reviewer FIRST is no longer `cdx` (`XASK_CODEX_FALLBACK=kimi-k3` remaps `cdx` onto Kimi OAuth). Token Plan stays `SERVICE_TIER: default` (no `--service-tier fast`). `ds-flash` is named/opt-in, not hangar FIRST.
 - `/xbgst` is the SSoT slash that loads skill **xbgst**. `/xbreed-team` is a slash clone of that file. `clone-l1 -p /xbgst`. Keep `/xgs`. Unshipped aliases remain `/xb` `/xbt` `/xbreed`.
 
 ## 1.1.30

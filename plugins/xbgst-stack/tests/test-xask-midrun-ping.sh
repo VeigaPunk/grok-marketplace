@@ -25,7 +25,8 @@ strip_pong() {
 
 run_extract() {
   local envfile=$1
-  XDG_RUNTIME_DIR="$FIX/run" python3 "$EXTRACT" <"$envfile"
+  # Ambient XBRD_SPARK_ROOT (host /scratch) must not steal fixture XDG.
+  XDG_RUNTIME_DIR="$FIX/run" env -u XBRD_SPARK_ROOT python3 "$EXTRACT" <"$envfile"
 }
 
 # Do not capture into bash vars — command substitution strips trailing newlines.
@@ -47,10 +48,10 @@ if grep -q PONG /tmp/xask-midrun-malformed.out 2>/dev/null; then
   fail "malformed extract must not emit PONG"
 fi
 
-XDG_RUNTIME_DIR="$FIX/canary/run" python3 "$EXTRACT" <"$FIX/envelope.json" \
+XDG_RUNTIME_DIR="$FIX/canary/run" env -u XBRD_SPARK_ROOT python3 "$EXTRACT" <"$FIX/envelope.json" \
   | python3 -c 'import sys; s=sys.stdin.read(); sys.exit(0 if s=="XCANARY\n" else 1)' \
   || fail "source-follow: result.json stdout swap must follow (want XCANARY\\n)"
-if XDG_RUNTIME_DIR="$FIX/canary/run" python3 "$EXTRACT" <"$FIX/envelope.json" | grep -q PONG; then
+if XDG_RUNTIME_DIR="$FIX/canary/run" env -u XBRD_SPARK_ROOT python3 "$EXTRACT" <"$FIX/envelope.json" | grep -q PONG; then
   fail "source-follow leaked prompt PONG"
 fi
 
@@ -70,7 +71,7 @@ nsid="sp-A_b-9"
 mkdir -p "$idprobe/xbrd-spark/$nsid/out"
 printf '%s\n' '{"status":"ok","stdout":"NONHEX\n"}' >"$idprobe/xbrd-spark/$nsid/out/result.json"
 printf '%s\n' "{\"spark_id\":\"$nsid\",\"status\":\"ok\",\"result_path\":\"/tmp/xbgst-sentinel-evil-result.json\"}" >"$idprobe/env.json"
-XDG_RUNTIME_DIR="$idprobe" python3 "$EXTRACT" <"$idprobe/env.json" \
+XDG_RUNTIME_DIR="$idprobe" env -u XBRD_SPARK_ROOT python3 "$EXTRACT" <"$idprobe/env.json" \
   | python3 -c 'import sys; s=sys.stdin.read(); sys.exit(0 if s=="NONHEX\n" else 1)' \
   || fail "sekhmet-valid non-hex spark_id must extract"
 rm -rf "$idprobe"

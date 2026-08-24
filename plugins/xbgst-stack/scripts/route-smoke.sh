@@ -105,8 +105,10 @@ fi
 # Shared RE row (one line)
 need_re "$SHARED" '\| RE \| `the-revenger` \| cdx \|'
 
-# L2 consult paste surface: Token Plan qwen38 remains opt-in; gx-* never xask grok FIRST
+# L2 consult paste surface: Token Plan qwen38/ds-pro is hangar default cheap FIRST; gx-* never xask grok FIRST
 need "$SHARED" "xask --gs qwen38"
+need "$SHARED" "xask --gs ds-pro"
+need "$DOC" "hangar gx-* default cheap FIRST"
 need "$SHARED" "Do not \`xask grok\` as FIRST bash"
 need "$SHARED" "Never spawn type \`xask\`"
 need "$SHARED" "Never use \`xask-l3\`"

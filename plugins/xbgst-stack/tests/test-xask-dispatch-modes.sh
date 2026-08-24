@@ -53,6 +53,28 @@ need "$SCOUT" "xask --gs"
 need "$SHARED" "--spark"
 need "$SHARED" "xask --gs --service-tier fast cdx"
 need "$SHARED" "xask --gs qwen38"
+need "$SHARED" "xask --gs ds-pro"
+# E-split hangar cheap FIRST (policy grep; no live model)
+need "$SCOUT" "xask --gs qwen38"
+need "$ROOT/agents/connector.md" "xask --gs qwen38"
+for a in labrat executor reviewer critic sentinel mutation-tester; do
+  need "$ROOT/agents/$a.md" "xask --gs ds-pro"
+done
+if grep -E 'FIRST tool call MUST be Bash: `xask --gs cdx' "$ROOT/agents/reviewer.md" >/dev/null 2>&1; then
+  fail "$ROOT/agents/reviewer.md must not FIRST cdx (cdx remaps to kimi-k3)"
+fi
+# R3: consult FIRST is Token Plan cheap, not kimi (keep kimi in slash files as named route)
+for a in scout connector labrat executor reviewer critic sentinel mutation-tester; do
+  if grep -E 'FIRST tool call MUST be Bash: `xask --gs kimi' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
+    fail "agents/$a.md FIRST must not be xask --gs kimi (named slash route only)"
+  fi
+done
+# R3: hangar cheap FIRST is qwen38+ds-pro; ds-flash named/opt-in not hangar FIRST
+need "$ROOT/docs/model-routing.md" '`xask --gs qwen38\|ds-pro`'
+need "$ROOT/docs/model-routing.md" "named/opt-in not hangar FIRST"
+if grep -F 'qwen38\|ds-flash\|ds-pro' "$ROOT/docs/model-routing.md" >/dev/null 2>&1; then
+  fail "$ROOT/docs/model-routing.md hangar FIRST must not lump ds-flash with qwen38/ds-pro"
+fi
 need "$SCOUT" "<raw_output>"
 need "$SCOUT" "BLOCKED"
 need "$SCOUT" "mode: xgs"

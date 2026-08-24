@@ -40,7 +40,7 @@ If the host already has `heuer-planning` installed (e.g. from ds4cc / user skill
 
 Then proceed. Never block critic work on a missing heuer skill.
 
-- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --gs kimi '<design review question>'`. No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
+- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --gs ds-pro '<design review question>'`. No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
 
 ## Posture
 
