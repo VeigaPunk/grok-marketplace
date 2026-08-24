@@ -4,6 +4,8 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- `/xbgst` is the SSoT slash that loads skill **xbgst**. `/xbreed-team` is a slash clone of that file. `clone-l1 -p /xbgst`. Keep `/xgs`. Unshipped aliases remain `/xb` `/xbt` `/xbreed`.
+
 ## 1.1.30
 
 - gx-teams does not wrap `grok -p` that starts with `/` (or when `GX_TEAMS_SKIP_GODSPEED=1`). `/xbgst-clone` stays a real L1 (`/xbreed-team` loads skill **xbgst**) instead of a godspeed teammate oneshot.

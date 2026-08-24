@@ -85,7 +85,11 @@ PY
 }
 inject_local "$resolved"
 
-# Slash L1 loaders must stay unwrapped so grok actually loads /xbreed-team.
+# Slash L1 loaders must stay unwrapped so grok actually loads /xbgst (SSoT).
+# Keep `/` skip; clone slash /xbreed-team also starts with / .
+argv=(/usr/bin/grok -p '/xbgst ping-clone')
+inject_godspeed_into_grok_prompt argv
+[[ "${argv[-1]}" == "/xbgst ping-clone" ]]
 argv=(/usr/bin/grok -p '/xbreed-team ping-clone')
 inject_godspeed_into_grok_prompt argv
 [[ "${argv[-1]}" == "/xbreed-team ping-clone" ]]
