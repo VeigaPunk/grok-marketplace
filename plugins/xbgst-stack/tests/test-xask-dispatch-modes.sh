@@ -54,6 +54,8 @@ need "$SHARED" "--spark"
 need "$SHARED" "xask --gs --service-tier fast cdx"
 need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
+need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"
+need "$ROOT/commands/xbgst-orch.md" "xask --provider cursor --model-id kimi-k3-max"
 # E-split hangar cheap FIRST (policy grep; no live model)
 need "$SCOUT" "xask --gs qwen38"
 need "$ROOT/agents/connector.md" "xask --gs qwen38"
@@ -67,6 +69,9 @@ fi
 for a in scout connector labrat executor reviewer critic sentinel mutation-tester; do
   if grep -E 'FIRST tool call MUST be Bash: `xask --gs kimi' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
     fail "agents/$a.md FIRST must not be xask --gs kimi (named slash route only)"
+  fi
+  if grep -E 'FIRST tool call MUST be Bash: `xask --provider cursor' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
+    fail "agents/$a.md FIRST must not be xask --provider cursor (named gravy route only)"
   fi
 done
 # R3: hangar cheap FIRST is qwen38+ds-pro; ds-flash named/opt-in not hangar FIRST
