@@ -4,7 +4,7 @@
 #
 # fnm is required (fail-closed). Timer is opt-in (--install-timer).
 # Livepatch ELF present → install-timer.sh --link-bin (grok-titanium), no timer.
-# PATH: gx-teams + xbgst-mailbox (integrations/, hangar fallback until M07).
+# PATH: xbgst-mailbox. gx-teams is opt-in (XBGST_INSTALL_GX_TEAMS=1).
 #
 # Timer root (marketplace-first):
 #   1) GROK_LIVEPATCH_ROOT if set
@@ -52,16 +52,14 @@ if ! command -v fnm >/dev/null 2>&1; then
   exit 1
 fi
 
-# Slash-boundary ours-test (not prefix glob). Also treat any
-# */installed-plugins/xbgst-stack-* path as ours so plugin updates retarget.
+# Slash-boundary ours-test (not prefix glob). Marketplace checkout only.
+# Do NOT treat */installed-plugins/xbgst-stack-* as yankable — that pin is
+# the host overlay unfuck (user /xbgst must not bounce back onto a dirty checkout).
 is_ours() {
   local cur=$1
   local base=$STACK_ROOT
   [[ -n "$cur" ]] || return 1
   if [[ "$cur" == "$base" || "$cur" == "$base"/* ]]; then
-    return 0
-  fi
-  if [[ "$cur" == */installed-plugins/xbgst-stack-* ]]; then
     return 0
   fi
   return 1
@@ -240,10 +238,12 @@ link_path_bin() {
   ln -sfn "$src" "$dest"
   echo "✓ $(basename "$dest") → $dest"
 }
-if [[ -x "$GX_TEAMS_SRC/gx-teams.sh" ]]; then
+if [[ "${XBGST_INSTALL_GX_TEAMS:-0}" == 1 && -x "$GX_TEAMS_SRC/gx-teams.sh" ]]; then
   link_path_bin "$LOCAL_BIN/gx-teams" "$GX_TEAMS_SRC/gx-teams.sh" || true
-else
+elif [[ "${XBGST_INSTALL_GX_TEAMS:-0}" == 1 ]]; then
   echo "⚠ gx-teams.sh missing under $GX_TEAMS_SRC" >&2
+else
+  echo "→ skip PATH gx-teams (set XBGST_INSTALL_GX_TEAMS=1 to opt in)"
 fi
 MAILBOX_DIR="$GX_TEAMS_SRC/mailbox"
 VENDORED_MAILBOX="$STACK_ROOT/integrations/gx-teams/mailbox/Cargo.toml"

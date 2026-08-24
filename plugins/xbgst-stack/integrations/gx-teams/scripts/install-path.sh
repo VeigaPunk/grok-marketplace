@@ -22,6 +22,10 @@ else
   exit 1
 fi
 chmod +x "$ROOT/gx-teams.sh"
-ln -sfn "$ROOT/gx-teams.sh" "$BIN/gx-teams"
 echo "linked $BIN/xbgst-mailbox"
-echo "linked $BIN/gx-teams"
+if [[ "${XBGST_INSTALL_GX_TEAMS:-0}" == 1 ]]; then
+  ln -sfn "$ROOT/gx-teams.sh" "$BIN/gx-teams"
+  echo "linked $BIN/gx-teams"
+else
+  echo "skip PATH gx-teams (set XBGST_INSTALL_GX_TEAMS=1 to opt in)"
+fi
