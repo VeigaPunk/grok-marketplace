@@ -1,5 +1,5 @@
 ---
-description: Grok-host crossbreed godspeed orchestrator — gx-* runners xask-first (sekhmet/titanium, service_tier=fast). Spawn the-planner then judge rounds (local-first → main).
+description: Grok-host crossbreed godspeed orchestrator — gx-* runners xask-first (stock xask --gs cdx; --spark opt-in L3 sekhmet/codex-titanium service_tier=fast). Spawn the-planner then judge rounds (local-first → main).
 argument-hint: <task for the judge>
 ---
 
@@ -40,7 +40,7 @@ Use `xbrd-selector` only as the separate L2-select lane when it is installed; Pr
 |---------|-----------------|
 | `/xbgst` | Crossbreed (this file → skill). PATH `xask` first. sekhmet fan-out. |
 | `/xgs` | Native-only. Specialists do not call xask. |
-| `/xbt` / `/xbreed` / `/xb` | Same as `/xbgst` (xbgst-mode / xask-first). Consult table: `commands/references/xbreed-shared.md` |
+| `/xbt` / `/xbreed` / `/xb` / `/xbreed-team` | Same as `/xbgst` (xbgst-mode / xask-first). Consult table: `commands/references/xbreed-shared.md` |
 
 ## Livepatch
 

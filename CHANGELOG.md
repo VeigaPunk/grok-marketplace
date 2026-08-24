@@ -4,14 +4,19 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
-- Host concurrency is 64. Dropped the 16/wave specialist cap. `[subagents] max_concurrent = 64` in livepatch `cli-config.toml`. Skill/commands no longer introduce a smaller package-level cap.
-- Split `/xgs` (native-only, no xask) from `/xbgst` (crossbreed). Named `gx-*` runners FIRST call PATH `xask --spark --gs --service-tier fast` (sekhmet / `codex-titanium`). `/xb` `/xbt` `/xbreed` follow xbgst-mode. Gate: `plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh`.
+## 1.1.26
+
+- gx-teams PATH: fnm shim stays ahead of `/usr/bin`; skip foreign PATH bins; drop the hangar default from `install-host`; point vendored gx-teams at the plugin Godspeed directive.
+- Alias-truth: `/xb` matches `/xbgst` (stock `xask --gs cdx`, `--spark` opt-in). `/xbreed-team` is listed as an alias. `xbreed-shared.md` mode line matches the consult table. xbrd-grok SKILL mirror is byte-identical to the plugin skill.
 
 ## 1.1.25
 
 - Product name **grok-titanium**: livepatched Grok Build PATH `grok-titanium`. Livepatch series 0001–0005.
 - Vendor `gx-teams` + `xbgst-mailbox` into `xbgst-stack/integrations/gx-teams`. `install-host.sh` fail-closes without fnm, PATH-links mailbox/gx-teams, `--link-bin` when ELF exists (no timer).
 - Spawn protocol is fnm multishells **always** (`BLOCKED: fnm missing`). JSONL mailbox is a log; live DM stays ACP. Do not GC `fnm_multishells`.
+- Host concurrency is 64. Dropped the 16/wave specialist cap. `[subagents] max_concurrent = 64` in livepatch `cli-config.toml`. Skill/commands no longer introduce a smaller package-level cap.
+- Split `/xgs` (native-only, no xask) from `/xbgst` (crossbreed). Named `gx-*` runners FIRST call PATH `xask` with flags that name the target CLI (stock `xask --gs cdx` default; `--spark` / `--substrate sekhmet` opt-in for L3). `/xb` `/xbt` `/xbreed` follow xbgst-mode. Gate: `plugins/xbgst-stack/tests/test-xask-dispatch-modes.sh`.
+- Fast servicing is pinned only on ChatGPT lanes that advertise it (`xask --gs --service-tier fast cdx`). Token Plan / grok / kimi / gemma / Daybreak stay default-tier. Bare `xask cdx` does not auto-spark.
 
 ## 1.1.24
 

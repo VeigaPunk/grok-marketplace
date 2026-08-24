@@ -4,7 +4,7 @@
 
 **Not used on Grok:** Claude TeamCreate, `advisor()`, sonnet/opus model pins, `~/.claude/*` paths. **Never spawn type `xask`.** PATH `xask` is the consult CLI; spawn stays `gx-*`.
 
-**Modes:** `/xgs` = native-only (no xask). `/xbgst` = xbgst-mode (PATH `xask` first; sekhmet/`codex-titanium`/`service_tier=fast`).
+**Modes:** `/xgs` = native-only (no xask). `/xbgst` = xbgst-mode (PATH `xask` first; flags name the target CLI; stock `xask --gs cdx`; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
 
 ## Godspeed injection (every teammate)
 
