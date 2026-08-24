@@ -69,7 +69,7 @@ FIRST Bash (copy-paste by flag):
 | Token Plan qwen3.8-max | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast` |
 | Token Plan DeepSeek | `xask --gs ds-pro '<q>'` / `ds-flash` | Token Plan wrappers; **no** `--service-tier fast` |
 | Grok oneshot | `xask --gs grok '<q>'` | `grok --always-approve --no-subagents --verbatim -p` |
-| Kimi | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` |
+| Kimi (OAuth, native CLI) | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Bare `xask --gs cdx` remaps here while `XASK_CODEX_FALLBACK=kimi-k3`. Pay-as-you-go is `--model-id moonshotai/…`. |
 | Local Gemma | `xask --gs gemma '<q>'` | `xbreed ask gemma` |
 | Sol review | `xask --gpt55 --gs -e low cdx '<q>'` | stock gpt-5.6-sol |
 
