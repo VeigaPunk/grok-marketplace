@@ -48,6 +48,7 @@ Judge calls: **grok-titanium** is on PATH (`~/.local/bin/grok-titanium` → live
 | **OS-gx-teams** | tmux panes + JSONL mailbox (`xbgst-mailbox`) | Grok OS teammates (`grok -p`) | vendored in xbgst-stack `integrations/gx-teams`; PATH `gx-teams` + `xbgst-mailbox` via install-host |
 | **DESK-grok-bot** | Electron `/opt/Grok Bot/sand` → skill local-exec `grok -p /xbgst` | trigger, **not** judge | `/usr/bin/grok-bot`; skill `xbgst-surface` |
 | **CDP family** | fnm + `agent-browser` + `musketeer-chrome` on loopback **9222** | web-UI adapters | binaries present; **9222 down this session** |
+| **DESK-cursor-agent** | `cursor-agent -p` · Ultra · `cursor-grok-4.6-high-fast` | trigger / usage surface, **not** judge | AppImage 3.17.8 + CLI `2026.08.11-e8db854`; skill `xbgst-cursor`; ping `xbgst-cursor armed`. PATH `agent` remains grok-titanium. |
 
 L1 xbgst remains sole scheduler, Pareto, `APPROVED`, integrator, shipper.
 
@@ -117,6 +118,7 @@ Vault item name only: `DashScope Token Plan Team (intl sk-sp)` in `AgentAutomati
 |---|---|---|
 | grok-bot | `/usr/bin/grok-bot` → `/opt/Grok Bot/sand` | **live as trigger** (PATH + `xbgst-surface` contract). Surface tests **not re-run** this pass. Not the judge. |
 | gx-teams | `gx-teams` + `xbgst-mailbox` | OS harness; JSONL log via crate; fnm-always panes |
+| Cursor Ultra | AppImage `Cursor-3.17.8-x86_64.AppImage` + PATH `cursor-agent` | **live as trigger** (ping/run + `xbgst-cursor` nested tree). Not the judge. Never argv0=`agent`. |
 
 ---
 
@@ -133,6 +135,7 @@ Vault item name only: `DashScope Token Plan Team (intl sk-sp)` in `AgentAutomati
 | process `DASHSCOPE_API_KEY` / `BAILIAN_TOKEN_PLAN_API_KEY` | **unset** | must be injected per call |
 | CDP cookies in `~/.local/share/the-musketeer/chrome-profile` | profile dir present | grok.com / kimi.ai / chatgpt.com / notebooklm when 9222 is up |
 | PrimeAgent OpenAI OAuth | user-owned, optional | never automate `/login` |
+| `~/.config/Cursor` / `~/.cursor` | yes (presence only) | Cursor desktop + Agent CLI; do not cat `auth.json` |
 
 This Grok session MCP: **github, gmail, tasks, vercel** connected; **exa** failed auth. `config.toml` has **no** `[mcp_servers]` — vercel/exa come from plugin `.mcp.json`. github/gmail/tasks are session-level, not orch inventory.
 
