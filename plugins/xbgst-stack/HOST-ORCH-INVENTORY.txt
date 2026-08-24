@@ -21,6 +21,7 @@ xbgst-livepatch.md
 xgs.md
 xbreed-team.md
 xbgst-orch.md
+xbgst-clone.md
 references/xbreed-shared.md
 
 [agents]

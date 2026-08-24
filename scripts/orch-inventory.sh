@@ -10,7 +10,7 @@ HOST_GROK="${GROK_HOME:-$HOME/.grok}"
 # Frozen required names (plan-phase0 Host orch inventory).
 SKILLS="xbgst xbgst-livepatch the-janitor godspeed wwkd"
 SSOT_FILES="ssot/godspeed-core/directive.md ssot/godspeed-core/filter.md ssot/godspeed-core/velocity.md"
-COMMANDS="xbgst.md xbgst-livepatch.md xgs.md xbreed-team.md xbgst-orch.md references/xbreed-shared.md"
+COMMANDS="xbgst.md xbgst-livepatch.md xgs.md xbreed-team.md xbgst-orch.md xbgst-clone.md references/xbreed-shared.md"
 AGENTS="connector critic distiller executor labrat mutation-tester reviewer scout scribe sentinel simplifier the-planner the-revenger the-janitor the-musketeer explore general-purpose"
 LIVEPATCH="livepatch/patches/0001-ban-generic-subagents.patch livepatch/scripts/check-and-patch.sh scripts/install-host.sh"
 BANNED="heuer-planning the-kimiraikkoner"

@@ -87,6 +87,26 @@ Signals that should fork without waiting: the user says "also dispatch", "anothe
 - Connector still mandatory on that child's PROPOSE rounds after its Round 0
 - Return is evidence. L1 integrates, scores axes, ships.
 
+## Orch-clone (detached L1, prototype)
+
+When the target **scope is another cwd/repo**, do not fold it into this pane and do not use `/xbgst-orch`. **Detach a clone of this L1** in another tmux window via `gx-teams` + `grok --cwd <dir> -p /xbreed-team <task>` (`scripts/xbgst-clone-l1.sh`). Session is `gx-teams-<team>` (default team `clone`), never operator `0`/`1`. Each clone gets its own `--leader-socket` (grok has no `--no-leader`) and pane PWD via `env -C`.
+
+That pane **is** a Grok L1: it may name axes, Pareto, `APPROVED`, and ship **there**. This pane stays the parent L1 and **does not wait**. Never nuke operator tmux sessions `0`/`1`. Each spawn gets a unique gx-teams `--name` and `--leader-socket` so two clones (including explicit same-cwd A/B) do not share a leader endpoint.
+
+### Autonomous pick (same-session multi-orch vs clone)
+
+| Scope | Move |
+|---|---|
+| Same cwd, disjoint task | `/xbgst-orch` — in-process child planner, evidence only |
+| Existing dir whose realpath ≠ this cwd (or different git toplevel) | `/xbgst-clone` — detached L1 clone |
+| Refinement of the current gate | fold; do not fork |
+
+Prototype: the end user compares **multi-orch + clone** vs **clone-only**. Iterate on the two slashes. Default autonomous table above.
+
+### Slash flag
+
+`/xbgst-clone <cwd> <task>` forces a detach. Script: `scripts/xbgst-clone-l1.sh --cwd DIR -- <task>` (`--dry-run`, `--ping` for `CLONE_L1_OK`).
+
 ## Posture
 
 - **Judge explicitly.** Name axes, score proposals, pick. No vibe-based decisions.

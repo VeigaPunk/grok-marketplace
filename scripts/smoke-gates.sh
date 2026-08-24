@@ -484,6 +484,11 @@ if XASK_LIVE=0 bash plugins/xbgst-stack/tests/test-xask-midrun-ping.sh; then
 else
   bad "xask midrun ping fixtures"
 fi
+if bash plugins/xbgst-stack/tests/test-xbgst-clone-l1.sh; then
+  ok "xbgst-clone-l1 dry-run"
+else
+  bad "xbgst-clone-l1 dry-run"
+fi
 
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"

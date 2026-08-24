@@ -4,6 +4,10 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.29
+
+- Prototype **orch-clone**: `/xbgst-clone` detaches a real L1 in another tmux window via `gx-teams` + `grok --cwd` (`env -C` pane PWD, unique `--leader-socket`; grok has no `--no-leader`). Autonomous: other cwd → clone; same cwd disjoint → `/xbgst-orch`. Never team `0`/`1`. Gate: `tests/test-xbgst-clone-l1.sh`.
+
 ## 1.1.28
 
 - Concurrent child orchs on the same L1: skill **xbgst** may spawn additional `the-planner` waves when a task is disjoint; `/xbgst-orch` is the explicit fork flag. Children return evidence; only L1 ships. Never a second judge.

@@ -82,7 +82,7 @@ bash scripts/gate-m06.sh   # expect GATE_M06_OK
 
 ## Steal / drop (from CC 2.1.32-era teams, not the 2.1.137 VSCode patch)
 
-**Steal:** OS process per pane; first spawn mkdir (no TeamCreate); JSON inbox with ack-on-write; identity in argv/env; `--no-leader` so panes do not share `~/.grok/leader.sock`.
+**Steal:** OS process per pane; first spawn mkdir (no TeamCreate); JSON inbox with ack-on-write; identity in argv/env; unique `--leader-socket` so panes do not share `~/.grok/leader.sock` (top-level `grok` has no `--no-leader`).
 
 **Drop:** wrapping Claude Code; TeamCreate/TeamDelete; pane title as SSoT; `tmux send-keys` as the DM bus; `grok agent leader` as the teammate transport; in-process `spawn_subagent` as “teammate mode”.
 
