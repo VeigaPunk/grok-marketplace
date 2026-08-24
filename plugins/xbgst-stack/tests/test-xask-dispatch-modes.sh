@@ -49,33 +49,39 @@ need "$SKILL" "mode: xbgst | xgs"
 
 # 4) scout xask-first + 4-layer + xgs skip
 need "$SCOUT" "FIRST tool"
-need "$SCOUT" "xask --gs"
+need "$SCOUT" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$SHARED" "--spark"
 need "$SHARED" "xask --gs --service-tier fast cdx"
 need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
 need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"
 need "$ROOT/commands/xbgst-orch.md" "xask --provider cursor --model-id kimi-k3-max"
-# E-split hangar cheap FIRST (policy grep; no live model)
-need "$SCOUT" "xask --gs qwen38"
-need "$ROOT/agents/connector.md" "xask --gs qwen38"
+# E-split hangar FIRST: scout/connector = cursor gravy; implement/review = ds-pro
+need "$SCOUT" "xask --provider cursor --model-id kimi-k3-max --gs"
+need "$ROOT/agents/connector.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 for a in labrat executor reviewer critic sentinel mutation-tester; do
   need "$ROOT/agents/$a.md" "xask --gs ds-pro"
 done
 if grep -E 'FIRST tool call MUST be Bash: `xask --gs cdx' "$ROOT/agents/reviewer.md" >/dev/null 2>&1; then
   fail "$ROOT/agents/reviewer.md must not FIRST cdx (cdx remaps to kimi-k3)"
 fi
-# R3: consult FIRST is Token Plan cheap, not kimi (keep kimi in slash files as named route)
+# consult FIRST is not native kimi OAuth; qwen38 is named Token Plan not FIRST
 for a in scout connector labrat executor reviewer critic sentinel mutation-tester; do
   if grep -E 'FIRST tool call MUST be Bash: `xask --gs kimi' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
     fail "agents/$a.md FIRST must not be xask --gs kimi (named slash route only)"
   fi
-  if grep -E 'FIRST tool call MUST be Bash: `xask --provider cursor' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
-    fail "agents/$a.md FIRST must not be xask --provider cursor (named gravy route only)"
+  if grep -E 'FIRST tool call MUST be Bash: `xask --gs qwen38' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
+    fail "agents/$a.md FIRST must not be xask --gs qwen38 (named Token Plan route only)"
   fi
 done
-# R3: hangar cheap FIRST is qwen38+ds-pro; ds-flash named/opt-in not hangar FIRST
-need "$ROOT/docs/model-routing.md" '`xask --gs qwen38\|ds-pro`'
+for a in labrat executor reviewer critic sentinel mutation-tester; do
+  if grep -E 'FIRST tool call MUST be Bash: `xask --provider cursor' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
+    fail "agents/$a.md FIRST must not be xask --provider cursor (scout/connector gravy only)"
+  fi
+done
+# hangar FIRST is cursor gravy + ds-pro; ds-flash/qwen38 named/opt-in not hangar FIRST
+need "$ROOT/docs/model-routing.md" '`xask --gs ds-pro`'
+need "$ROOT/docs/model-routing.md" '`xask --provider cursor --model-id kimi-k3-max`'
 need "$ROOT/docs/model-routing.md" "named/opt-in not hangar FIRST"
 if grep -F 'qwen38\|ds-flash\|ds-pro' "$ROOT/docs/model-routing.md" >/dev/null 2>&1; then
   fail "$ROOT/docs/model-routing.md hangar FIRST must not lump ds-flash with qwen38/ds-pro"

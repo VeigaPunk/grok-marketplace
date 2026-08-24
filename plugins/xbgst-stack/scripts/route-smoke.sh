@@ -105,9 +105,10 @@ fi
 # Shared RE row (one line)
 need_re "$SHARED" '\| RE \| `the-revenger` \| cdx \|'
 
-# L2 consult paste surface: Token Plan qwen38/ds-pro is hangar default cheap FIRST; gx-* never xask grok FIRST
+# L2 consult paste surface: scout/connector FIRST is cursor kimi-k3-max; ds-pro remains Token Plan FIRST
 need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
+need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"
 need "$DOC" "hangar gx-* default cheap FIRST"
 need "$SHARED" "Do not \`xask grok\` as FIRST bash"
 need "$SHARED" "Never spawn type \`xask\`"

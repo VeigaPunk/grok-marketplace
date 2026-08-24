@@ -4,6 +4,9 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- Scout/connector hangar FIRST consult is Cursor Ultra gravy: `xask --provider cursor --model-id kimi-k3-max --gs`. `qwen38` is named Token Plan, not FIRST. Implement/review FIRST stays `xask --gs ds-pro`.
+- gx-teams `cmd` spawn of `grok` prefixes `grok-oauth-route wrap --` when the helper is on PATH (pass-through if absent). OS teammate API fallback stays off `~/.grok/auth.json`. In-process `gx-*` still inherit TUI OAuth.
+
 ## 1.1.31
 
 - Hangar gx-* cheap FIRST consult is Token Plan: `scout`/`connector` → `xask --gs qwen38`; `labrat`/`executor`/`reviewer`/`critic`/`sentinel`/`mutation-tester` → `xask --gs ds-pro`. `xask --gs kimi` stays a named route, not hangar default. Reviewer FIRST is no longer `cdx` (`XASK_CODEX_FALLBACK=kimi-k3` remaps `cdx` onto Kimi OAuth). Token Plan stays `SERVICE_TIER: default` (no `--service-tier fast`). `ds-flash` is named/opt-in, not hangar FIRST.

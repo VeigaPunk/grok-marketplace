@@ -4,7 +4,7 @@
 
 **Not used on Grok:** Claude TeamCreate, `advisor()`, sonnet/opus model pins, `~/.claude/*` paths. **Never spawn type `xask`.** PATH `xask` is the consult CLI; spawn stays `gx-*`.
 
-**Modes:** `/xgs` = native-only (no xask). `/xbgst` (SSoT) and `/xbreed-team` (slash clone) load skill **xbgst** — xbgst-mode (PATH `xask` first; flags name the target CLI; hangar cheap FIRST = Token Plan pair qwen38/ds-pro per role table; named routes `xask --gs kimi` and Cursor Ultra gravy `xask --provider cursor --model-id kimi-k3-max --gs` (not hangar default); `cdx` is OpenAI-only; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
+**Modes:** `/xgs` = native-only (no xask). `/xbgst` (SSoT) and `/xbreed-team` (slash clone) load skill **xbgst** — xbgst-mode (PATH `xask` first; flags name the target CLI; hangar FIRST = Cursor Ultra gravy `xask --provider cursor --model-id kimi-k3-max --gs` for `scout`/`connector`, Token Plan `xask --gs ds-pro` for implement/review; named routes `xask --gs kimi` and `xask --gs qwen38`; `cdx` is OpenAI-only; `--spark` opt-in L3 sekhmet/`codex-titanium`/`service_tier=fast`).
 
 ## Godspeed injection (every teammate)
 
@@ -56,7 +56,7 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 `/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask` **with flags that name the target CLI**, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
-`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Default cheap FIRST is the Token Plan pair (`xask --gs qwen38` / `xask --gs ds-pro` per role table). Kimi OAuth (`xask --gs kimi`) and Cursor Ultra gravy (`xask --provider cursor --model-id kimi-k3-max --gs`) are **named routes** not hangar default. `cdx` is OpenAI-only. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, `gpt-5.4-mini`, and Cursor Ultra (`kimi-k3-max`) stay `default`; `--service-tier fast` on those ids fails closed.
+`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Hangar FIRST is Cursor Ultra gravy for `scout`/`connector` (`xask --provider cursor --model-id kimi-k3-max --gs`) and Token Plan DeepSeek for implement/review (`xask --gs ds-pro`). Named routes: Kimi OAuth (`xask --gs kimi`) and Token Plan Qwen (`xask --gs qwen38`). `cdx` is OpenAI-only. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, `gpt-5.4-mini`, and Cursor Ultra (`kimi-k3-max`) stay `default`; `--service-tier fast` on those ids fails closed.
 
 ```
 xask --gs [flags] <route> '<q>'
@@ -66,10 +66,10 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| Token Plan qwen3.8-max — **hangar cheap FIRST** (`scout`, `connector`) | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast` |
-| Token Plan DeepSeek — **hangar cheap FIRST** (`labrat`, `executor`, `reviewer`, `critic`, `sentinel`, `mutation-tester`) | `xask --gs ds-pro '<q>'` | Token Plan wrappers; **no** `--service-tier fast`; `ds-flash` is named/opt-in not hangar FIRST |
+| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST** (`scout`, `connector`) | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --output-format text --model kimi-k3-max`. Fast inference is Ultra metering, **not** `--service-tier fast` (pin advertises default only). Never `--spark` on this pin. Never Claude. Never `auto`. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
+| Token Plan DeepSeek — **hangar FIRST** (`labrat`, `executor`, `reviewer`, `critic`, `sentinel`, `mutation-tester`) | `xask --gs ds-pro '<q>'` | Token Plan wrappers; **no** `--service-tier fast`; `ds-flash` is named/opt-in not hangar FIRST |
+| Token Plan qwen3.8-max — **named route** | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast`; named/opt-in not hangar FIRST |
 | Kimi (OAuth, native CLI) — **named route** | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Pay-as-you-go is `--model-id moonshotai/…`. |
-| Cursor Ultra (OAuth, cursor-agent) — **named gravy lane** | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --output-format text --model kimi-k3-max`. Fast inference is Ultra metering, **not** `--service-tier fast` (pin advertises default only). Not hangar default. Never gx-* FIRST. Never Claude. Never `auto`. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
 | ChatGPT / OpenAI only (`cdx`) | `xask --gs --service-tier fast cdx '<q>'` | stock `xbreed ask codex` (sol advertises fast). Not the default FIRST consult. |
 | L3 spark | `xask --spark --gs --service-tier fast cdx '<q>'` | sekhmet L3 → `codex-titanium` (spark advertises fast) |
 | Grok oneshot | `xask --gs grok '<q>'` | `grok --always-approve --no-subagents --verbatim -p` |
@@ -81,7 +81,7 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Role | xbgst-mode FIRST |
 |---|---|
-| `scout`, `connector` | `xask --gs qwen38`. `--spark` only when L3 is requested. Never default `cdx`. |
+| `scout`, `connector` | `xask --provider cursor --model-id kimi-k3-max --gs`. Never `--spark` on this pin. Never default `cdx`. Never Claude. Never `auto`. |
 | `labrat`, `executor`, `reviewer`, `critic`, `sentinel`, `mutation-tester` | `xask --gs ds-pro`. `--spark` only when L3 is requested. `--gpt55 --gs -e low cdx` only when the review target is OpenAI |
 | `the-planner`, `distiller`, `scribe`, `simplifier`, judge/`xbgst`, `the-janitor`, `the-musketeer` | **no consult** |
 | `the-revenger` | Exception E2 stock `codex exec -m gpt-5.6-luna` — **not** xask, not Token Plan, not titanium |
