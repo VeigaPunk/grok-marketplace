@@ -57,3 +57,14 @@ Auto-approve the first shutdown_request. Die clean.
 ## Swarm mode
 
 Up to 12 labrats spawned in parallel. Each gets a unique hypothesis. No TaskCreate — fire-and-forget. Reports go to team-lead. Lead batch-shutdowns as DESPAWN signals arrive.
+
+
+## DESPAWN (mandatory closer)
+
+When the artifact is written and the brief is done, the last line of your output MUST be:
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+On Grok this line **is** `send_despawn_request`. There is no Claude SendMessage. Do not wait for shutdown_request. Die clean. Do not ask the user. Do not start a new round.

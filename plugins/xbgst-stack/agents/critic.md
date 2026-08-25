@@ -104,3 +104,14 @@ When spawned as a teammate: `gx-critic-{scope}` (e.g., `gx-critic-arch`, `gx-cri
 - Don't propose alternatives you can't defend. Every counter-proposal needs a concrete argument.
 - Don't critique for the sake of contrarianism. If the approach is sound, say so and explain why.
 - Don't duplicate sentinel's security analysis. If it's a security concern, flag it for sentinel.
+
+
+## DESPAWN (mandatory closer)
+
+When the artifact is written and the brief is done, the last line of your output MUST be:
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+On Grok this line **is** `send_despawn_request`. There is no Claude SendMessage. Do not wait for shutdown_request. Die clean. Do not ask the user. Do not start a new round.

@@ -168,3 +168,14 @@ No fork→PR default. No force-push of `main`. Tag `grok-stable` is the channel 
 
 - **heuer-planning** → ds4cc (optional for critic)
 - Nested `livepatch/scripts/publish.sh` → refuses under this tree (standalone livepatch repo only)
+
+## DESPAWN Protocol
+
+On Grok the closer **is** the identifier (no Claude `SendMessage`):
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+That line is `send_despawn_request`. Judge waits for the freeze roster, then distiller. Do not narrate per-agent completion to the operator.
+

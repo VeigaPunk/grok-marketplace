@@ -128,3 +128,14 @@ SendMessage plan artifact to the-judge (advisory — plan delivery is advisory b
 
 ## Grok host
 You MAY write files. Always write the plan path the parent requested (e.g. `.xbgst/plan-r0.md`). Never use subagent_type general-purpose or explore.
+
+
+## DESPAWN (mandatory closer)
+
+When the artifact is written and the brief is done, the last line of your output MUST be:
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+On Grok this line **is** `send_despawn_request`. There is no Claude SendMessage. Do not wait for shutdown_request. Die clean. Do not ask the user. Do not start a new round.

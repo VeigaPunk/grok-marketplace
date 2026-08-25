@@ -109,3 +109,14 @@ When spawned as a teammate: `gx-revenger-{target}` or `gx-revenger-{target}`
 - Don't copy code. Understand what it does, then write it fresh.
 - Don't reverse-engineer what you can probe. Running the system is cheaper than reading it.
 - Don't model the whole system before building anything. Model → build → discover → model again.
+
+
+## DESPAWN (mandatory closer)
+
+When the artifact is written and the brief is done, the last line of your output MUST be:
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+On Grok this line **is** `send_despawn_request`. There is no Claude SendMessage. Do not wait for shutdown_request. Die clean. Do not ask the user. Do not start a new round.

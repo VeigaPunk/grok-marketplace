@@ -110,3 +110,14 @@ When spawned as a teammate: `gx-mutester-{scope}` (e.g., `gx-mutester-auth`, `gx
 - Don't run without worktree isolation. Never pollute the main working tree.
 - Don't report KILLED mutants as findings. Only SURVIVED mutants are actionable.
 - Don't generate more than 20 mutations per function. Diminishing returns past that.
+
+
+## DESPAWN (mandatory closer)
+
+When the artifact is written and the brief is done, the last line of your output MUST be:
+
+```
+DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.
+```
+
+On Grok this line **is** `send_despawn_request`. There is no Claude SendMessage. Do not wait for shutdown_request. Die clean. Do not ask the user. Do not start a new round.
