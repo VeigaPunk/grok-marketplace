@@ -241,12 +241,12 @@ index 0deca08..591a1e8 100644
      }
      /// Built-in agents available as subagents via the Task tool.
 +    ///
-+    /// `GeneralPurpose` and `Explore` are intentionally excluded — they are
++    /// `GeneralPurpose`, `Explore`, and `Plan` are excluded — they are
 +    /// hard-banned at spawn validation (`is_banned_subagent_type`).
 +    /// `Agent` is also excluded from ads (first-party only; same toolset as GP).
      pub fn subagent_variants() -> &'static [Self] {
 -        &[Self::GeneralPurpose, Self::Explore, Self::Plan]
-+        &[Self::Plan]
++        &[]
      }
  }
  /// Portable agent identity — parsed from .grok/agents/*.md.
@@ -300,11 +300,11 @@ index 0deca08..591a1e8 100644
 -        assert_eq!(variants.len(), 3);
 -        assert!(variants.contains(&BuiltinAgentName::GeneralPurpose));
 -        assert!(variants.contains(&BuiltinAgentName::Explore));
-+        assert_eq!(variants.len(), 1);
++        assert_eq!(variants.len(), 0);
 +        assert!(!variants.contains(&BuiltinAgentName::GeneralPurpose));
 +        assert!(!variants.contains(&BuiltinAgentName::Agent));
 +        assert!(!variants.contains(&BuiltinAgentName::Explore));
-         assert!(variants.contains(&BuiltinAgentName::Plan));
++        assert!(!variants.contains(&BuiltinAgentName::Plan));
      }
      #[test]
 +    fn test_agent_alias_matches_general_purpose_capability() {
@@ -1274,7 +1274,7 @@ index 5696588..0ac9eb8 100644
 +    /// User-defined agents (e.g. under ~/.grok/agents/) are also available.
      #[schemars(
 -        description = "Name of the subagent type to launch. Built-in types: \"general-purpose\", \"explore\", \"plan\". Additional user-defined types may also be available."
-+        description = "Name of the subagent type to launch. Built-in: \"plan\". Types \"general-purpose\" and \"explore\" are banned and will be rejected. User-defined types from agent files may also be available."
++        description = "Name of the subagent type to launch. Built-in types \"general-purpose\", \"explore\", and \"plan\" are banned and will be rejected. User-defined types from agent files may also be available."
      )]
      #[serde(default = "default_subagent_type")]
      pub subagent_type: String,
@@ -1285,8 +1285,9 @@ index 5696588..0ac9eb8 100644
 +/// Built-in subagent type names that must never be spawned.
 +///
 +/// These legacy generics encourage unfocused agent loops. Prefer explicit
-+/// user-defined specialists (or the remaining built-in `plan`).
-+pub const BANNED_SUBAGENT_TYPES: &[&str] = &["general-purpose", "explore"];
++/// user-defined specialists (`the-planner`, `scout`, …). Builtin `plan` is
++/// banned the same way as `general-purpose` and `explore`.
++pub const BANNED_SUBAGENT_TYPES: &[&str] = &["general-purpose", "explore", "plan"];
 +
 +/// True when `name` is a hard-banned subagent type (ASCII case-insensitive).
 +#[inline]
@@ -1298,8 +1299,8 @@ index 5696588..0ac9eb8 100644
 +
  /// Default `subagent_type` for [`TaskToolInput`] when the caller omits it.
 +///
-+/// Defaults to `plan` (the only remaining built-in). Callers should still
-+/// pick an explicit specialist whenever a user-defined agent fits better.
++/// There is no spawnable builtin. Serializes `"plan"` so omitted type hits
++/// the hard-ban (fail closed) instead of silently becoming GP.
  pub fn default_subagent_type() -> String {
 -    "general-purpose".to_string()
 +    "plan".to_string()
@@ -1361,7 +1362,7 @@ index 5696588..0ac9eb8 100644
 +/// are hard-banned at spawn validation via [`is_banned_subagent_type`].
 +/// `agent` is resolvable for first-party spawns but is intentionally **not**
 +/// listed here so Task does not re-advertise a generic full-capability type.
-+pub const BUILTIN_SUBAGENTS: [BuiltinSubagent; 1] = [PLAN_SUBAGENT];
++pub const BUILTIN_SUBAGENTS: [BuiltinSubagent; 0] = [];
  
  /// Look up a built-in subagent by its `subagent_type` name
 -/// (e.g. `"explore"`), or `None` for user-defined / unknown types.
@@ -1409,7 +1410,7 @@ index 5696588..0ac9eb8 100644
 +    fn banned_subagent_types_are_recognized() {
 +        assert!(is_banned_subagent_type("general-purpose"));
 +        assert!(is_banned_subagent_type("explore"));
-+        assert!(!is_banned_subagent_type("plan"));
++        assert!(is_banned_subagent_type("plan"));
 +        assert!(!is_banned_subagent_type("agent"));
 +        assert!(!is_banned_subagent_type("Agent"));
 +        assert!(!is_banned_subagent_type("the-planner"));

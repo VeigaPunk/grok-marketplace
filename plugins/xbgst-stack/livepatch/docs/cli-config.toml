@@ -61,3 +61,4 @@ max_concurrent = 64
 # Defense in depth: CLI livepatch already hard-rejects these at spawn.
 explore = false
 general-purpose = false
+plan = false

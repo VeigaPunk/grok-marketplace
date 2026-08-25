@@ -1,6 +1,6 @@
 # grok-build-livepatch
 
-**grok-titanium** — hard-ban Grok Build's `general-purpose` and `explore` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005**. PATH: `grok-titanium`.
+**grok-titanium** — hard-ban Grok Build's `general-purpose`, `explore`, and `plan` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005**. PATH: `grok-titanium`.
 
 xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not accept external PRs**. This repo is the practical path:
 
@@ -12,7 +12,7 @@ xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not ac
 
 | Change | Effect |
 |--------|--------|
-| `BUILTIN_SUBAGENTS` → only `plan` | Model no longer sees `general-purpose` / `explore` |
+| `BUILTIN_SUBAGENTS` → empty | Model no longer sees `general-purpose` / `explore` / `plan` |
 | `subagent_variants()` → only `Plan` | Discovery matches |
 | `default_subagent_type()` → `plan` | Omitted type is no longer GP |
 | `is_banned_subagent_type()` + gate (case-insensitive) | Spawn of banned names hard-fails even if shadowed |
@@ -25,7 +25,7 @@ Upstream constants for GP/explore prompts remain for legacy rendering only; they
 
 | Patch | Effect |
 |-------|--------|
-| 0001-ban-generic-subagents.patch | GP/explore hard-ban at spawn |
+| 0001-ban-generic-subagents.patch | GP/explore/plan hard-ban at spawn |
 | 0002-kill-workflows.patch | resolve_workflows() always false |
 | 0003-kill-foreign-cli-compat.patch | resolve_compat_config() all cells false |
 | 0004-concurrency-64.patch | DEFAULT_MAX_CONCURRENT=64; ignore remote 4-slot |
