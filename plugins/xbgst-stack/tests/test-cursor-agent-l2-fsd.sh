@@ -150,4 +150,25 @@ CURSOR_RAN_MARK="$mark" CURSOR_AGENT_BIN="$fake" env -u XBGST_CURSOR_EXEC \
 set -e
 [[ ! -e "$mark" ]] || fail "wrapper exec'd cursor-agent without XBGST_CURSOR_EXEC=1"
 
+# Agent catalog pin is --model / XBGST_CURSOR_MODEL, not xask --model-id.
+set +e
+o=$(env -u XBGST_CURSOR_EXEC -u XBGST_CURSOR_MODEL bash "$WRAP" --print --model kimi-k3-max ping 2>&1)
+r=$?
+set -e
+[[ "$r" -eq 0 ]] || fail "--model kimi-k3-max rc=$r: $o"
+printf '%s\n' "$o" | grep -F -q -- '--model kimi-k3-max' || fail "wrap --model missing from argv: $o"
+if printf '%s\n' "$o" | grep -E -q -- '--mode ask'; then
+  fail "wrap --model must not add --mode ask: $o"
+fi
+
+set +e
+o=$(env -u XBGST_CURSOR_EXEC bash "$WRAP" --print --model auto ping 2>&1)
+r=$?
+set -e
+[[ "$r" -eq 2 ]] || fail "wrap --model auto should exit 2, got $r: $o"
+
+need "$SHARED" "cursor-agent --model"
+need "$ROUTING_DOC" "XBGST_CURSOR_MODEL"
+need "$CMD" "--model"
+
 echo "PASS: xbgst-cursor L2-fsd hangar row + print-only wrapper"

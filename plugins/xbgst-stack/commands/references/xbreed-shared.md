@@ -43,7 +43,7 @@ This invariant covers native `gx-*` teammates, Round 0 planner, recursive sub-le
 |---|---|---|
 | Native proposal/review/implementation | L1 → named `gx-*` | default |
 | Long-lived intermodel exchange or bounded delegation | optional OpenAI-backed PrimeAgent **L2-loop** | attachable user-owned runtime; exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop`; no judge authority or unapproved child fan-out |
-| Cursor-agent write+shell FSD subprocess | optional **xbgst-cursor L2-fsd** | hangar `scripts/cursor-agent-l2.sh` → orch `bin/xbgst-cursor-run.sh`; workspace `/home/vgpnk/Projects/xbgst/xbgst-cursor`; print-argv default; exec only `XBGST_CURSOR_EXEC=1`; refuse `--mode ask`/`--force`/`--yolo`/`--plugin-dir`/argv0=`agent`; envelope documented not executed; surface stays trigger/forward |
+| Cursor-agent write+shell FSD subprocess | optional **xbgst-cursor L2-fsd** | hangar `scripts/cursor-agent-l2.sh` → orch `bin/xbgst-cursor-run.sh`; workspace `/home/vgpnk/Projects/xbgst/xbgst-cursor`; print-argv default; exec only `XBGST_CURSOR_EXEC=1`; catalog pin is `cursor-agent --model <cli-id>` / `XBGST_CURSOR_MODEL` (not xask `--model-id`); refuse `--mode ask`/`--force`/`--yolo`/`--plugin-dir`/argv0=`agent`; envelope documented not executed; surface stays trigger/forward |
 | Ranked bounded choice | `xbrd-selector` **L2-select**, if separately present | PrimeAgent never substitutes; absent means L1 selects |
 | Broad bounded fan-out | sekhmet **L3**, always-on under `/xbgst` | `/xgs` in-process only; PrimeAgent never proxies L3 or invokes `codex-titanium` |
 

@@ -18,8 +18,11 @@ stop: saturation or labeled 6-round halt or envelope abort
 
 Envelope documented not executed. `scripts/cursor-agent-l2.sh` prints argv by default and never runs the envelope. Exec only if `XBGST_CURSOR_EXEC=1`.
 
+Catalog pin is **cursor-agent `--model <cli-id>`**, not `xask --model-id`. Default `cursor-grok-4.6-high-fast`. Override with `--model` or `XBGST_CURSOR_MODEL`. xask `--provider cursor --model-id` is consult only (`-p --mode ask --trust`).
+
 ```bash
 env -u XBGST_CURSOR_EXEC bash scripts/cursor-agent-l2.sh --print -- "$TASK"
+env -u XBGST_CURSOR_EXEC bash scripts/cursor-agent-l2.sh --print --model kimi-k3-max -- "$TASK"
 ```
 
 That forwards to `/home/vgpnk/Projects/xbgst/xbgst-cursor/bin/xbgst-cursor-run.sh` with `--workspace /home/vgpnk/Projects/xbgst/xbgst-cursor`. Caller prepends byte-exact `godspeed-core/directive.md` and ends the prompt exactly once with `| godspeed`.

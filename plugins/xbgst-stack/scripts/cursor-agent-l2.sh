@@ -5,14 +5,32 @@
 set -euo pipefail
 
 usage() {
-  echo "Usage: cursor-agent-l2.sh [--print] [--] <task...>" >&2
+  echo "Usage: cursor-agent-l2.sh [--print] [--model <cli-id>] [--] <task...>" >&2
 }
 
 args=()
+model_flag=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --print) shift ;;
     --help|-h) usage; exit 0 ;;
+    --model)
+      shift
+      if [[ $# -lt 1 || "$1" == -* ]]; then
+        echo "missing --model value (pass a cursor-agent catalog CLI-id)" >&2
+        exit 2
+      fi
+      model_flag="$1"
+      shift
+      ;;
+    --model=*)
+      model_flag="${1#--model=}"
+      shift
+      if [[ -z "$model_flag" ]]; then
+        echo "missing --model value (pass a cursor-agent catalog CLI-id)" >&2
+        exit 2
+      fi
+      ;;
     --mode|--mode=*)
       echo "refusing --mode (consult stays PATH xask --mode ask; L2-fsd is cursor-agent -p)" >&2
       exit 2
@@ -83,8 +101,13 @@ if ! _cwd_under "$ORCH_RUN" "$ORCH_PIN"; then
   exit 2
 fi
 export XBGST_CURSOR_CWD="$(realpath -m -- "$_cwd")"
+# Catalog pin is cursor-agent --model, not xask --model-id. Flag/env both land on the orch helper.
+if [[ -n "$model_flag" ]]; then
+  export XBGST_CURSOR_MODEL="$model_flag"
+  set -- --model "$model_flag" "$@"
+fi
 
 if [[ ${#args[@]} -eq 0 ]]; then
-  exec bash "$ORCH_RUN" --print
+  exec bash "$ORCH_RUN" --print "$@"
 fi
-exec bash "$ORCH_RUN" --print -- "${args[@]}"
+exec bash "$ORCH_RUN" --print "$@" -- "${args[@]}"
