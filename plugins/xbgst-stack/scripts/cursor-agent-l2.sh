@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
       fi
       ;;
     --mode|--mode=*)
-      echo "refusing --mode (consult stays PATH xask --mode ask; L2-fsd is cursor-agent -p)" >&2
+      echo "refusing --mode (cursor routes are agentic -p --trust; never --mode ask)" >&2
       exit 2
       ;;
     --force|-f)

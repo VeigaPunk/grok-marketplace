@@ -4,6 +4,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- PATH `xask --provider cursor` is agentic `-p --trust` (never `--mode ask`). Catalog default pin is `kimi-k3-max`. Grok stays L1 judge; Cursor Ultra OAuth meters L2 Kimi K3 swarms. Inner argv: `cursor-agent -p --trust --output-format text --model kimi-k3-max`.
 - xask job → argv quick-ref in the plugin: `commands/references/xask-routing.md` (host overlay) and `docs/xask-routing.md`. Pins stay in `docs/model-routing.md`.
 
 ## 1.1.34

@@ -18,7 +18,7 @@ stop: saturation or labeled 6-round halt or envelope abort
 
 Envelope documented not executed. `scripts/cursor-agent-l2.sh` prints argv by default and never runs the envelope. Exec only if `XBGST_CURSOR_EXEC=1`.
 
-Catalog pin is **cursor-agent `--model <cli-id>`**, not `xask --model-id`. Default **`kimi-k3-max`** (Ultra grants, agentic `-p --trust`). Override with `--model` or `XBGST_CURSOR_MODEL`. Allow-list: orch `agents/catalog-agentic.json` (from xask cursor catalog minus auto/Claude). xask `--provider cursor --model-id` is consult only (`-p --mode ask --trust`).
+Catalog pin is **cursor-agent `--model <cli-id>`**, not `xask --model-id`. Default **`kimi-k3-max`** (Ultra grants, agentic `-p --trust`). Override with `--model` or `XBGST_CURSOR_MODEL`. Allow-list: orch `agents/catalog-agentic.json` (from xask cursor catalog minus auto/Claude). PATH `xask --provider cursor` is the same agentic argv (`-p --trust`, never `--mode ask`).
 
 ```bash
 env -u XBGST_CURSOR_EXEC bash scripts/cursor-agent-l2.sh --print -- "$TASK"
@@ -27,7 +27,7 @@ env -u XBGST_CURSOR_EXEC bash scripts/cursor-agent-l2.sh --print --model kimi-k3
 
 That forwards to `/home/vgpnk/Projects/xbgst/xbgst-cursor/bin/xbgst-cursor-run.sh` with `--workspace /home/vgpnk/Projects/xbgst/xbgst-cursor`. Caller prepends byte-exact `godspeed-core/directive.md` and ends the prompt exactly once with `| godspeed`.
 
-Refuse `--mode ask` (PATH xask consult), `--force`/`--yolo`, `--plugin-dir`, and argv0=`agent`. Never Claude. Never `auto`. Surface `xbgst-cursor-agent-surface` stays trigger/forward — not this FSD orch.
+Refuse `--mode ask`, `--force`/`--yolo`, `--plugin-dir`, and argv0=`agent`. Never Claude. Never `auto`. Surface `xbgst-cursor-agent-surface` stays trigger/forward — not this FSD orch.
 
 This lane is an optional sibling of OpenAI-backed PrimeAgent L2-loop, not a replacement. If the orch tree or run helper is unavailable, report the route unavailable and continue through the named native `gx-*` path; do not block L1 or promote L2.
 

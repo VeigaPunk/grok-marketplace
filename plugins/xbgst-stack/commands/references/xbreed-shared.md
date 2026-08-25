@@ -67,7 +67,7 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST (every gx-* consult)** | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max`. `--mode ask` is read-only consult. `--trust` skips Workspace Trust Required. Never `--yolo`/`-f`. Never `--spark` on this pin. Never Claude. Never `auto`. Full-agent L2-fsd is `xbgst-cursor` (print-first `scripts/cursor-agent-l2.sh`, `-p`, no ask). Surface `xbgst-cursor-agent-surface` stays trigger/forward. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
+| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST (every gx-* cursor route)** | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --trust --output-format text --model kimi-k3-max`. Agentic burn (write+shell). Never `--mode ask`. `--trust` skips Workspace Trust Required. Never `--yolo`/`-f`. Never `--spark` on this pin. Never Claude. Never `auto`. L2-fsd is `xbgst-cursor` (print-first `scripts/cursor-agent-l2.sh`, same `-p --trust`). Surface `xbgst-cursor-agent-surface` stays trigger/forward. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
 | Token Plan DeepSeek — **named route** | `xask --gs ds-pro '<q>'` | Token Plan wrappers; **no** `--service-tier fast`; not hangar FIRST |
 | Token Plan qwen3.8-max — **named route** | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast`; named/opt-in not hangar FIRST |
 | Kimi (OAuth, native CLI) — **named route** | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Pay-as-you-go is `--model-id moonshotai/…`. |
