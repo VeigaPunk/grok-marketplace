@@ -1,6 +1,6 @@
 # grok-build-livepatch
 
-**grok-titanium** — hard-ban Grok Build's `general-purpose`, `explore`, and `plan` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005**. PATH: `grok-titanium`.
+**grok-titanium** — hard-ban Grok Build's `general-purpose`, `explore`, and `plan` subagents in the CLI itself — and keep that ban alive across upstream releases. Series **0001–0005** plus recap kill **0006**. PATH: `grok-titanium`.
 
 xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not accept external PRs**. This repo is the practical path:
 

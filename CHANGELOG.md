@@ -4,7 +4,10 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+## 1.1.34
+
 - Livepatch kills session recap (`/recap` and return-from-away). Default off; remote cannot re-enable. Host `[features] session_recap = false`.
+- `check-and-patch.sh` rebuilds when recap is newly applied onto an already-0001 tree (do not noop past the new patch).
 - the-planner files the complete PATH xask stdout as the plan artifact. `<raw_output>` is the full consult. Never a substring, never an ellipsis.
 - Hangar FIRST for **every** gx-* xask consult is Cursor Ultra `kimi-k3-max` (`xask --provider cursor --model-id kimi-k3-max --gs`). `ds-pro` / `qwen38` / native `kimi` are named routes, not FIRST.
 - Livepatch 0001 hard-bans builtin **`plan`** the same way as `general-purpose` and `explore`. Spawn `the-planner` (named specialist). Host `[subagents.toggle] plan = false`.
