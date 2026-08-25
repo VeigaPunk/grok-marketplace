@@ -14,6 +14,8 @@
     "godspeed",
     "grok-stable",
     "livepatch",
-    "agents"
+    "agents",
+    "xask",
+    "routing"
   ]
 }

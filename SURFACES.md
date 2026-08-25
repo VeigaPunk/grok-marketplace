@@ -246,6 +246,7 @@ L3 setters (do not collapse to one number): crate const `DEFAULT_SERVICE_TIER=de
 - Plan (hangar): `.xbgst/plan-surface-inventory.md`
 - Census TSV (hangar): `.xbgst/inventory/census.tsv` (M01 `grok,agent` same md5 is **stale**; live `grok` ≡ `grok-titanium`, `agent` is stock 1.0.8)
 - Routing SSoT: `plugins/xbgst-stack/docs/model-routing.md`
+- Job → argv (advisory): `plugins/xbgst-stack/commands/references/xask-routing.md` (also `docs/xask-routing.md`)
 - L3 env vs crate: hangar `SSoT_TABLE.md` + `~/.xbgst/env.l3-sekhmet.sh`
 - Reviewer: livepatch_applied **PASS** (0001–0005, ads-kill yes); grok≡grok-titanium **PASS**; grok≡agent **FAIL**; xask≠xask-l3 **PASS**; orch fixture **FAIL**; OpenCode GP/explore disable **PASS**; codex≠titanium **PASS**
 - Critic: kill 0–4 as a host score; kinds on layer rows

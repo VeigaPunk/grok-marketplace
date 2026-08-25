@@ -220,7 +220,7 @@ Cursor-agent **xbgst-cursor L2-fsd** is an optional sibling, not a PrimeAgent re
 | Test validation, mutation testing | `mutation-tester` (grok + godspeed) | grok | mutate-run-revert in isolated dirs (no git worktrees) | All |
 | Documentation, audit trail | `scribe` (grok-4.6-low + godspeed) | grok-4.6-low | spawn after SYNTHESIS_READY, concurrent with Pareto; filter-exempt | All |
 
-**Exception E2** (`the-revenger` only): spawn is outbound stock Codex CLI named `cdx-revenger-*` (`codex exec -m gpt-5.6-luna`), not Grok `spawn_subagent`, not `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 (`prime-agent-l2.sh`) must never invoke titanium. `agents/the-revenger.md` stays `model: inherit` (`gx-revenger-*` fallback). Daybreak Blue is lab/defensive ping via stock `codex exec -m gpt-daybreak-blue-latest` (no `service_tier`). Table: `docs/model-routing.md`.
+**Exception E2** (`the-revenger` only): spawn is outbound stock Codex CLI named `cdx-revenger-*` (`codex exec -m gpt-5.6-luna`), not Grok `spawn_subagent`, not `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 (`prime-agent-l2.sh`) must never invoke titanium. `agents/the-revenger.md` stays `model: inherit` (`gx-revenger-*` fallback). Daybreak Blue is lab/defensive ping via stock `codex exec -m gpt-daybreak-blue-latest` (no `service_tier`). Pins: `docs/model-routing.md`. Job → argv (does not move pins): `commands/references/xask-routing.md`.
 
 ## Teammate naming convention
 

@@ -4,6 +4,8 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- xask job → argv quick-ref in the plugin: `commands/references/xask-routing.md` (host overlay) and `docs/xask-routing.md`. Pins stay in `docs/model-routing.md`.
+
 ## 1.1.34
 
 - Livepatch kills session recap (`/recap` and return-from-away). Default off; remote cannot re-enable. Host `[features] session_recap = false`.

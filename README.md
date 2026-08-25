@@ -114,6 +114,8 @@ grok plugin install grok-build-livepatch@veigapunk/grok-marketplace --trust
 | `skills/xbgst-livepatch` | Install/verify CLI livepatch |
 | `skills/the-janitor` | 1Password / secrets |
 | `commands/` | `/xbgst`, `/xbgst-livepatch`, aliases |
+| `commands/references/xask-routing.md` | Job → xask argv (45d niches; does not move pins) |
+| `docs/model-routing.md` | Pin / binary SSoT |
 | `livepatch/` | Manual patch + optional 6h systemd timer |
 | `scripts/install-host.sh` | Idempotent host wire-up |
 

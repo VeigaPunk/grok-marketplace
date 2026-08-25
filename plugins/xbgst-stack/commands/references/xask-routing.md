@@ -1,6 +1,6 @@
 # xask routing — job → argv
 
-Quick reference for **sensible model routing**. Hangar **pins** stay in [`model-routing.md`](model-routing.md) — this page does **not** move them. Flag surface: PATH xask / ds4cc `docs/xask-protocol.md`. Host overlay (what specialists load): [`../commands/references/xask-routing.md`](../commands/references/xask-routing.md).
+Quick reference for **sensible model routing**. Hangar **pins** stay in `docs/model-routing.md` — this page does **not** move them. Flag surface: PATH xask / ds4cc `docs/xask-protocol.md`. Specialist consult table: [`xbreed-shared.md`](xbreed-shared.md).
 
 **Window:** 2026-07-11 .. 2026-08-25 (catalog freeze 2026-08-25). 234 xask ids collapsed to 43 families. Density never rewrites argv.
 
