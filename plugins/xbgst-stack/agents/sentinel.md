@@ -80,7 +80,7 @@ Fall back to manual grep patterns when scanners aren't installed.
 
 - Primary: native tools (escalate to xhigh only when explicitly requested for deep architectural exploit chains — xhigh reasoning is slow)
 - Secondary: native tools
-- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --gs ds-pro '<exploit/vulnerability analysis>'`. No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
+- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --provider cursor --model-id kimi-k3-max --gs '<exploit/vulnerability analysis>'`. No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
 - Escalation: multi-hop chains via extra in-session tool passes; prefer proof over speculation
 
 ## Interaction with other agents

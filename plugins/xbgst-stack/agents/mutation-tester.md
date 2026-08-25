@@ -90,7 +90,7 @@ CRITICAL GAPS: <list of untested code paths>
 - **(a) Single mutation, ≤4 targets:** mutate → run tests → revert; report score.
 - **(b) Systematic ≥5 targets / breadth discovery:** parallel native probes; list candidates with short rationale each; then mutate-run-revert on survivors.
 - **Selection rule:** count targets first. ≤4 → (a). ≥5 OR unknown targets → (b). Don't mix for the same axis.
-- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --gs ds-pro '<generate mutation for this function>'` (≤4 targets) or the same argv with a breadth prompt (≥5). No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
+- **xbgst-mode FIRST (mandatory):** if handoff `mode: xgs`, skip this gate. Otherwise your FIRST tool call MUST be Bash: `xask --provider cursor --model-id kimi-k3-max --gs '<generate mutation for this function>'` (≤4 targets) or the same argv with a breadth prompt (≥5). No other tool before xask returns. Never spawn type `xask`. Never use `xask-l3`. If `--spark`, extract **result.json stdout**; else quote PATH `xask` stdout (`xbreed-shared.md` Extract; never quote the sekhmet CLI envelope) and paste a literal substring in `<raw_output>`. Empty extract = invalid. On failure `BLOCKED: xask [reason]` then continue `[xask dry]`.
 
 ## Interaction with other agents
 

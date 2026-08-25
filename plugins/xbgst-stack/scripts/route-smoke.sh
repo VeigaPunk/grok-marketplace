@@ -105,7 +105,7 @@ fi
 # Shared RE row (one line)
 need_re "$SHARED" '\| RE \| `the-revenger` \| cdx \|'
 
-# L2 consult paste surface: scout/connector/planner FIRST is cursor kimi-k3-max; ds-pro remains Token Plan FIRST
+# L2 consult paste surface: every gx-* FIRST is cursor kimi-k3-max; ds-pro remains a named Token Plan route
 need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
 need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"

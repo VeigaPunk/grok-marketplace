@@ -56,7 +56,7 @@ need "$SHARED" "xask --gs qwen38"
 need "$SHARED" "xask --gs ds-pro"
 need "$SHARED" "xask --provider cursor --model-id kimi-k3-max"
 need "$ROOT/commands/xbgst-orch.md" "xask --provider cursor --model-id kimi-k3-max"
-# E-split hangar FIRST: scout/connector/the-planner = cursor gravy; implement/review = ds-pro
+# Hangar FIRST: every gx-* consult is cursor gravy kimi-k3-max
 need "$SCOUT" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/connector.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 need "$ROOT/agents/the-planner.md" "xask --provider cursor --model-id kimi-k3-max --gs"
@@ -70,7 +70,7 @@ if ! grep -F 'This consult is the mapping. Do not ask a question.' "$ROOT/agents
   fail "agents/the-planner.md missing WWKD mapping payload"
 fi
 for a in labrat executor reviewer critic sentinel mutation-tester; do
-  need "$ROOT/agents/$a.md" "xask --gs ds-pro"
+  need "$ROOT/agents/$a.md" "xask --provider cursor --model-id kimi-k3-max --gs"
 done
 if grep -E 'FIRST tool call MUST be Bash: `xask --gs cdx' "$ROOT/agents/reviewer.md" >/dev/null 2>&1; then
   fail "$ROOT/agents/reviewer.md must not FIRST cdx (cdx remaps to kimi-k3)"
@@ -85,11 +85,11 @@ for a in scout connector the-planner labrat executor reviewer critic sentinel mu
   fi
 done
 for a in labrat executor reviewer critic sentinel mutation-tester; do
-  if grep -E 'FIRST tool call MUST be Bash: `xask --provider cursor' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
-    fail "agents/$a.md FIRST must not be xask --provider cursor (scout/connector/planner gravy only)"
+  if grep -E 'FIRST tool call MUST be Bash: `xask --gs ds-pro' "$ROOT/agents/$a.md" >/dev/null 2>&1; then
+    fail "agents/$a.md FIRST must not be xask --gs ds-pro (named Token Plan route only)"
   fi
 done
-# hangar FIRST is cursor gravy + ds-pro; ds-flash/qwen38 named/opt-in not hangar FIRST
+# hangar FIRST is cursor gravy for every consult; ds-pro/ds-flash/qwen38 named/opt-in
 need "$ROOT/docs/model-routing.md" '`xask --gs ds-pro`'
 need "$ROOT/docs/model-routing.md" '`xask --provider cursor --model-id kimi-k3-max`'
 need "$ROOT/docs/model-routing.md" "named/opt-in not hangar FIRST"

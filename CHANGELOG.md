@@ -4,6 +4,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- Hangar FIRST for **every** gx-* xask consult is Cursor Ultra `kimi-k3-max` (`xask --provider cursor --model-id kimi-k3-max --gs`). `ds-pro` / `qwen38` / native `kimi` are named routes, not FIRST.
 - Livepatch 0001 hard-bans builtin **`plan`** the same way as `general-purpose` and `explore`. Spawn `the-planner` (named specialist). Host `[subagents.toggle] plan = false`.
 - gx-teams pane hardcap 16 → **64** (host ceiling; 65th spawn fails `hardcap`).
 - the-planner xbgst-mode FIRST xask bash must pass `timeout 300000` or `timeout 0` + background true.
