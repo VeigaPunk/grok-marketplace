@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# gx-teams M01 — detached tmux team session, titled panes, hardcap 16, nuke.
+# gx-teams M01 — detached tmux team session, titled panes, hardcap 64, nuke.
 set -euo pipefail
 
-HARDCAP=16
+HARDCAP=64
 STATE_ROOT="${GX_TEAMS_STATE:-$HOME/.gx-teams}"
 ID_RE='^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$'
 SCRIPT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

@@ -4,6 +4,8 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- gx-teams pane hardcap 16 → **64** (host ceiling; 65th spawn fails `hardcap`).
+- the-planner xbgst-mode FIRST xask bash must pass `timeout 300000` or `timeout 0` + background true.
 - the-planner Cursor xask loads skill `wwkd` as the third positional (`… -- "<WWKD mapping>" "No prior context." wwkd`). Direct CLI lanes inline that SKILL.md.
 
 ## 1.1.33

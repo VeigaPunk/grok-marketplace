@@ -6,12 +6,13 @@ Grok Build 1.0.5 has no `teammateMode`. `spawn_subagent` is in-process (depth 1)
 
 ## M_final (cheap all-green)
 
-Cheap smoke: Godspeed unit gate + M01 + M03–M06 + mailbox. Nukes leftovers. Asserts operators `0`/`1`. **Does not** run M02 (`grok -p`) or M07 (ACP). `gate-all.sh` runs `gate-godspeed.sh` first, then M01+M03–M06 + `gate-mbox.sh`.
+Cheap smoke: Godspeed unit gate + oauth-route wrap + M01 + M03–M06 + mailbox. Nukes leftovers. Asserts operators `0`/`1`. **Does not** run M02 (`grok -p`) or M07 (ACP). `gate-all.sh` runs `gate-godspeed.sh` then `gate-oauth-route.sh`, then M01+M03–M06 + `gate-mbox.sh`.
 
 ```bash
-bash scripts/gate-godspeed.sh   # expect GATE_GODSPEED_OK
-bash scripts/gate-all.sh        # expect GX-TEAMS-GATE-OK
-./gx-teams.sh --help            # lists spawn / nuke / dm
+bash scripts/gate-godspeed.sh     # expect GATE_GODSPEED_OK
+bash scripts/gate-oauth-route.sh  # expect GATE_OAUTH_ROUTE_OK
+bash scripts/gate-all.sh          # expect GX-TEAMS-GATE-OK
+./gx-teams.sh --help              # lists spawn / nuke / dm
 ```
 
 ## M01 (shipped)
@@ -39,12 +40,13 @@ bash scripts/gate-m02.sh   # expect GATE_M02_OK
 | Target | exact `-t =gx-teams-<team>` (tmux prefix-matches without `=`) |
 | Pane handle | `#{pane_id}` (`%N`). **Never** `:0.0` |
 | Identity | env `GX_TEAM`, `GX_TEAMMATE_NAME`, `GX_TEAMMATE_ID=name@team`, `GX_PARENT_SESSION=<tmux session name>` — **not** pane title / `%N`. `GX_TEAMMATE_NAME` always wins over `dm --from` (CLI `--from` is harness-only when env unset; else `lead`) |
-| Hardcap | 16 panes / session |
+| Hardcap | 64 panes / session |
 | Cleanup | `nuke --team` only; **never** `kill-server` |
 | Deny | `claude`, `TeamCreate`, `--team 0\|1` |
 | Allowlist | `^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$` |
 | State | `~/.gx-teams/<team>/config.json` + `inboxes/<name>.jsonl` (disk persist) |
 | Scratch | pane `TMPDIR=/tmp/xbgst-gx-<team>-<name>-XXXXXX`; `XBGST_MAIL_ROOT=$TMPDIR/mail`. `XBRD_SPARK_ROOT=$TMPDIR/spark` **only** when argv has `--spark`/`--spk`/`--substrate sekhmet`/`sekhmet`. PATH includes `~/.local/bin` so `xask` reaches grok/kimi/qwen/stock cdx. Never JSONL bodies on `$XDG_RUNTIME_DIR`. |
+| OAuth route | `cmd` spawn whose argv0 basename is `grok` prefixes `grok-oauth-route wrap --` when that helper is on PATH (pass-through if absent). After Godspeed `-p` inject. In-process `gx-*` inherit TUI OAuth. |
 | Serde | crate `mailbox/` (`xbgst-mailbox`) append/last/gc-scratch. Live `dm` calls `xbgst-mailbox append` (jq only if `XBGST_MAILBOX_ALLOW_JQ=1`). Spawn always `eval "$(fnm env --shell bash)"`. Do **not** GC `fnm_multishells`. |
 
 ## M03 (shipped)
@@ -66,7 +68,7 @@ bash scripts/gate-m04.sh   # expect GATE_M04_OK
 
 ## M05 (shipped)
 
-Hardcap 16: 16×`cmd true`, 17th fails with `hardcap`, nuke `cap`, operators `0`/`1` pane_id:pid frozen.
+Hardcap 64: 64×`cmd true`, 65th fails with `hardcap`, nuke `cap`, operators `0`/`1` pane_id:pid frozen.
 
 ```bash
 bash scripts/gate-m05.sh   # expect GATE_M05_OK
