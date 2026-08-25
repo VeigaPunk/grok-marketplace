@@ -18,7 +18,7 @@ stop: saturation or labeled 6-round halt or envelope abort
 
 Envelope documented not executed. `scripts/cursor-agent-l2.sh` prints argv by default and never runs the envelope. Exec only if `XBGST_CURSOR_EXEC=1`.
 
-Catalog pin is **cursor-agent `--model <cli-id>`**, not `xask --model-id`. Default `cursor-grok-4.6-high-fast`. Override with `--model` or `XBGST_CURSOR_MODEL`. xask `--provider cursor --model-id` is consult only (`-p --mode ask --trust`).
+Catalog pin is **cursor-agent `--model <cli-id>`**, not `xask --model-id`. Default **`kimi-k3-max`** (Ultra grants, agentic `-p --trust`). Override with `--model` or `XBGST_CURSOR_MODEL`. Allow-list: orch `agents/catalog-agentic.json` (from xask cursor catalog minus auto/Claude). xask `--provider cursor --model-id` is consult only (`-p --mode ask --trust`).
 
 ```bash
 env -u XBGST_CURSOR_EXEC bash scripts/cursor-agent-l2.sh --print -- "$TASK"

@@ -46,6 +46,7 @@ rc=$?
 set -e
 [[ "$rc" -eq 0 ]] || fail "print ping rc=$rc: $out"
 printf '%s\n' "$out" | grep -F -q -- 'cursor-agent' || fail "print argv missing cursor-agent: $out"
+printf '%s\n' "$out" | grep -F -q -- '--model kimi-k3-max' || fail "print argv missing default kimi-k3-max: $out"
 printf '%s\n' "$out" | grep -F -q -- '/xbgst-cursor' || fail "print argv missing orch workspace: $out"
 if printf '%s\n' "$out" | grep -F -q -- 'xbgst-cursor-agent-surface'; then
   fail "print argv leaked surface workspace: $out"
