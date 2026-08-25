@@ -8,11 +8,18 @@
 #   bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 #   ./scripts/install-timer.sh --link-bin   # active_cli=livepatch
 #
-# Hard-ban of general-purpose/explore is enforced in the livepatched binary
+# Hard-ban of general-purpose/explore/plan is enforced in the livepatched binary
 # (not only by [subagents.toggle]). First-party full-tool paths use "agent".
+# Session recap (/recap + return-from-away) is off. Recap is substring ingest.
 
 [cli]
 installer = "internal"
+
+[features]
+session_recap = false
+
+[ui.notifications]
+session_recap = false
 
 [marketplace]
 default_skills_installs_purged = true

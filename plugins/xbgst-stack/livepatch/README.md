@@ -30,8 +30,9 @@ Upstream constants for GP/explore prompts remain for legacy rendering only; they
 | 0003-kill-foreign-cli-compat.patch | resolve_compat_config() all cells false |
 | 0004-concurrency-64.patch | DEFAULT_MAX_CONCURRENT=64; ignore remote 4-slot |
 | 0005-no-explore-plan-ads.patch | EnterPlanMode no explore ads |
+| 0006-kill-session-recap.patch | `/recap` + auto return-from-away off; remote cannot re-enable |
 
-No 0006. JSONL mailbox (`xbgst-mailbox`) is an OS-layer log shipped via xbgst-stack `integrations/gx-teams`, not a grok-build crate.
+JSONL mailbox (`xbgst-mailbox`) is an OS-layer log shipped via xbgst-stack `integrations/gx-teams`, not a grok-build crate.
 
 ## Public site (Titanium / ds4cc Pages)
 

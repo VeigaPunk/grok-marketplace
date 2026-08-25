@@ -53,6 +53,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="${GROK_LIVEPATCH_STATE:-$HOME/.local/state/grok-build-livepatch}"
 SRC_DIR="${GROK_BUILD_SRC:-$HOME/Projects/grok-build}"
 PATCH="$ROOT/patches/0001-ban-generic-subagents.patch"
+# Recap kill: stack ships 0006-kill-session-recap.patch; standalone livepatch
+# already used 0006 for mailbox, so that tree ships 0007-kill-session-recap.patch.
+PATCH_RECAP="$ROOT/patches/0006-kill-session-recap.patch"
+if [[ ! -f "$PATCH_RECAP" ]]; then
+  PATCH_RECAP="$ROOT/patches/0007-kill-session-recap.patch"
+fi
 LOG="$STATE_DIR/watch.log"
 VERSION_FILE="$HOME/.grok/version.json"
 BIN_LINK="$HOME/.grok/bin/grok"
@@ -133,6 +139,27 @@ ensure_source() {
   fi
 }
 
+apply_one_patch() {
+  local patch=$1
+  local label=$2
+  [[ -f "$patch" ]] || return 0
+  if git apply --check "$patch" 2>"$STATE_DIR/apply-check-${label}.err"; then
+    git apply "$patch"
+    log "$label applied cleanly"
+    return 0
+  fi
+  if git apply --reverse --check "$patch" 2>"$STATE_DIR/apply-reverse-check-${label}.err"; then
+    log "$label already present (reverse-check OK)"
+    return 0
+  fi
+  if git apply --3way "$patch" 2>"$STATE_DIR/apply-3way-${label}.err"; then
+    log "$label applied with 3-way merge"
+    return 0
+  fi
+  log "$label FAILED — needs human rebase"
+  return 2
+}
+
 # Sets APPLY_STATUS: applied | already-applied | three-way | needs-rebase | fail
 apply_patch() {
   APPLY_STATUS=fail
@@ -144,12 +171,14 @@ apply_patch() {
     git apply "$PATCH"
     log "patch applied cleanly"
     APPLY_STATUS=applied
+    apply_one_patch "$PATCH_RECAP" recap || return 2
     return 0
   fi
   # 2) already applied only if reverse --check succeeds (do not OR-grep symbols alone)
   if git apply --reverse --check "$PATCH" 2>"$STATE_DIR/apply-reverse-check.err"; then
     log "patch already present (reverse-check OK) — already-applied"
     APPLY_STATUS=already-applied
+    apply_one_patch "$PATCH_RECAP" recap || return 2
     return 0
   fi
   if git grep -q 'is_banned_subagent_type' -- '*.rs' 2>/dev/null; then
@@ -159,6 +188,7 @@ apply_patch() {
   if git apply --3way "$PATCH" 2>"$STATE_DIR/apply-3way.err"; then
     log "patch applied with 3-way merge"
     APPLY_STATUS=three-way
+    apply_one_patch "$PATCH_RECAP" recap || return 2
     return 0
   fi
   # 4) needs human
@@ -258,6 +288,11 @@ main() {
       log "version match: clean tip — re-assert patch + unit smoke (light path)"
       git -C "$SRC_DIR" checkout -B livepatch/ban-generic-subagents
       git -C "$SRC_DIR" apply "$PATCH"
+      if [[ -f "$PATCH_RECAP" ]]; then
+        git -C "$SRC_DIR" apply "$PATCH_RECAP" 2>/dev/null \
+          || git -C "$SRC_DIR" apply --reverse --check "$PATCH_RECAP" >/dev/null 2>&1 \
+          || true
+      fi
       run_unit_smoke
       if [[ -x "$INSTALL_DIR/grok" ]]; then
         ensure_cli_link
