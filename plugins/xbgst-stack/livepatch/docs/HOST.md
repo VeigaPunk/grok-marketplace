@@ -10,7 +10,8 @@ cd ~/Projects/grok-build-livepatch   # or git clone …
 chmod +x scripts/*.sh
 ./scripts/gates.sh                  # offline health
 ./scripts/check-and-patch.sh        # first build (network + cargo)
-./scripts/install-timer.sh          # optional: 6h timer → this ROOT; REPLACE_BIN=1 on unit
+./scripts/install-timer.sh --link-bin        # point grok + grok-titanium at the livepatch ELF
+# ./scripts/install-timer.sh --install-timer  # opt-in 6h cargo timer; not the default
 ./scripts/install-timer.sh --status # ExecStart, ban_in_binary, active_cli
 # after upgrades, keep marketplace/plugin copies aligned:
 ./scripts/sync-stack-livepatch.sh   # sync scripts + rewrite install-host (manual by default)
@@ -31,7 +32,7 @@ Install **always** rewrites
 Reclaim after a plugin stole the unit:
 
 ```bash
-cd ~/Projects/grok-build-livepatch && ./scripts/install-timer.sh
+cd ~/Projects/grok-build-livepatch && ./scripts/install-timer.sh --install-timer
 ```
 
 ## xbgst-stack `install-host.sh`

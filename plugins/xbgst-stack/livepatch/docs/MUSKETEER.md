@@ -28,6 +28,6 @@ Never use subagent types general-purpose or explore.
 ## Option C — systemd (always-on, no chat)
 
 ```bash
-./scripts/install-timer.sh
+./scripts/install-timer.sh --install-timer
 journalctl --user -u grok-build-livepatch.service -n 50
 ```

@@ -72,7 +72,7 @@ if [[ "$INSTALL_TIMER" -eq 1 ]]; then
   LP="$ROOT"
   if [[ -x "$LP/scripts/install-timer.sh" ]]; then
     echo "→ rebind timer to $LP"
-    GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh"
+    GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh" --install-timer
   fi
 fi
 

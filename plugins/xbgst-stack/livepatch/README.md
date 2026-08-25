@@ -5,8 +5,8 @@
 xAI's public tree (`xai-org/grok-build`) is source-transparent and **does not accept external PRs**. This repo is the practical path:
 
 1. Track a minimal patch that removes those built-ins from the advertised roster and **rejects them at spawn validation**.
-2. Every **6 hours**, check whether upstream moved; re-apply the patch; run unit smoke; optionally rebuild the binary.
-3. Ship as a **public installable** (git clone + timer, or GitHub Actions watch).
+2. Apply the patch **on command** (`check-and-patch.sh` / a source install). There is no default 6h timer.
+3. Ship as a **public installable** (git clone + `--link-bin`, or GitHub Actions watch). `--install-timer` is opt-in only.
 
 ## What the patch does
 
@@ -58,7 +58,7 @@ bash ~/.grok/installed-plugins/xbgst-stack-*/scripts/install-host.sh
 ./scripts/install-timer.sh --status   # expect active_cli=livepatch
 ```
 
-## Quick install (local, every 6h)
+## Quick install (command-only)
 
 ```bash
 git clone https://github.com/VeigaPunk/grok-build-livepatch.git
@@ -69,12 +69,12 @@ chmod +x scripts/*.sh
 ./scripts/gates.sh                   # bash -n + --help (+ install-timer --status)
 ./scripts/gates.sh --with-patch      # also clean-tree git apply --check (network)
 ./scripts/check-and-patch.sh          # first run (clone/fetch + cargo — network-heavy)
-./scripts/install-timer.sh            # systemd --user timer @ 6h (binds ExecStart to this ROOT)
+./scripts/install-timer.sh --link-bin # point grok + grok-titanium at the livepatch ELF
+# ./scripts/install-timer.sh --install-timer  # opt-in 6h cargo timer; not the default
 ./scripts/sync-stack-livepatch.sh    # sync copies; leaves timers untouched by default
-./scripts/sync-stack-livepatch.sh --install-timer # optional timer rebind
 ```
 
-Re-run `./scripts/install-timer.sh` after upgrades. It stamps `~/.local/state/grok-build-livepatch/preferred-install-root` and resolves ROOT as: `GROK_LIVEPATCH_ROOT` → stamp (if still valid) → this checkout. Use `./scripts/install-timer.sh --status` to verify the unit `ExecStart`. Plugin/marketplace copies of this script must be updated to honor the stamp, or they can rebind the timer; prefer installing from this public repo.
+A bare `./scripts/install-timer.sh` **refuses** (exit 2). Timer enable is `--install-timer` only. `--link-bin` / `--status` stay command-only. The script stamps `~/.local/state/grok-build-livepatch/preferred-install-root` and resolves ROOT as: `GROK_LIVEPATCH_ROOT` → stamp (if still valid) → this checkout.
 
 There is **no dry-run** that skips network on the zero-arg path; only `--help`/`-h` exits before clone/build.
 

@@ -300,6 +300,7 @@ index 0deca08..591a1e8 100644
 -        assert_eq!(variants.len(), 3);
 -        assert!(variants.contains(&BuiltinAgentName::GeneralPurpose));
 -        assert!(variants.contains(&BuiltinAgentName::Explore));
+-        assert!(variants.contains(&BuiltinAgentName::Plan));
 +        assert_eq!(variants.len(), 0);
 +        assert!(!variants.contains(&BuiltinAgentName::GeneralPurpose));
 +        assert!(!variants.contains(&BuiltinAgentName::Agent));

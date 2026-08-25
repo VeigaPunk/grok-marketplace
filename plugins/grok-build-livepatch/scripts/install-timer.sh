@@ -4,18 +4,17 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: install-timer.sh [--help|-h] [--status] [--link-bin]
+Usage: install-timer.sh [--help|-h] [--status] [--link-bin] [--install-timer]
 
-Install a user systemd timer that runs check-and-patch.sh every 6 hours.
-Copies units under ~/.config/systemd/user and enables the timer (local only;
-no network from this script).
+Livepatch apply is command-only. A bare invocation does NOT enable the 6h timer.
 
-  --help, -h   Print this help and exit 0.
-  --status     Print preferred root, unit ExecStart, and whether the active
-               ~/.grok/bin/grok is the livepatch build (no changes).
-  --link-bin   Symlink ~/.grok/bin/grok → ~/.local/opt/grok-build-livepatch/grok
-               and grok-titanium (opt + ~/.local/bin) if that binary exists
-               (opt-in; timer unit defaults REPLACE_BIN=1).
+  --help, -h        Print this help and exit 0.
+  --status          Print preferred root, unit ExecStart, and whether the active
+                    ~/.grok/bin/grok is the livepatch build (no changes).
+  --link-bin        Symlink ~/.grok/bin/grok → ~/.local/opt/grok-build-livepatch/grok
+                    and grok-titanium (opt + ~/.local/bin) if that binary exists.
+  --install-timer   Opt-in only. Copies units and enables the 6h cargo timer.
+                    Do not use this on a pinned 1.0.6 host.
 
 Install root resolution (first match wins):
   1) GROK_LIVEPATCH_ROOT if it contains scripts/check-and-patch.sh
@@ -150,7 +149,14 @@ case "${1:-}" in
     link_livepatch_bin
     exit 0
     ;;
-  "")
+  --install-timer)
+    ;;
+  "" )
+    echo "refusing: livepatch timer is command-only on this host." >&2
+    echo "  link binary: $0 --link-bin" >&2
+    echo "  status:      $0 --status" >&2
+    echo "  explicit timer (you do not want this): $0 --install-timer" >&2
+    exit 2
     ;;
   *)
     echo "Unknown option: $1" >&2

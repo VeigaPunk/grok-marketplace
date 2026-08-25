@@ -351,13 +351,13 @@ if [[ -d "$LP/scripts" ]]; then
     chmod +x "$LP/scripts/"*.sh
     if [[ -n "${GROK_LIVEPATCH_ROOT:-}" ]]; then
       echo "→ install-timer with GROK_LIVEPATCH_ROOT=$GROK_LIVEPATCH_ROOT"
-      bash "$LP/scripts/install-timer.sh"
+      bash "$LP/scripts/install-timer.sh" --install-timer
     elif [[ "${GROK_LIVEPATCH_KEEP_STAMP:-}" == "1" ]]; then
       echo "→ install-timer honoring preferred-install-root stamp (KEEP_STAMP=1)"
-      GROK_LIVEPATCH_KEEP_STAMP=1 bash "$LP/scripts/install-timer.sh"
+      GROK_LIVEPATCH_KEEP_STAMP=1 bash "$LP/scripts/install-timer.sh" --install-timer
     else
       echo "→ install-timer binding ROOT to stack livepatch: $LP"
-      GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh"
+      GROK_LIVEPATCH_ROOT="$LP" bash "$LP/scripts/install-timer.sh" --install-timer
     fi
     UNIT="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user/grok-build-livepatch.service"
     if [[ -f "$UNIT" ]] && grep -qE '^Environment=GROK_LIVEPATCH_REPLACE_BIN=1' "$UNIT"; then

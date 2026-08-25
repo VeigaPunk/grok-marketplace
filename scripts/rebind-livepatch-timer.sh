@@ -30,7 +30,7 @@ if [[ "${GROK_LIVEPATCH_KEEP_STAMP:-}" != "1" && -f "$PREF" ]]; then
   fi
 fi
 
-bash "$LP/scripts/install-timer.sh"
+bash "$LP/scripts/install-timer.sh" --install-timer
 bash "$LP/scripts/install-timer.sh" --status
 
 exec_line=$(grep -E '^ExecStart=' "${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user/grok-build-livepatch.service" 2>/dev/null | head -1 || true)
