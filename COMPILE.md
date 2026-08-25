@@ -5,14 +5,14 @@
 
 Hangar `/home/vgpnk/Projects/xbgst` is **not a git repo**. The mess is **cache**. Named GitHub remotes are gold. If a hangar doc disagrees with one named remote, **upstream wins**.
 
-- Core [VeigaPunk/xbgst-gdsd-fknpft](https://github.com/VeigaPunk/xbgst-gdsd-fknpft) is **read-only**. Do not push experiments there.
+- Core mold crate `VeigaPunk/xbgst-gdsd-fknpft` is **deleted upstream** (grok-bot mint, compile-dead). Thanks grok-bot. Do not revive.
 - [VeigaPunk/xbgst-grok-bot](https://github.com/VeigaPunk/xbgst-grok-bot) **`land-host`** is substrate experiments, **not** core.
 - Godspeed SSoT owner: [VeigaPunk/godspeed-core](https://github.com/VeigaPunk/godspeed-core).
 - grok-bot card named **xbgst** is **sub-orch**. L1 is **Grok Build**.
 
 Cache (cite only, labeled): hangar `SSoT_TABLE.md`; hangar `grok-marketplace/SURFACES.md`; hangar `gx-teams/evidence/`; hangar `xbrd-grok/docs/`.
 
-M01 origin map: [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) `c4b0181`; [VeigaPunk/godspeed-core](https://github.com/VeigaPunk/godspeed-core) `35bce0e`; [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) `e3620d4`; [VeigaPunk/sekhmet-l3](https://github.com/VeigaPunk/sekhmet-l3) `f4d5117`; [VeigaPunk/xbgst-gdsd-fknpft](https://github.com/VeigaPunk/xbgst-gdsd-fknpft) `ccecd04`; [VeigaPunk/xbrd-grok](https://github.com/VeigaPunk/xbrd-grok) `6b52a1e`; [VeigaPunk/xbrd-spark](https://github.com/VeigaPunk/xbrd-spark) `9e4187e`; sibling [VeigaPunk/xbgst-grok-bot](https://github.com/VeigaPunk/xbgst-grok-bot) checkout **land-host** `a3efb55` (origin/HEAD is `main` — same remote, not two owners).
+M01 origin map: [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) `c4b0181`; [VeigaPunk/godspeed-core](https://github.com/VeigaPunk/godspeed-core) `35bce0e`; [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) `e3620d4`; [VeigaPunk/sekhmet-l3](https://github.com/VeigaPunk/sekhmet-l3) `f4d5117`; [VeigaPunk/xbrd-grok](https://github.com/VeigaPunk/xbrd-grok) `6b52a1e`; [VeigaPunk/xbrd-spark](https://github.com/VeigaPunk/xbrd-spark) `9e4187e`; sibling [VeigaPunk/xbgst-grok-bot](https://github.com/VeigaPunk/xbgst-grok-bot) checkout **land-host** `a3efb55`. `xbgst-gdsd-fknpft` deleted.
 
 ## landed
 
@@ -23,7 +23,7 @@ What a stranger can treat as already true, pointed at remotes (not hangar paths 
 - Grok CLI stack / surfaces: [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) (`plugins/xbgst-stack`).
 - xbreed / xask protocol / myagents: [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace). PATH `xask` is that protocol, not the L3 shim.
 - Grok skill mirror (`/xbgst`, THERE `grok -p`): [VeigaPunk/xbrd-grok](https://github.com/VeigaPunk/xbrd-grok).
-- Core mold crate + config: [VeigaPunk/xbgst-gdsd-fknpft](https://github.com/VeigaPunk/xbgst-gdsd-fknpft). Read-only.
+- Core mold crate `xbgst-gdsd-fknpft`: **deleted**. Do not clone. FSD hops are `xbgst-stack` + PATH `xbgst-mailbox`.
 - Grok Bot native host (fnm spawn, godspeed required): [VeigaPunk/xbgst-grok-bot](https://github.com/VeigaPunk/xbgst-grok-bot) **`land-host`**. Do not merge into core.
 - Dual-orch seats (cache: hangar `.xbgst/dual-orch/`): HERE = Grok Build TUI judge; THERE = `grok -p` fleet; surface = grok-bot local-exec.
 
@@ -43,7 +43,7 @@ João’s **live cheap lane** is the land-host one (fact 3). That is operator tr
 - M06 (later, xbgst picks remote): mirror this index to **one** named upstream. Likely a new `COMPILE.md` on [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) next to `SURFACES.md` — only after M05. Do not decide the remote here if grok-marketplace vs ds4cc-marketplace is still open.
 - M07 the-janitor: only if a leak appears. This file must stay secret-free.
 - Do **not** rewrite hangar root into a new SSoT. Tokens are cheap; cleanup-overfit is the defect.
-- Do **not** push [VeigaPunk/xbgst-gdsd-fknpft](https://github.com/VeigaPunk/xbgst-gdsd-fknpft). Do **not** push land-host experiments into core.
+- Do **not** revive `xbgst-gdsd-fknpft`. Do **not** push land-host experiments into grok-marketplace as a second judge.
 - Escalate to xbgst (forwarder on grok-bot; L1 remains Grok Build) if two *named remotes* still need a pick after M03–M05.
 
 ## CLIs
@@ -89,7 +89,7 @@ Do **not** pick a single L3 pin. Keep three gold facts (see **landed**, all **un
 | Grok CLI stack / surfaces | [VeigaPunk/grok-marketplace](https://github.com/VeigaPunk/grok-marketplace) | hangar `grok-marketplace/SURFACES.md` until mirrored |
 | xbreed / xask protocol / myagents | [VeigaPunk/ds4cc-marketplace](https://github.com/VeigaPunk/ds4cc-marketplace) | hangar `ds4cc-marketplace/` |
 | Grok skill mirror | [VeigaPunk/xbrd-grok](https://github.com/VeigaPunk/xbrd-grok) | hangar `xbrd-grok/` |
-| Core mold (read-only) | [VeigaPunk/xbgst-gdsd-fknpft](https://github.com/VeigaPunk/xbgst-gdsd-fknpft) | any local edit or land-host experiment |
+| Core mold | **deleted** (`xbgst-gdsd-fknpft`) | do not revive; hangar grok-marketplace/ is not a load path |
 | Grok Bot substrate | [VeigaPunk/xbgst-grok-bot](https://github.com/VeigaPunk/xbgst-grok-bot) `land-host` | do not merge this into core |
 | Compile index (this file) | **local mailbox first** `.xbgst/suborch/COMPILE.md` | hangar root rewrite |
 

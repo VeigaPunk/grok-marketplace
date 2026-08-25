@@ -489,6 +489,11 @@ if bash plugins/xbgst-stack/tests/test-xbgst-clone-l1.sh; then
 else
   bad "xbgst-clone-l1 dry-run"
 fi
+if bash plugins/xbgst-stack/tests/test-install-host-pin.sh; then
+  ok "install-host pin overlay (steal hangar/myskills, keep plugin pin)"
+else
+  bad "install-host pin overlay"
+fi
 
 if [[ "$fail" -ne 0 ]]; then
   echo "→ smoke-gates FAILED"

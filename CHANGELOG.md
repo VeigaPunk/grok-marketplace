@@ -6,6 +6,12 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 - the-planner Cursor xask loads skill `wwkd` as the third positional (`… -- "<WWKD mapping>" "No prior context." wwkd`). Direct CLI lanes inline that SKILL.md.
 
+## 1.1.33
+
+- `install-host` overlays skills/agents/commands/ssot from the unique installed `xbgst-stack` pin. Steal hangar `myskills/`, hangar `godspeed-core`, and hangar `grok-marketplace/plugins/xbgst-stack` dirt onto that pin. Never yank the pin back onto a dirty checkout. Gate: `tests/test-install-host-pin.sh`.
+- PATH `xbgst-mailbox` and `gx-teams` follow the same pin (`OVERLAY_ROOT/integrations/gx-teams`). `link_path_bin` steals hangar dirt. Skip cargo when the pin mailbox ELF is already executable. Hangar `grok-marketplace/` is the git push vehicle, not a grok load path. Runtime SSoT is GitHub `VeigaPunk/grok-marketplace` via `~/.grok/installed-plugins/xbgst-stack-*`. Set `XBGST_INSTALL_GX_TEAMS=0` to skip gx-teams.
+- `xbgst-gdsd-fknpft` (grok-bot compile-dead crate) deleted upstream. Thanks grok-bot; do not revive.
+
 ## 1.1.32
 
 - Scout/connector/the-planner hangar FIRST consult is Cursor Ultra gravy: `xask --provider cursor --model-id kimi-k3-max --gs`. `qwen38` is named Token Plan, not FIRST. Implement/review FIRST stays `xask --gs ds-pro`.

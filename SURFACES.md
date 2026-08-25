@@ -190,7 +190,7 @@ Default: present-not-supported unless a named xbgst contract exists. Scout mappe
 | bailian / bl | optional helper | Token Plan key/source; not a host |
 | CDP satellites | present; bus down | 9222 failed this session |
 | plazirhangar | optional | in-tree; PATH-MISS |
-| xbgst-gdsd-fknpft | stub | do not revive |
+| xbgst-gdsd-fknpft | deleted upstream | grok-bot mint; compile-dead; thanks; do not revive |
 | xbrd-selector | optional / PATH-MISS | L2-select docs only |
 | xbgst-l3-orch | cargo-only | PATH-MISS |
 | grok-titanium | live | `~/.local/bin/grok-titanium` → livepatch ELF |
@@ -212,7 +212,7 @@ Default: present-not-supported unless a named xbgst contract exists. Scout mappe
 | `plazirhangar` | in-tree script; PATH-MISS |
 | `gx-teams` | PATH overlay from xbgst-stack `integrations/gx-teams` |
 | `kimi-code` as argv | PATH-MISS; live CLI is `kimi` 0.38.0 (same npm package) |
-| `xbgst-gdsd-fknpft` | compile-dead stub; do not revive |
+| `xbgst-gdsd-fknpft` | **deleted** (`VeigaPunk/xbgst-gdsd-fknpft`). Grok-bot mint, compile-dead. Thanks. Do not revive. |
 | DSH | pinned rc.8; **not** a default L2 |
 
 ---
