@@ -15,15 +15,16 @@
 | `xask --gs ds-pro` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-ds-pro` → `codex -p ds-pro` (xask unsets `CODEX_BIN`; no `--service-tier fast`) | hangar gx-* FIRST; L3 spark; default Codex; `--service-tier fast`; ds-flash hangar FIRST |
 | `xask --gs qwen38` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-qwen38` → `codex -p qwen38` (xask unsets `CODEX_BIN`; no `--service-tier fast`); `qwen38` is named/opt-in not hangar FIRST | hangar gx-* FIRST; L3 spark; `--service-tier fast` |
 | `xask --gs ds-flash` | named/opt-in Token Plan (not hangar FIRST) → wrapper `codex-ds-flash` → `codex -p ds-flash` (xask unsets `CODEX_BIN`; no `--service-tier fast`); `ds-flash` is named/opt-in not hangar FIRST | hangar gx-* FIRST; L3 spark; default Codex; `--service-tier fast` |
-| `xask --provider cursor --model-id kimi-k3-max` | hangar gx-* FIRST for **every** consult role → `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max` (consult; `--trust` required or Workspace Trust Required). Full-agent L2: `xbgst-cursor-agent-surface` `-p --trust` | L3 spark; `--service-tier fast`; Claude; `auto`; `--yolo`/`-f` |
+| `xask --provider cursor --model-id kimi-k3-max` | hangar gx-* FIRST for **every** consult role → `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max` (consult; `--trust` required or Workspace Trust Required). Full-agent L2-fsd is **xbgst-cursor L2-fsd** (`scripts/cursor-agent-l2.sh` → orch `-p`, no ask). Surface `xbgst-cursor-agent-surface` stays trigger/forward. | L3 spark; `--service-tier fast`; Claude; `auto`; `--yolo`/`-f` |
 | `xbreed` (ask CLI; stock ChatGPT `codex`) | invoked by protocol `xask` for `codex`/`cdx` | honor `CODEX_BIN`; `codex-titanium`; Token Plan `-p`; L3 workers |
 | `codex` (stock `@openai/codex`) | Daybreak Blue; Exception E2 `cdx-revenger-*`; `xbreed ask codex`; Token Plan only via `-p` / wrappers | sekhmet L3 workers (use `codex-titanium`) |
 | `xask-l3` (sekhmet shim; bare `sekhmet run`, Titanium default) | **sekhmet L3 only** | gx-* FIRST tool; E2; L1 judge; protocol `xask` lane |
 | `codex-titanium` (Titanium ELF) | **sekhmet L3 workers only** | Daybreak; L2 (`prime-agent-l2.sh` / `prime-agent`); Grok-host E2; `xbreed ask` |
 | direct `prime-agent --provider openai-codex` | optional attachable L2-loop behind a named `gx-*` route owner; existing user-owned ChatGPT/Codex OAuth only | L1 judge, L2-select, L3; never exec `codex-titanium` |
 | `prime-agent` via `scripts/prime-agent-l2.sh` | legacy xAI-only compatibility path (fail-closed) | OpenAI route; never wrap or exec `codex-titanium` |
+| `scripts/cursor-agent-l2.sh` → `xbgst-cursor/bin/xbgst-cursor-run.sh` | optional **xbgst-cursor L2-fsd** behind a named `gx-*` route owner; print-argv default; exec only `XBGST_CURSOR_EXEC=1`; workspace orch tree | L1 judge; PATH xask consult (`--mode ask`); `--force`/`--yolo`/`--plugin-dir`; argv0=`agent`; surface as FSD orch; never exec `codex-titanium` |
 
-L2 substrate must **never** be invoked with Titanium. Titanium stays on the L3 sekhmet plane. L1 xbgst remains the sole scheduler, Pareto/`APPROVED` authority, integrator, and shipper. The direct OpenAI lane receives the exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop` envelope and defaults child fan-out off. Credentials and provider setup stay user-owned; missing PrimeAgent or ChatGPT/Codex OAuth falls back to the native named `gx-*` path.
+L2 substrate must **never** be invoked with Titanium. Titanium stays on the L3 sekhmet plane. L1 xbgst remains the sole scheduler, Pareto/`APPROVED` authority, integrator, and shipper. The direct OpenAI lane receives the exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop` envelope and defaults child fan-out off. Credentials and provider setup stay user-owned; missing PrimeAgent or ChatGPT/Codex OAuth falls back to the native named `gx-*` path. **xbgst-cursor L2-fsd** is an optional sibling (print-first hangar wrapper; envelope documented not executed). Surface `xbgst-cursor-agent-surface` stays trigger/forward.
 
 ## Probe-gated lanes
 
@@ -87,6 +88,6 @@ Authorization: Bearer $DASHSCOPE_API_KEY
 bash scripts/route-smoke.sh
 ```
 
-Policy greps only (no `op`, no `curl`, no secrets), then both `tests/test-prime-agent-l2.sh` and `tests/test-openai-primeagent-routing.sh`.
+Policy greps only (no `op`, no `curl`, no secrets), then `tests/test-prime-agent-l2.sh`, `tests/test-openai-primeagent-routing.sh`, and `tests/test-cursor-agent-l2-fsd.sh`.
 
 Pointer: xbrd-grok `docs/model-routing.md` → this file.

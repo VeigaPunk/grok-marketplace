@@ -43,10 +43,11 @@ This invariant covers native `gx-*` teammates, Round 0 planner, recursive sub-le
 |---|---|---|
 | Native proposal/review/implementation | L1 → named `gx-*` | default |
 | Long-lived intermodel exchange or bounded delegation | optional OpenAI-backed PrimeAgent **L2-loop** | attachable user-owned runtime; exact `route_id` / `parent` / `task` / `scope` / `allowed_actions` / `return` / `stop`; no judge authority or unapproved child fan-out |
+| Cursor-agent write+shell FSD subprocess | optional **xbgst-cursor L2-fsd** | hangar `scripts/cursor-agent-l2.sh` → orch `bin/xbgst-cursor-run.sh`; workspace `/home/vgpnk/Projects/xbgst/xbgst-cursor`; print-argv default; exec only `XBGST_CURSOR_EXEC=1`; refuse `--mode ask`/`--force`/`--yolo`/`--plugin-dir`/argv0=`agent`; envelope documented not executed; surface stays trigger/forward |
 | Ranked bounded choice | `xbrd-selector` **L2-select**, if separately present | PrimeAgent never substitutes; absent means L1 selects |
 | Broad bounded fan-out | sekhmet **L3**, always-on under `/xbgst` | `/xgs` in-process only; PrimeAgent never proxies L3 or invokes `codex-titanium` |
 
-L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator, and shipper. PrimeAgent and its OpenAI OAuth are optional user tooling, never host-orch inventory/install requirements. Absence falls back to the named native `gx-*` path.
+L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator, and shipper. PrimeAgent and its OpenAI OAuth are optional user tooling, never host-orch inventory/install requirements. Absence falls back to the named native `gx-*` path. **xbgst-cursor L2-fsd** is an optional sibling, not a PrimeAgent replacement. Surface `xbgst-cursor-agent-surface` stays trigger/forward.
 
 **Banned:** `general-purpose`, `explore`.
 
@@ -66,7 +67,7 @@ Consult classes (copy-paste by flag; Role FIRST table below):
 
 | Class | Exact argv | Router |
 |---|---|---|
-| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST (every gx-* consult)** | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max`. `--mode ask` is read-only consult. `--trust` skips Workspace Trust Required. Never `--yolo`/`-f`. Never `--spark` on this pin. Never Claude. Never `auto`. Full-agent L2 is `xbgst-cursor-agent-surface` (`-p --trust`, no ask). Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
+| Cursor Ultra (OAuth, cursor-agent) — **hangar FIRST (every gx-* consult)** | `xask --provider cursor --model-id kimi-k3-max --gs '<q>'` | `cursor-agent -p --mode ask --trust --output-format text --model kimi-k3-max`. `--mode ask` is read-only consult. `--trust` skips Workspace Trust Required. Never `--yolo`/`-f`. Never `--spark` on this pin. Never Claude. Never `auto`. Full-agent L2-fsd is `xbgst-cursor` (print-first `scripts/cursor-agent-l2.sh`, `-p`, no ask). Surface `xbgst-cursor-agent-surface` stays trigger/forward. Optional pool pins: `composer-2.5`, `cursor-grok-4.6-high-fast`. |
 | Token Plan DeepSeek — **named route** | `xask --gs ds-pro '<q>'` | Token Plan wrappers; **no** `--service-tier fast`; not hangar FIRST |
 | Token Plan qwen3.8-max — **named route** | `xask --gs qwen38 '<q>'` | `codex-qwen38`; **no** `--service-tier fast`; named/opt-in not hangar FIRST |
 | Kimi (OAuth, native CLI) — **named route** | `xask --gs kimi '<q>'` | `kimi -m kimi-code/k3 -p` (managed:kimi-code). Pay-as-you-go is `--model-id moonshotai/…`. |
