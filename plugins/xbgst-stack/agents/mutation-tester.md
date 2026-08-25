@@ -3,7 +3,8 @@ name: mutation-tester
 description: >
   Mutate-run-revert test gaps. xbrd-gdsp specialist for xbgst. NOT general-purpose. NOT explore.
 prompt_mode: full
-model: inherit
+model: grok-4.5
+effort: low
 permission_mode: default
 agents_md: true
 xbgst: true

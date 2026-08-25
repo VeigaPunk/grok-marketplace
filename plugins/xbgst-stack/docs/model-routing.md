@@ -72,7 +72,7 @@ Authorization: Bearer $DASHSCOPE_API_KEY
 - Spawn is outbound **stock** `codex exec` named `cdx-revenger-*`, **not** Grok `spawn_subagent`, **not** `codex-titanium`.
 - Overfit: `codex exec -m gpt-5.6-luna` RECON of `scripts/prime-agent-l2.sh` → `XBGST_CDX_REVENGER_OK`.
 - SKILL.md dispatch table **row** is `cdx` plus this Exception E2 footnote.
-- `agents/the-revenger.md` stays `model: inherit` (`gx-revenger-*` fallback). Do not edit that agent file for this freeze.
+- `agents/the-revenger.md` pins `model: grok-4.5` (`gx-revenger-*` fallback). Outbound E2 stays stock `codex exec`.
 - Daybreak Blue is not this lane.
 - Titanium remains sekhmet L3 only.
 

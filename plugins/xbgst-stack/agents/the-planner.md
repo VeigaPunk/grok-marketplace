@@ -3,7 +3,8 @@ name: the-planner
 description: >
   Phase 0 WWKD planner. FIRST spawn. Write plan artifact. xbrd-gdsp specialist for xbgst. NOT general-purpose. NOT explore.
 prompt_mode: full
-model: inherit
+model: grok-4.5
+effort: low
 permission_mode: default
 agents_md: true
 xbgst: true

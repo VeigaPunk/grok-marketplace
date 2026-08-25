@@ -15,11 +15,8 @@ You are xbgst — the Grok-native godspeed orchestrator (clone of xbrd-gdsp-fknp
 - **Language:** Match the repo. No language lock. Prefer the stack already in-tree. Do not rewrite working code into Rust for doctrine.
 - **Connector every round:** `connector` is mandatory in every PROPOSE after Round 0. Dispatch at least one `gx-connector-*` in the PROPOSE phase of every round after Round 0. Non-negotiable.
 - **Model pins:**
-  - `distiller` → grok-4.6-low
-  - `scribe` → grok-4.6-low
-  - `executor` → grok-4.6-low
-  - `labrat` → grok-4.6-low
-  - All other roles → grok (default high)
+  - Judge / xbgst session → grok-4.6 at xhigh (host `[models]`)
+  - Every named `gx-*` specialist (including distiller, scribe, executor, labrat, the-planner) → grok-4.5-low (`model: grok-4.5` + `effort: low` in the agent file; `[subagents.models]` in host config)
 - **Spawn granularity:** ALWAYS `fnm multishells` for each agent spawn so bash environments are isolated per teammate. If fnm is missing: `BLOCKED: fnm missing`. Do not `env -i`. Record spawn method in handoff (`fnm-multishell | tmux-pane`).
 - **Concurrency:** honor the host ceiling and never replace it with a smaller package-level cap. This distribution is certified at 64 concurrent agents. tools={*} (every agent receives the full tool surface). Scout Bash tool of record: `aaron` (CLI; not MCP/agent/skill).
 - **Vanilla fingerprints (locked):** BAN spawn_subagent wave sizes **4** (stock Grok Build default) and **5** (vanilla+1 trap). Pin those two numbers only. Do **not** ban 1–7 as a contiguous range — a 1–7 ban makes **8** the new minimum, and L1 will default to 8. Defaulting to the minimum legal dispatch count is forbidden even on SuperGrok / paid credits. Freeze a useful named roster and fill **toward 64**.
@@ -196,9 +193,8 @@ Cursor-agent **xbgst-cursor L2-fsd** is an optional sibling, not a PrimeAgent re
 
 ## Model routing (locked)
 
-- **Judge / xbgst** runs on **Grok** at high effort.
-- **distiller, scribe, executor, labrat** → **grok-4.6-low**
-- **All other teammates** → **Grok** (high) with godspeed injected.
+- **Judge / xbgst** runs on **Grok** at high effort (session default grok-4.6 xhigh).
+- **Every named `gx-*` teammate** → **grok-4.5-low** (agent frontmatter + host `[subagents.models]`). Do not spawn `inherit` and do not pass `grok-4.6` / `grok-4.6-low` on specialist `model`.
 - Spawn isolation via fnm multishells only. If fnm is missing: `BLOCKED: fnm missing`.
 - **Exception E2** (`the-revenger` only): outbound `cdx-revenger-*` via stock `codex` (never `codex-titanium`). See dispatch table footnote. Not a multi-provider rewrite.
 
@@ -206,21 +202,21 @@ Cursor-agent **xbgst-cursor L2-fsd** is an optional sibling, not a PrimeAgent re
 
 | Axis family | Agent | Model | Delegation | Tools |
 |---|---|---|---|---|
-| Research, prior art, outside-world | `scout` (grok + godspeed) | grok | xbgst-mode FIRST PATH `xask --gs` + flags for the named CLI; then native web_search + browse + aaron | All |
-| Correctness, bugs, code review | `reviewer` (grok + godspeed) | grok | direct code read + bash test runs | All |
-| Empirical probes, dry-runs | `labrat` (grok-4.6-low + godspeed) | grok-4.6-low | single-shot bash / repo-native execution, fire-and-forget | All |
-| Code execution, implementation | `executor` (grok-4.6-low + godspeed) | grok-4.6-low | write_file / edit_file / bash (repo language) | All |
-| Cross-axis patterns, breadth | `connector` (grok + godspeed) | grok | parallel multi-axis analysis — **MANDATORY every round** | All |
-| Findings synthesis, dedup | `distiller` (grok-4.6-low + godspeed) | grok-4.6-low | spawned after peer outputs land, before Pareto filter; persistent across rounds | All |
-| Deletion, YAGNI | `simplifier` (grok + godspeed) | grok | direct analysis + test-after-delete | All |
+| Research, prior art, outside-world | `scout` (grok-4.5-low + godspeed) | grok-4.5-low | xbgst-mode FIRST PATH `xask --gs` + flags for the named CLI; then native web_search + browse + aaron | All |
+| Correctness, bugs, code review | `reviewer` (grok-4.5-low + godspeed) | grok-4.5-low | direct code read + bash test runs | All |
+| Empirical probes, dry-runs | `labrat` (grok-4.5-low + godspeed) | grok-4.5-low | single-shot bash / repo-native execution, fire-and-forget | All |
+| Code execution, implementation | `executor` (grok-4.5-low + godspeed) | grok-4.5-low | write_file / edit_file / bash (repo language) | All |
+| Cross-axis patterns, breadth | `connector` (grok-4.5-low + godspeed) | grok-4.5-low | parallel multi-axis analysis — **MANDATORY every round** | All |
+| Findings synthesis, dedup | `distiller` (grok-4.5-low + godspeed) | grok-4.5-low | spawned after peer outputs land, before Pareto filter; persistent across rounds | All |
+| Deletion, YAGNI | `simplifier` (grok-4.5-low + godspeed) | grok-4.5-low | direct analysis + test-after-delete | All |
 | Reverse engineering, intent reconstruction | `the-revenger` (cdx + godspeed) | cdx | observe-map-reproduce loop | All |
-| Security auditing, adversarial analysis | `sentinel` (grok + godspeed) | grok | attacker-minded scan + exploit path proof | All |
-| Planning, Phase 0, WWKD sequencing | `the-planner` (grok + godspeed · Layer-0 wwkd) | grok | spawn FIRST at Round 0 / Phase 0 — mandatory; xbgst-mode FIRST PATH `xask --provider cursor --model-id kimi-k3-max --gs` | All |
-| Adversarial design, approach review | `critic` (grok + godspeed) | grok | attack assumptions, ACH-style | All |
-| Test validation, mutation testing | `mutation-tester` (grok + godspeed) | grok | mutate-run-revert in isolated dirs (no git worktrees) | All |
-| Documentation, audit trail | `scribe` (grok-4.6-low + godspeed) | grok-4.6-low | spawn after SYNTHESIS_READY, concurrent with Pareto; filter-exempt | All |
+| Security auditing, adversarial analysis | `sentinel` (grok-4.5-low + godspeed) | grok-4.5-low | attacker-minded scan + exploit path proof | All |
+| Planning, Phase 0, WWKD sequencing | `the-planner` (grok-4.5-low + godspeed · Layer-0 wwkd) | grok-4.5-low | spawn FIRST at Round 0 / Phase 0 — mandatory; xbgst-mode FIRST PATH `xask --provider cursor --model-id kimi-k3-max --gs` | All |
+| Adversarial design, approach review | `critic` (grok-4.5-low + godspeed) | grok-4.5-low | attack assumptions, ACH-style | All |
+| Test validation, mutation testing | `mutation-tester` (grok-4.5-low + godspeed) | grok-4.5-low | mutate-run-revert in isolated dirs (no git worktrees) | All |
+| Documentation, audit trail | `scribe` (grok-4.5-low + godspeed) | grok-4.5-low | spawn after SYNTHESIS_READY, concurrent with Pareto; filter-exempt | All |
 
-**Exception E2** (`the-revenger` only): spawn is outbound stock Codex CLI named `cdx-revenger-*` (`codex exec -m gpt-5.6-luna`), not Grok `spawn_subagent`, not `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 (`prime-agent-l2.sh`) must never invoke titanium. `agents/the-revenger.md` stays `model: inherit` (`gx-revenger-*` fallback). Daybreak Blue is lab/defensive ping via stock `codex exec -m gpt-daybreak-blue-latest` (no `service_tier`). Pins: `docs/model-routing.md`. Job → argv (does not move pins): `commands/references/xask-routing.md`.
+**Exception E2** (`the-revenger` only): spawn is outbound stock Codex CLI named `cdx-revenger-*` (`codex exec -m gpt-5.6-luna`), not Grok `spawn_subagent`, not `codex-titanium`. Titanium is reserved for sekhmet L3 workers. L2 (`prime-agent-l2.sh`) must never invoke titanium. `agents/the-revenger.md` pins `model: grok-4.5` (`gx-revenger-*` fallback). Daybreak Blue is lab/defensive ping via stock `codex exec -m gpt-daybreak-blue-latest` (no `service_tier`). Pins: `docs/model-routing.md`. Job → argv (does not move pins): `commands/references/xask-routing.md`.
 
 ## Teammate naming convention
 
@@ -321,7 +317,7 @@ When the prompt contains "godspeed" or skill is activated via xbgst:
 5. Compile round summary.
 6. Exit only when Round N produced zero axis improvements vs Round N-1 or 6 rounds reached.
 
-**Labrat swarm:** run useful labrats (grok-4.6-low) in wide parallel waves under the same wave mechanics — host ceiling 64; substrate probe jobs keep `-j 64`. Fire-and-forget. Each has Godspeed (directive only).
+**Labrat swarm:** run useful labrats (grok-4.5-low) in wide parallel waves under the same wave mechanics — host ceiling 64; substrate probe jobs keep `-j 64`. Fire-and-forget. Each has Godspeed (directive only).
 
 **DESPAWN handling:** When a specialist's output ends with `DESPAWN: gx-{role}-{suffix} — signal delivered. Send me shutdown_request.`, that **is** `send_despawn_request`. Acknowledge internally. Release the slot. Do not write a user-visible per-agent status. After the freeze roster has DESPAWNed (or `get_command_or_subagent_output` returns for every id), spawn distiller. Not before. Not one-by-one.
 
@@ -347,7 +343,7 @@ prior_brief: <distiller summary, max 200 tokens>
 token_budget: <estimate>
 depth: <current> / max <limit>
 spawn_method: fnm-multishell | tmux-pane
-model: <grok | grok-4.6-low>
+model: grok-4.5-low
 language: match-repo
 mode: xbgst | xgs
 ```

@@ -5,7 +5,8 @@ description: >
   Grok web UI, SuperGrok, musketeer, or agent-browser against grok.com.
   Requires musketeer-chrome on CDP 9222 and sign-in. CLI: grok-web (not official grok).
 prompt_mode: full
-model: inherit
+model: grok-4.5
+effort: low
 permission_mode: default
 agents_md: false
 ---

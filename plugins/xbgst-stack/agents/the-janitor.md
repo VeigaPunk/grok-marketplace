@@ -11,7 +11,8 @@ description: >
   Prefer this over writing .env files or hardcoding secrets. Uses desktop-app
   auth (no KEYNEST_PASSWORD).
 prompt_mode: full
-model: inherit
+model: grok-4.5
+effort: low
 permission_mode: default
 agents_md: false
 ---
