@@ -1,10 +1,9 @@
 ---
 name: godspeed
 description: >
-  Godspeed posture — load directive.md only. Name the axes, iterate cheap in
-  parallel, keep moves that improve any axis and harm none. Stop asking
-  clarifying questions. Triggered by "godspeed", "--with godspeed", or a task
-  marked with godspeed framing. Never load filter.md or velocity.md (judge-only).
+  Use on every prompt, including nested and delegated prompts, without waiting
+  for a keyword. Explicit "godspeed" and "--with godspeed" remain supported.
+  Load directive.md only. Never load filter.md or velocity.md (judge-only).
 ---
 
 # Godspeed

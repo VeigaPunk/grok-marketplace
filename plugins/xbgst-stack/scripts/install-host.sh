@@ -260,6 +260,71 @@ if [[ -d "$OVERLAY_ROOT/ssot/godspeed-core" ]]; then
   fi
 fi
 
+# Semantic godspeed on every grok prompt (TUI + tools). Pointer, not a copy.
+if [[ -f "$OVERLAY_ROOT/ssot/godspeed-core/always-on.md" ]]; then
+  mkdir -p "$GROK_HOME/rules"
+  cp -f "$OVERLAY_ROOT/ssot/godspeed-core/always-on.md" "$GROK_HOME/rules/godspeed.md"
+  echo "✓ $GROK_HOME/rules/godspeed.md (always-on)"
+fi
+
+install_godspeed_cli_wrap() {
+  local dest=$1
+  local real=$2
+  local wrap=$3
+  local dest_base real_base
+  dest_base="${dest##*/}"
+  real_base="${real##*/}"
+  case "$dest_base" in kimi|kimi-code) return 0 ;; esac
+  case "$real_base" in kimi|kimi-code) return 0 ;; esac
+  [[ -n "$real" && -x "$real" && -f "$wrap" ]] || return 0
+  [[ "$(readlink -f "$real" 2>/dev/null || true)" == "$(readlink -f "$dest" 2>/dev/null || true)" && -L "$dest" ]] && true
+  mkdir -p "$(dirname "$dest")"
+  # Never write through a symlink (that overwrites the real CLI).
+  if [[ -L "$dest" ]]; then
+    rm -f "$dest"
+  fi
+  local stub
+  stub=$(cat <<EOF
+#!/usr/bin/env bash
+export GODSPEED_WRAP_REAL=$(printf '%q' "$real")
+export GODSPEED_GX_TEAMS_SH=$(printf '%q' "$GX_TEAMS_SRC/gx-teams.sh")
+exec bash $(printf '%q' "$wrap") "\$@"
+EOF
+)
+  if ! printf '%s\n' "$stub" >"$dest" 2>/dev/null; then
+    printf '%s\n' "$stub" >"${dest}.godspeed-wrap"
+    chmod 0755 "${dest}.godspeed-wrap"
+    echo "⚠ $dest busy; wrote ${dest}.godspeed-wrap → $real"
+    return 0
+  fi
+  chmod 0755 "$dest"
+  echo "✓ godspeed wrap $dest → $real"
+}
+
+GX_TEAMS_SRC="$OVERLAY_ROOT/integrations/gx-teams"
+GODSPEED_WRAP="$GX_TEAMS_SRC/scripts/godspeed-cli-wrap.sh"
+if [[ ! -f "$GODSPEED_WRAP" ]]; then
+  GODSPEED_WRAP="$STACK_ROOT/integrations/gx-teams/scripts/godspeed-cli-wrap.sh"
+fi
+GROK_ELF=""
+if [[ -x "$HOME/.local/opt/grok-build-livepatch/grok" ]]; then
+  GROK_ELF="$HOME/.local/opt/grok-build-livepatch/grok"
+elif [[ -L "$GROK_HOME/bin/grok" ]]; then
+  GROK_ELF=$(readlink -f "$GROK_HOME/bin/grok" || true)
+fi
+if [[ -n "$GROK_ELF" && -f "$GODSPEED_WRAP" ]]; then
+  install_godspeed_cli_wrap "$GROK_HOME/bin/grok" "$GROK_ELF" "$GODSPEED_WRAP"
+fi
+CURSOR_REAL=""
+if [[ -L "$LOCAL_BIN/cursor-agent" ]]; then
+  CURSOR_REAL=$(readlink -f "$LOCAL_BIN/cursor-agent" || true)
+elif [[ -x "$LOCAL_BIN/cursor-agent" ]] && ! grep -q GODSPEED_WRAP_REAL "$LOCAL_BIN/cursor-agent" 2>/dev/null; then
+  CURSOR_REAL="$LOCAL_BIN/cursor-agent"
+fi
+if [[ -n "$CURSOR_REAL" && -f "$GODSPEED_WRAP" && "$CURSOR_REAL" != "$LOCAL_BIN/cursor-agent" ]]; then
+  install_godspeed_cli_wrap "$LOCAL_BIN/cursor-agent" "$CURSOR_REAL" "$GODSPEED_WRAP"
+fi
+
 # Required Phase-0 names must exist after overlay when present in this stack
 # (foreign skip leaves dest present — OK). Completely missing dest → fail.
 missing=0

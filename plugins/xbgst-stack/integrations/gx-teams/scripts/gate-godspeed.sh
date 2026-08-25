@@ -85,21 +85,21 @@ PY
 }
 inject_local "$resolved"
 
-# Slash L1 loaders must stay unwrapped so grok actually loads /xbgst (SSoT).
-# Keep `/` skip; clone slash /xbreed-team also starts with / .
-argv=(/usr/bin/grok -p '/xbgst ping-clone')
+# cursor-agent -p is boolean; prompt lives after --. --trust must stay intact.
+argv=(cursor-agent -p --trust -- hello)
 inject_godspeed_into_grok_prompt argv
-[[ "${argv[-1]}" == "/xbgst ping-clone" ]]
-argv=(/usr/bin/grok -p '/xbreed-team ping-clone')
-inject_godspeed_into_grok_prompt argv
-[[ "${argv[-1]}" == "/xbreed-team ping-clone" ]]
+[[ "${argv[2]}" == "--trust" ]]
+PROMPT="${argv[-1]}" python3 - "$resolved" <<'PY'
+import os, pathlib, sys
+directive = pathlib.Path(sys.argv[1]).read_bytes()
+prompt = os.environ["PROMPT"].encode()
+assert prompt == directive + b"\nhello\n| godspeed"
+PY
 
-# Explicit skip (clone --ping canary) even when the prompt is not a slash.
-GX_TEAMS_SKIP_GODSPEED=1
-argv=(/usr/bin/grok -p 'Reply with exactly: CLONE_L1_OK')
+# kimi-code hard skip — argv must be byte-identical
+argv=(kimi -m kimi-code/k3 -p 'naked kimi')
 inject_godspeed_into_grok_prompt argv
-[[ "${argv[-1]}" == "Reply with exactly: CLONE_L1_OK" ]]
-unset GX_TEAMS_SKIP_GODSPEED
+[[ "${argv[-1]}" == "naked kimi" ]]
 
 python3 - "$ROOT/scripts/acp-live-dm.py" "$resolved" <<'PY'
 import importlib.util
