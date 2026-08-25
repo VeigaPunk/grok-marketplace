@@ -4,6 +4,7 @@ Channel tag: annotated **`grok-stable`** (peels to shippable `main`).
 
 ## Unreleased
 
+- the-planner files the complete PATH xask stdout as the plan artifact. `<raw_output>` is the full consult. Never a substring, never an ellipsis.
 - Hangar FIRST for **every** gx-* xask consult is Cursor Ultra `kimi-k3-max` (`xask --provider cursor --model-id kimi-k3-max --gs`). `ds-pro` / `qwen38` / native `kimi` are named routes, not FIRST.
 - Livepatch 0001 hard-bans builtin **`plan`** the same way as `general-purpose` and `explore`. Spawn `the-planner` (named specialist). Host `[subagents.toggle] plan = false`.
 - gx-teams pane hardcap 16 → **64** (host ceiling; 65th spawn fails `hardcap`).

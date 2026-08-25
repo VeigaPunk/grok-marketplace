@@ -93,7 +93,7 @@ Fallback: `obs: xask BLOCKED [reason]` then continue in-session. Binary split: `
 
 ### Extract — spark vs stock vs kimi chrome
 
-Non-spark routes: quote PATH `xask` stdout (the model answer). `--json` / `-o` follow the target CLI.
+Non-spark routes: quote PATH `xask` stdout (the model answer). `--json` / `-o` follow the target CLI. **the-planner:** the consult **is** the mapping. File the **complete** stdout as the plan artifact. `<raw_output>` is the full stdout. Never ellipsize. Never a one-line substring.
 
 **kimi print-mode:** CLI dumps version, thinking CoT bullets (`• The user asks…`), and `To resume this session: kimi -r …` onto the ingested stream. PATH `xask` runs `scripts/xask-kimi-stdout.py` (ds4cc sibling of `xask`) so stdout is the last non-CoT bullet. Chrome stays on stderr. Gate: `tests/test_xask_kimi_stdout.py` (overfit DIRECT_P_OK; no live model). Do not grep the answer token out of CoT — that spoofs PONG. Empty extract must not invent the answer.
 
