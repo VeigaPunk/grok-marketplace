@@ -57,7 +57,7 @@ L1 xbgst remains sole scheduler, Pareto judge, `APPROVED` authority, integrator,
 
 `/xgs` specialists skip this section (native tools only). `/xbgst` specialists are runners: FIRST Bash is PATH `xask` **with flags that name the target CLI**, then they continue with native tools. Never spawn type `xask`. Never use `xask-l3`. Do not treat `xbreed team mailbox` as a live DM (it is a log).
 
-`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Hangar FIRST for **every** gx-* consult is Cursor Ultra gravy (`xask --provider cursor --model-id kimi-k3-max --gs`). Named routes: native Kimi OAuth (`xask --gs kimi`), Token Plan DeepSeek (`xask --gs ds-pro`), Token Plan Qwen (`xask --gs qwen38`). `cdx` is OpenAI-only. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, `gpt-5.4-mini`, and Cursor Ultra (`kimi-k3-max`) stay `default`; `--service-tier fast` on those ids fails closed.
+`xask` is a dispatcher, not an xbrd-spark-only lane. Spark is **opt-in**. Hangar FIRST for **every** gx-* consult is Cursor Ultra gravy (`xask --provider cursor --model-id kimi-k3-max --gs`). Named routes: native Kimi OAuth (`xask --gs kimi`), Token Plan DeepSeek (`xask --gs ds-pro`), Token Plan Qwen (`xask --gs qwen38`). `cdx` is OpenAI-only. Job → argv (does not move pins): `docs/xask-routing.md`. Pin **fast servicing only on models that advertise it** (`config/xask-models.json` `service_tiers`). Token Plan qwen/ds, grok, kimi, gemma, Daybreak, `gpt-5.4-mini`, and Cursor Ultra (`kimi-k3-max`) stay `default`; `--service-tier fast` on those ids fails closed.
 
 ```
 xask --gs [flags] <route> '<q>'

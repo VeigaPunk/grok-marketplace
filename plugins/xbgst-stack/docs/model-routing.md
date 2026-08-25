@@ -5,6 +5,8 @@
 
 **Judge / xbgst** runs on **Grok**. This file freezes live-probe results (M07) and the optional substrate boundary. It does not rewrite the Grok-native roster into multi-provider: OpenAI-backed PrimeAgent is an L2-loop runtime, not a roster role. Exception **E2** is `the-revenger` only.
 
+Job → argv (advisory, 45d niches, does **not** move pins): [`xask-routing.md`](xask-routing.md).
+
 ## Binary split (load-bearing)
 
 | Binary | Who may invoke it | Who must not |
